@@ -1,0 +1,26 @@
+#logo {
+    margin-top: 180px; 
+}
+
+#slogan {
+    font-family: 'Pretendard-Regular';
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: -81px;
+    font-size: 0.7rem;
+    margin-left: 110px;
+}
+
+
+#login_logo {
+    display: block;
+    margin: 0 auto;
+}
+
+.container{
+    margin-top: 80px;
+}
+
+.search{
+    background-color: #F0F0F0;
+    border: 0.5px #6C6591 solid;
+}

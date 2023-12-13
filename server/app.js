@@ -6,10 +6,10 @@ import inquiryRouter from './router/inquiry.js'
 import { config } from './config.js'
 import { connectDB } from './db/database.js';
 import bodyParser from "body-parser";
-import { MakePriorityAboutPath } from "../front/dest/priority.js"
-import { gybus_and_subway_transfer } from "../front/dest/gy/gybus-and-subway-transfer.js";
-import { gybus } from "../front/dest/gy/gybus.js";
-import { gysubway } from "../front/dest/gy/gysubway.js";
+import { MakePriorityAboutPath } from "./priority.js"
+import { gybus_and_subway_transfer } from "./gy/gybus-and-subway-transfer.js";
+import { gybus } from "./gy/gybus.js";
+import { gysubway } from "./gy/gysubway.js";
 
 const app = express()
 
