@@ -92,7 +92,11 @@ app.get("/isNear/:userX/:userY/:targetBusName", async (req, res) => {
 
     const distance = await getDistance(userX, userY, busX, busY);
 
-    res.status(200).json(distance);
+    const result = {
+        "result": distance
+    }
+
+    res.status(200).json(result);
 })
 
 async function getDistance(userX, userY, busX, busY){
