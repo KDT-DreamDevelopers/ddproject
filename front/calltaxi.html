@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mypage</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./calltaxi.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <script src="./calltaxi.js"></script>
+    <style>.menu2 i{color: #EF9E3E !important;}</style>
+</head>
+<body>
+    <header class="purple">
+        <span class="title">콜택시</span>
+    </header>
+    <div class="purple container">
+        <p class="con-menu-button xi-play" onclick="goToHomepage()"><span>홈페이지</span></p>
+        <p class="con-menu-button xi-play" id="callButton"><span>전화연결</span></p>
+        <span>
+            <i class="xi-call calling" id="callDisplay" onclick="makeCall()"><span>1588-4388</span></i>
+        </span>   
+        <p class="con-menu-button xi-play"><span>문자보내기</span></p>           
+    </div>
+    <footer></footer>
+    <div data-include-file="./banner.html" class="footer-wrap includeJs"></div>
+</body>
+<script>
+    (function(){
+            function includeHtml() {
+                const includeTarget = document.querySelectorAll('.includeJs');
+                includeTarget.forEach(function(el, idx) {
+                    const targetFile = el.dataset.includeFile;
+                    if(targetFile){
+                        let xhttp = new XMLHttpRequest();
+                    
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState === XMLHttpRequest.DONE) {
+                                this.status === 200 ? (el.innerHTML = this.responseText) : null
+                                this.status === 404 ? (el.innerHTML = 'include not found.') : null
+                            }
+                        }
+                        xhttp.open('GET', targetFile, true);
+                        xhttp.send();
+                        return;
+                    }
+                });
+            };
+    
+            includeHtml();
+        })();
+</script>
+</html>

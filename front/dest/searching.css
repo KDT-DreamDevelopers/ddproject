@@ -1,0 +1,67 @@
+.origin {
+    display: block;
+}
+form > button {
+    width: 0;
+    height: 0;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.xi-maker {
+    color: #bebebe;
+}
+
+.locationName  {
+    font-weight: bolder;    
+    padding-left: 0.3rem;
+}
+
+.locationInfo {
+    margin: 0.125rem 0 auto;
+    padding-left: 1.5rem;
+    font-size: 0.8rem;
+    color: #bebebe;
+}
+
+.info {
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(225, 224, 224, 0.5);
+}
+
+header {
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+form {
+    height: fit-content;
+    margin-top: 1.25rem;
+}
+
+.warning {
+    /* border: 3px solid black; */
+    height: 30rem;
+    font-size: 1.5rem;
+    padding-top: 3rem;
+    text-align: center;
+}
+
+.warning p {
+    margin: 0 auto;
+    color: rgb(48, 48, 48);
+}
+
+.warning span {
+    font-size: 0.75rem;
+    color: rgba(82, 82, 82, 0.5);
+}
+
+form {
+    position: relative;
+}
+form i {
+    position: absolute;
+    transform: translate(-120%, 25%);
+    color: rgba(82, 82, 82, 0.5);
+}

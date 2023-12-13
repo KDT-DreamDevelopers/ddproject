@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>welcome</h2>
+    <div id="container"></div>
+    <script>
+        const subwayList = [
+            "1호선",
+            "2호선",
+            "3호선",
+            "4호선",
+            "5호선",
+            "6호선",
+            "7호선",
+            "8호선",
+            "9호선",
+            "호선",
+            "신분당선",
+            "분당선",
+            "공항철도",
+            "인천1호선",
+            "인천2호선",
+            "경의중앙선",
+            "경춘선"
+        ]
+        const container = document.getElementById("container");
+        const order = localStorage.getItem("pathSelector");
+        const data = localStorage.getItem(`Top${order}Data`);
+        const useData = JSON.parse(data);
+        console.log(useData)
+        let str = "";
+        let last =0;
+        const lastValue = localStorage.getItem("endTitle")
+
+        for ( let i=0; i<useData["탑승지"].length; i++){
+            if(subwayList.includes(useData["호선노선"][i])){
+                str += `<i class='xi-subway'></i> <span>${useData["호선노선"][i]} ${useData["탑승지"][i]}에서 ${useData["호선노선"][i]} 승차</span>`;
+                str += `<p> ${useData["하차지"][i]} 에서 하차 </p>`
+            }
+            else {
+                str += `<i class='xi-bus'></i> <span>${useData["탑승지"][i]}에서 ${useData["호선노선"][i]}번 버스 승차 </span>`;
+                str += `<p>${useData["하차지"][i]} 에서 하차</p>`
+            }
+            last ++;
+        }
+        str += `<p>${useData["하차지"][last-1]} => ${lastValue}</p>`
+        container.innerHTML += str;
+    </script>
+</body>
+</html>

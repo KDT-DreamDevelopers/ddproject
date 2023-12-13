@@ -1,0 +1,43 @@
+h2{
+    text-align: center;
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#form{
+    width: 80%;
+    margin: auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#form2{
+    width: 80%;
+    margin: auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+#ssn1,#ssn2{
+    width: 47%;
+}
+
+#cancel,#check,#back,#codeBtn{
+    width: 45%;
+}
+
+#codeBtn{
+    margin-left: 20px;
+}
+
+#check{
+    margin-left: 20px;
+}
+
+#text { background-color: rgb(244, 244, 244); margin-top: 20px; padding: 20px;}

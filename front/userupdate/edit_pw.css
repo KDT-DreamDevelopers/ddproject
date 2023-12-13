@@ -1,0 +1,32 @@
+.btn_inside{
+    width: fit-content;
+    text-wrap: nowrap; /*버튼 크기가 텍스트 사이즈에 맞게 커지도록 설정, 텍스트가 밑으로 가지 않고 옆으로 가게끔*/
+    background-color: #636163;
+    color: white;
+    font-weight: 500;
+    border-radius: 7px;
+    border: 0px;
+    position: absolute;
+    padding: 5px;
+    position: absolute;
+    transform: translate(-120%, 63%);
+}
+
+input {
+    width: 80%;
+    margin-top: 10px;
+    position: relative;
+}
+
+.container{
+
+    margin-top: 70px;
+}
+
+#change_pw{
+    margin-top: 18px;
+}
+
+#edit{
+    margin-top: 50px;
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./login.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+        
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">로그인</span>
+    </header>
+
+    <div class="container">
+    <form action="#">    
+        <div class="input_form"><label for="ID" class="txt_input">ID</label><input class="search" id="userid" type="text"></input></div>
+
+        <div class="input_form"><label for="password" class="txt_input">PASSWORD</label><input class="search" id="userpw" type="password"></input></div>
+
+        <button class="purple button" id="login">로그인</button>
+        
+
+        <p id="find_id"><a href="./findidpw/findId.html">아이디</a> / <a href="./findidpw/findPw.html">비밀번호 찾기</a></p>
+        
+    </form>
+    </div>
+    <script>
+
+        // 다시 start 페이지로 이동
+        const loginBack = document.getElementById('back')
+        loginBack.addEventListener('click', startPage)
+
+        // 첫화면 다시 이동
+        function startPage(){
+            console.log(2)
+            window.location.href = './index.html'
+        }
+
+        // 로그인 버튼 클릭 이벤트
+        const login = document.getElementById('login')
+        login.addEventListener('click', async (e)=>{
+            e.preventDefault()
+
+            // 입력 정보 추출
+            const userid = document.getElementById('userid').value
+            const userpw = document.getElementById('userpw').value
+            
+            const formData = {
+                userid: userid,
+                userpw: userpw
+            }
+            
+            const jsonData = JSON.stringify(formData)
+
+            fetch('http://localhost:8080/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(res => {return res.json()})
+            .then(data => {
+                if(data.message == '로그인 되었습니다'){ 
+                    setItemWithExpiry('userInfo', data.token, 30)
+                    alert(data.message)
+                    window.location.href = './mapPage.html'; //지도 화면으로 가야함
+                }else {
+                    alert(data.message)
+                } 
+                
+            })
+        })
+        
+        // 데이터를 저장할 때 만료 시간을 함께 저장하는 함수 (30일)
+        function setItemWithExpiry(key, value, expiryInDays ) {
+            const now = new Date();
+            const expiryTime = now.getTime() + (expiryInDays  * 24 * 60 * 60 * 1000);
+            const item = {
+                value: value,
+                expiry: expiryTime
+            };
+            localStorage.setItem(key, JSON.stringify(item));
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4, initial-scale=1.0">
+    <title>본인인증 페이지</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./findPw.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="container1">
+            
+            <header>
+                <i class="xi-angle-left" id="loginPage"></i>
+                <span class="title">비밀번호 찾기</span>
+            </header>
+        
+            <form class="form_class" action="#">
+                <div class="container">
+                    <p>
+                        <label for="username" class="txt_input">아이디:</label><input class="search" id="userid"
+                            placeholder="아이디를 입력하세요" maxlength="15">
+                    </p>
+        
+                    <p><label for="hp" class="txt_input">연락처:</label>
+                        <input class="search" id="hp" type="text" placeholder="하이픈( - )을 제외하고 입력하세요" maxlength="11">
+                    </p>
+        
+                    <button type="button" class="purple button" id="searchPw">찾기</button>
+        
+                </div>
+        
+        
+            </form>
+
+        </div>
+        <div id="container2" style="display: none;">
+            <h2>PASS 본인확인</h2>
+            <form action="#" id="form2"> <!-- 마진값 수정을 위해id 추가함 (동휘)-->
+                <label for="username" class="txt_input">인증번호</label>
+                <div id="checknum">
+                    <input type="text" id="codeCheck" placeholder="숫자 6자리 입력">
+                    <div id="timer"></div> <!--3분 지나면 local저장 사라지도록 구현-->
+                </div>
+                <!-- <p>시간연장 재전송</p>     시간연장, 재전송 버튼 구현 해야함(그냥 안해도될듯) -->
+                <button id="back">취소</button> <button type="button" id="codeBtn">확인</button>
+                <!--취소하면 이전 페이지, 확인은 코드 확인 후 회원가입창으로 다시 넘어가고 인증되었다고 표시-->
+            </form>
+            <div id="text">
+                <p>인증번호 문자를 못받으셨나요?</p>
+                <p class="sub">*입력하신 인증정보가 일치하지 않을 경우, 인증번호 문자는 발송되지 않습니다.</p>
+                <p class="sub">*인증번호가 문자로 수신되지 않을 경우 정확한 정보로 재시도해 주시기 바랍니다.</p>
+            </div>
+        </div>
+
+        <div id="container3" style="display: none;">
+            
+            <header>
+                <i class="xi-angle-left" id="back_btn"></i>
+                <span class="title">새 비밀번호 입력</span>
+            </header>
+        
+            <form class="form_class" action="#">
+                <input type="hidden" id="check" value="n">
+            <div class="container">
+                <p class="display">
+                    <!-- onclick 추가 -->
+                    <input type="password" class="search" id="new_pw" placeholder="새 비밀번호를 입력" maxlength="15">
+                </p>
+        
+                <p class="display">
+                    <!-- onclick 추가 -->
+                    <input type="password" class="search" id="new_pw_re" placeholder="새 비밀번호를 확인" maxlength="15">
+                </p>
+        
+                <p class="display">
+                    <!-- onclick 추가 -->
+                    <button type="button" class="purple button" id="edit"maxlength="15">수정</button>
+                </p>
+        
+            </div>
+                </form>
+
+        </div>
+    
+        
+    </div>
+    </div>
+
+    </div>
+    <script src="./findPw.js"></script>
+</body>
+
+</html>

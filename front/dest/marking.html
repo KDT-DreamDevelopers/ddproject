@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마커 생성하기</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./marking.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <style>
+         .xi-close-min {
+            margin-left: 0.6rem;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="origin purple">
+        <input class="search" type="text" maxlength="20" value="">
+        <i class="xi-close-min cancel"></i>
+    </header>
+    <div id="map"></div>   
+    <div class="choose">
+        <button type="button" class="button" style="color: rgb(48, 48, 48); border: 1px solid #bebebe;">출발지</button>
+        <button type="button" class="button purple">도착지</button>
+    </div>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1"></script>
+    <script>
+        const targetX = localStorage.getItem("useInMarkingTargetX");
+        const targetY = localStorage.getItem("useInMarkingTargetY");
+        const title = localStorage.getItem("useInMarkingTitle");
+
+        
+        const input = document.querySelector('.search');
+        input.value = title;
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = {
+            center: new kakao.maps.LatLng(targetX, targetY), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+        // 마커가 표시될 위치입니다 
+        var markerPosition = new kakao.maps.LatLng(targetX, targetY);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+        // marker.setMap(null);    
+        const cancel = document.querySelector('.cancel');
+        cancel.addEventListener('click', function () {
+            window.location.href = '../mapPage.html';
+        })
+
+        input.addEventListener('click', function(){
+            localStorage.setItem("useInMarkerFromMarkingTitle", title);
+            window.location.href = './markerFromMarking.html';
+        })
+
+        let buttons = document.querySelectorAll(".button");
+        buttons[0].addEventListener('click', function(){
+            localStorage.setItem("usePath", "start");
+            localStorage.setItem("startTitle", title)
+            localStorage.setItem("startX", targetX);
+            localStorage.setItem("startY", targetY);
+            window.location.href = './main.html';
+        })
+        buttons[1].addEventListener('click', function(){
+            localStorage.setItem("usePath", "end");
+            localStorage.setItem("endTitle", title)
+            localStorage.setItem("endX", targetX);
+            localStorage.setItem("endY", targetY);
+            window.location.href = './main.html';
+        })
+    </script>
+</body>
+
+</html>

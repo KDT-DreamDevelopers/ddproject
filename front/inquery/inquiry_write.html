@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./inquiry_write.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">문의하기</span>
+    </header>
+    <div class="container">
+        <p>
+            <select name="category" id="category" class="search">
+                <option>카테고리를 선택하세요</option>
+                <option value="회원가입">회원가입</option>
+                <option value="로그인">로그인</option>
+                <option value="고객센터">고객센터</option>
+                <option value="장애인 등록증">장애인 등록증</option>
+                <option value="이용방법">이용방법</option>
+            </select>
+        </p>
+        <p>
+            <input class="search" type="text" maxlength="30" placeholder="제목" id="title">
+            <input class="search bigsearch" type="text" placeholder="내용" id="text">
+        </p>
+        <button type="button" class="purple button" id="write">제출</button>
+    </div>
+    <footer></footer>   
+
+    <script>
+        const userInfo = localStorage.getItem('userInfo')
+        const token = JSON.parse(userInfo).value
+        if(!token){
+            alert('로그인 후 사용바랍니다')
+            window.location.href = '../login.html'
+        }
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.location.href = './my_inquiry.html'
+        })
+
+        const write = document.getElementById('write')
+        write.addEventListener('click',(e)=>{
+            e.preventDefault()
+            const category = document.getElementById('category').value
+            const title = document.getElementById('title').value
+            const text = document.getElementById('text').value
+            console.log(category)
+            const formData = {
+                category,
+                title,
+                text:text
+            }
+            console.log(formData)
+            const jsonData = JSON.stringify(formData)
+
+            fetch("http://localhost:8080/inquiry/write",{
+                method:"POST",
+                headers:{
+                    "Authorization":`Bearer ${token}`,
+                    "Content-Type":"application/json"
+                },
+                body: jsonData
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log(result)
+                alert('문의 글이 등록되었습니다.')
+                window.location.href = './my_inquiry.html'
+            })
+        })
+
+        
+        
+    </script>
+</body>
+</html>

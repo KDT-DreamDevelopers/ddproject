@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 문의</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./my_inquiry.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">문의 내역</span>
+    </header>
+    <div class="container">
+        <div id="inquiries">
+        </div>
+        <button type="button" class="purple button" onclick="writeInquiry()">문의하기</button>
+    </div>
+    <footer></footer>
+    <script>
+        // 로그인 여부 확인
+        const userInfo = localStorage.getItem('userInfo')
+        const token = JSON.parse(userInfo).value
+        if(!token){
+            alert('로그인 후 사용바랍니다')
+            window.location.href = '../login.html'
+        }
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.location.href = '../mypage.html'
+        })
+        
+        fetch("http://localhost:8080/inquiry/myInquiries",{
+            method:"GET",
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+            const inquiries = document.getElementById('inquiries')
+            
+            if (data && data.length > 0) {
+                data.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `${index + 1}. ${item.category} > ${item.title}<span>${item.createdAt.slice(0, 10)}</span>`;
+                    li.setAttribute('data-id', item.id)
+                    li.addEventListener('click', handleClick)
+                    inquiries.insertBefore(document.createTextNode(' '), inquiries.firstChild);
+                    inquiries.insertBefore(li,inquiries.firstChild);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = "아직 문의한 내용이 없습니다.";
+                inquiries.insertBefore(document.createTextNode(' '), inquiries.firstChild);
+                inquiries.insertBefore(li,inquiries.firstChild);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        })
+
+        // li 클릭이벤트 핸들러
+        function handleClick(event){
+            const clickedNodeId= event.target.getAttribute('data-id')
+            localStorage.setItem('inquiry_id', clickedNodeId)
+            window.location.href = './detail_inquiry.html'
+        }
+
+        // 문의하기 페이지로 이동
+        function writeInquiry(){
+            window.location.href = './inquiry_write.html'
+        }
+    </script>
+</body>
+</html>

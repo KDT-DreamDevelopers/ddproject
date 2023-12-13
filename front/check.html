@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4, initial-scale=1.0">
+    <title>본인인증 페이지</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./check.css">
+    <link rel="stylesheet" type="text/css" href="../a_XEIcon-2.2.0/xeicon.min.css">
+</head>
+<body>
+    <div id="container1" style="display: block;">
+        
+        <h2 id="title" >PASS 본인확인</h2>
+        <form action="#" id="form">      <!--정규 표현식, validate적용-->
+            <p>이름</p>
+            <input type="text" class="search" id="name" placeholder="성명입력" readonly>
+            <p>주민등록번호</p>
+            <input type="text" class="search" id="ssn1" placeholder="••••••" readonly> - <input type="text" class="search" id="ssn2" placeholder="•••••••" readonly>
+            <p>휴대폰번호</p> 
+            <input class="search" type="text" id="phone" placeholder="숫자만 입력" readonly>
+            <br>
+            <button class="purple button" id="cancel">취소</button> <button class="purple button" type="button" id="check">확인</button>
+        </form>
+    </div>
+
+    <div id="container2" style="display: none;">
+        <h2>PASS 본인확인</h2>
+        <form action="#" id="form2" >
+            <p>인증번호</p>
+            <div id="checknum">
+                <input class="search" type="text" id="codeCheck" placeholder="숫자 6자리 입력"><div id="timer"></div>       <!--3분 지나면 local저장 사라지도록 구현-->
+            </div>
+            <!-- <p>시간연장 재전송</p>     시간연장, 재전송 버튼 구현 해야함(그냥 안해도될듯) -->
+            <button class="purple button" id="back">취소</button> <button type="button" class="purple button" id="codeBtn">확인</button>   <!--취소하면 이전 페이지, 확인은 코드 확인 후 회원가입창으로 다시 넘어가고 인증되었다고 표시-->
+
+            <div id="text">
+                <p>인증번호 문자를 못받으셨나요?</p>
+                <p class="sub">*입력하신 인증정보가 일치하지 않을 경우, 인증번호 문자는 발송되지 않습니다.</p>
+                <p class="sub">*인증번호가 문자로 수신되지 않을 경우 정확한 정보로 재시도해 주시기 바랍니다.</p>
+            </div>
+
+        </form>
+        
+    </div>
+    <script>
+        window.onload = function(){
+            const storedData = localStorage.getItem('checkInfo')
+            document.getElementById('name').value = JSON.parse(storedData).name
+            document.getElementById('ssn1').value = JSON.parse(storedData).ssn1
+            document.getElementById('ssn2').value = JSON.parse(storedData).ssn2
+            document.getElementById('phone').value = JSON.parse(storedData).hp
+        }
+
+        const cancel = document.getElementById('cancel')
+        cancel.addEventListener('click', closeWindow)
+        
+        let code = 3000
+
+        const check = document.getElementById('check')
+        check.addEventListener('click', async (e)=>{
+            const name = document.getElementById('name').value;
+            const ssn1 = document.getElementById('ssn1').value;
+            const ssn2 = document.getElementById('ssn2').value;
+            const phone = document.getElementById('phone').value;
+            const none = document.getElementById('codeCheck').value;
+
+            const formData = {
+                name:name,
+                ssn1:ssn1,
+                ssn2:ssn2,
+                phone:phone,
+                none:none
+            }
+            const jsonData = JSON.stringify(formData)
+
+            try {
+                const response = await fetch("http://localhost:8080/auth/check", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: jsonData
+                });
+
+                const data = await response.json();
+                code = data.code;
+
+                const container1 = document.getElementById('container1');
+                const container2 = document.getElementById('container2');
+                
+                container1.style.display = 'none';
+                container2.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        })
+        console.log(code)
+
+        // 다시 정보 입력화면
+        const back = document.getElementById('back')
+        back.addEventListener('click',(e)=>{
+            const container1 = document.getElementById('container1')
+            const container2 = document.getElementById('container2')
+
+            container1.style.display = 'block'
+            container2.style.display = 'none'
+        })
+
+        // 코드 인증번호 맞는지 확인하기
+        const codeBtn = document.getElementById('codeBtn')
+        codeBtn.addEventListener('click', (e)=>{
+            const codeCheck = document.getElementById('codeCheck').value
+            console.log(codeCheck)
+            if (codeCheck == code){
+                alert('인증되었습니다')
+                localStorage.setItem("check",'ok')
+                window.close()
+            }else{
+                alert('인증번호가 틀렸거나 시간초과 되었습니다.')
+            }
+        })
+
+        // 취소시 창 닫기
+        function closeWindow(){
+        window.close()
+    }
+    </script>
+</body>
+</html>

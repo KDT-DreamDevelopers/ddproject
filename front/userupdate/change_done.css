@@ -1,0 +1,21 @@
+.txt{
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.line {
+    border-top: 7px solid rgba(101, 88, 177,0.3);
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.container{
+    margin-top: 140px;
+}
+
+
+#commit{
+    margin-top: 140px;
+}

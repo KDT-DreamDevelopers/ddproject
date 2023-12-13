@@ -1,0 +1,53 @@
+[1] "npm i" 로 package.json 설치
+[2] "node connect.js" 로 서버 실행
+[3] "marker.html" 에서 Alt+L+O 로 라이브 서버 실행
+[4] 검색 결과와 그에 따른 경로 탐색 
+
+
+localStroage
+
+localStorage = {
+    where = main.html_start / main.html_end,
+
+    useInMarkingTargetX : markerFrommapPage 에서 사용한 변수로 marking.html에 전달될 X좌표
+    
+    useInMarkingTargetY : markerFrommapPage 에서 사용한 변수로 marking.html에 전달될 y좌표
+
+    useInMarkingTitle : markerFrommapPage 에서 사용한 변수로 marking.html에 전달될 타이틀
+
+    useInMarkerFromMarkingTitle : marking 에서 marker로 되돌아갈 때 title을 전달하여 띄울 용도
+
+    startOrEnd : marking 에서 출발/도착 버튼을 눌렀을 때 main.html 에서 출발지 설정인지 도착지 설정인지를 구분하기 위한 용도
+
+    fromMarkingToMainLocationName : makring 에서 출발/도착 버튼을 눌렀을 때 해당 장소의 이름
+
+    useInMainForStartX : Main.html 에서 사용할 출발지의 X좌표
+
+    useInMainForStartY : Main.html 에서 사용할 출발지의 Y좌표
+    
+    useInMainForEndX : Main.html 에서 사용할 도착지의 X좌표
+    
+    useInMainForEndY : Main.html 에서 사용할 도착지의 Y좌표
+
+    fromMainToMarkerStartTitle : main.html 에서 출발지 또는 선택지를 눌렀을 때 그 값이 markerFromMain.html 로 전달된 후 값이 유지되게 하기 위한 타이틀 
+
+    fromMainToMarkerEndTitle : main.html 에서 출발지 또는 선택지를 눌렀을 때 그 값이 markerFromMain.html 로 전달된 후 값이 유지되게 하기 위한 타이틀
+
+    fromMainToMarkerWhichButton : main.html 에서 markerFromMain.html 로 연결되었을 때 어떤 버튼을 눌렀는지에 대한 타이틀
+
+    fromMarkingToMainLocationNameRe: marekr -> main -> marker -> main 을 위한 장소이름설정
+
+    usePath : 현재 수정하고자 접근중인 데이터의 경로 start/end
+
+    startTitle : start Path 를 이용할 때 현재 Title
+
+    startX : start Path 를 이용할 때 X 값
+
+    startY : start Path 를 이용할 때 Y 값
+
+    endTitle : end Path 를 이용할 때 현재 Title
+
+    endX : end Path 를 이용할 때 X 값
+
+    endY : end Path 를 이용할 떄 Y 값
+}

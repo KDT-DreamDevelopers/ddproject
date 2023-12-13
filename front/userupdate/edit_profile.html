@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./edit_profile.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">회원정보 수정</span>
+    </header>
+
+    <form class="form_class" action="#">
+        <input type="hidden" id="check" value="n">
+    <div class="container">
+        <p class="display">
+            <!-- onclick 추가 -->
+            <label for="username" class="txt_input">이름:</label><input class="search" id="name" placeholder="이름을 입력하세요" maxlength="15">
+        </p>
+
+        <p class="display">
+            <!-- onclick 추가 -->
+            <label for="userid" class="txt_input">아이디:</label><input class="search" id="userid" maxlength="15" readonly>
+        </p>
+
+        <p class="display">
+            <!-- onclick 추가 -->
+            <label for="change_pw" class="txt_input">비밀번호 변경:</label><button type="button" class="purple button" id="change_pw">변경하기</button>
+        </p>
+
+        <!-- 버튼 type=button으로 추가, onclick 추가 -->
+        <p class="display"><label for="hp" class="txt_input">연락처:</label>
+            <input class="search" id="hp" type="text" placeholder="하이픈( - )을 제외하고 입력하세요" maxlength="11">
+        </p>
+
+        <button type="button" class="purple button" id="edit">수정</button>
+
+    </div>
+        </form>
+
+    <script>
+        const userInfo = localStorage.getItem('userInfo')
+        const token = JSON.parse(userInfo).value
+        if(!token){
+            alert('로그인 후 사용바랍니다')
+            window.location.href = '../login.html'
+        }
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.location.href = '../mypage.html'
+        })
+        
+        fetch("http://localhost:8080/auth/userInfo",{
+            method:"GET",
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+
+            // 입력란 자동 넣기
+            document.getElementById('name').value = data.name
+            document.getElementById('userid').value = data.userid
+            document.getElementById('hp').value = data.hp
+
+
+        })
+        const change_pw_Btn = document.getElementById('change_pw')
+        change_pw_Btn.addEventListener('click',(e)=>{
+            window.location.href = './edit_pw.html'
+        })
+
+        const edit = document.getElementById('edit')
+        edit.addEventListener('click',(e)=>{
+            const name = document.getElementById('name').value
+            const hp = document.getElementById('hp').value
+
+            const formData = {
+                name,
+                hp,
+            }
+            const jsonData = JSON.stringify(formData)
+
+            fetch("http://localhost:8080/auth/modify", {
+                method:"PUT",
+                headers:{
+                    "Authorization":`Bearer ${token}`,
+                    "Content-Type":"application/json"
+                },
+                body: jsonData
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log(result)
+                alert(result.message)
+                window.location.href = '../mypage.html'
+            })
+        })
+    </script>
+    
+</body>
+</html>

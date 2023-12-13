@@ -1,0 +1,59 @@
+.bigsearch {
+    height: 200px;
+    position: relative;
+}
+
+.search.bigsearch {
+    padding-bottom: 130px; /* 접수사항을 기재하세요 */
+}
+
+.map-container {
+    position: relative;
+    margin: auto;
+    width: 80%;
+}
+
+#map {
+    height: 18.75rem; /* 수정: 지도의 높이를 적절한 값으로 조정 */
+    width: 100%;
+    z-index: 0; /* 수정: z-index 추가 */
+    margin-top: 1rem;
+}
+
+.search-container {
+    margin: auto;
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    z-index: 1; /* 수정: z-index 추가 */
+}
+
+.search {
+    width: 100%;
+}
+
+.xi-maker {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    color: #EF9E3E;
+    cursor: pointer;
+}
+
+.bigsearch {
+    height: 200px;
+    position: relative;
+}
+
+.bigsearch::placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(10%, 100%);
+}
+
+footer {
+    height: 8rem !important;
+}

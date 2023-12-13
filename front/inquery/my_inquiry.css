@@ -1,0 +1,41 @@
+.container {
+    list-style: none; 
+    padding: 0;
+    font-size: 1.5rem; 
+    line-height: 4;
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+
+.button {
+    margin-top: 80px; /* 문의하기 버튼과 위 요소 사이의 간격을 조절 */
+}
+
+.container li {
+    position: relative; /* 상대 위치 설정 */
+    font-size: 1.2rem;
+    color: rgb(110, 108, 108);
+}
+
+.container li::after {
+    content: ""; /* 가상 요소를 생성 */
+    position: absolute;
+    top: 90%; /* 가로선을 요소의 중앙에 위치시키기 */
+    left: 0;
+    width: 100%; /* 가로선 길이 설정 */
+    border-bottom: 1px solid #ccc;
+    display: block;
+    margin-top: 5px; /* 가로선과 텍스트 사이의 간격을 조절 */
+    transform: translateY(-50%); /* 가로선의 높이 절반만큼 위로 이동 */
+}
+
+li span {
+    font-size: 12px; 
+}
+
+li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

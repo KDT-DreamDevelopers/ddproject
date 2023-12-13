@@ -1,0 +1,45 @@
+.origin {
+    display: block;
+}
+
+header {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+header span {
+    width: 80%;
+}
+
+.margin {
+    height: 11.55rem;
+}
+
+form > button {
+    width: 0;
+    height: 0;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.xi-maker {
+    color: #bebebe;
+}
+
+.warning {
+    height: 30rem;
+    font-size: 1.5rem;
+    padding-top: 15rem;
+    text-align: center;
+}
+
+
+.warning p {
+    margin: 0 auto;
+    color: rgb(48, 48, 48);
+}
+
+.warning span {
+    font-size: 0.75rem;
+    color: rgba(82, 82, 82, 0.5);
+}

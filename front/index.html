@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이동의 꿈</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./start.css">
+</head>
+<body>
+    <!-- <p id="logo_text">꿈꾸던 이동을 실현시키다</p> -->
+    <div class="container">
+        <div class="logo">
+            <p id="slogan">꿈꾸던 이동을 실현시키다</p>
+            <img id="login_logo" src="./img/mainlogo.png">
+        </div>
+        <div class="line"></div>
+
+        <button type="button" value="로그인" class="button purple">로그인</button>
+        <button type="button" value="회원가입" class="button" style="border: 1px solid #6658B1; color: black; font-weight: 600; margin-top: 1rem;">회원가입</button>   
+    </div>
+    <script>
+        // 자동로그인
+        const token = getItemWithExpiry('userInfo')
+        if (token){
+            window.location.href = './mapPage.html'
+        }
+        
+
+        // 만료여부 확인
+        function getItemWithExpiry(key) {
+            const itemStr = localStorage.getItem(key);
+            if (!itemStr) {
+                return null; // 해당 키에 데이터가 없음
+            }
+
+            const item = JSON.parse(itemStr);
+            const now = new Date();
+
+            // 만료 여부 확인
+            if (now.getTime() > item.expiry) {
+                localStorage.removeItem(key);
+                return null; // 만료됨
+            }
+
+            return item.value; // 유효한 데이터 반환
+        }
+
+        const btn = document.querySelectorAll('.button');
+        for(let i = 0; i < btn.length; i++){
+            btn[i].addEventListener('click', function(event){
+                console.log(event.target.value);
+                if(event.target.value == '로그인'){
+                    window.location.href = './login.html';
+                }
+                else if(event.target.value == '회원가입'){
+                    window.location.href = './regist.html';
+
+                }
+            })
+        }
+    </script>
+</body>
+</html>

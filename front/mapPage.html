@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mypage</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./mapPage.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1"></script>
+    <script src="./mapPage.js"></script> 
+</head>
+<style>
+    .menu1 i{color: #EF9E3E !important;}
+</style>
+<body>
+    <header class="purple">
+        <input class="search" type="text" maxlength="20" placeholder="장소,주소 검색">
+    </header>
+        <div id="map"></div>   
+        <div data-include-file="./banner.html" class="footer-wrap includeJs"></div>
+    <script>
+       (function(){
+            function includeHtml() {
+                const includeTarget = document.querySelectorAll('.includeJs');
+                includeTarget.forEach(function(el, idx) {
+                    const targetFile = el.dataset.includeFile;
+                    if(targetFile){
+                        let xhttp = new XMLHttpRequest();
+                    
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState === XMLHttpRequest.DONE) {
+                                this.status === 200 ? (el.innerHTML = this.responseText) : null
+                                this.status === 404 ? (el.innerHTML = 'include not found.') : null
+                            }
+                        }
+                        xhttp.open('GET', targetFile, true);
+                        xhttp.send();
+                        return;
+                    }
+                });
+            };
+    
+            includeHtml();
+        })();
+        const input = document.querySelector('.search');
+        input.addEventListener('click', function(event){
+            localStorage.removeItem("useInMarkingTargetX")
+            localStorage.removeItem("useInMarkingTargetY")
+            localStorage.removeItem("useInMarkingTitle")
+            localStorage.removeItem("useInMarkerFromMarkingTitle")
+            localStorage.removeItem("startOrEnd")
+            localStorage.removeItem("fromMarkingToMainLocationName")
+            localStorage.removeItem("useInMainForStartX");
+            localStorage.removeItem("useInMainForStartY");
+            localStorage.removeItem("useInMainForEndX");
+            localStorage.removeItem("useInMainForEndY");
+            localStorage.removeItem("fromMainToMarkerStartTitle");
+            localStorage.removeItem("fromMainToMarkerEndTitle");
+            localStorage.removeItem("fromMainToMarkerWhichButton");
+            localStorage.removeItem("fromMarkingToMainLocationNameRe");
+            localStorage.removeItem("usePath");
+            localStorage.removeItem("startTitle");
+            localStorage.removeItem("startX");
+            localStorage.removeItem("startY");
+            localStorage.removeItem("endTitle");
+            localStorage.removeItem("endX");
+            localStorage.removeItem("endY");
+            window.location.href = './dest/markerFrommapPage.html'
+        })
+        </script>
+</body>
+</html>

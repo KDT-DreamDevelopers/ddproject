@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <style>
+        .xi-close {
+            margin-left: 0.5rem;
+            margin-right: 0.1rem;
+            padding-top: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: fit-content;
+            color: white;
+        }
+
+        .xi-exchange {
+            margin-right: 0.1rem;
+            font-size: 2rem;
+            height: fit-content;
+            align-self: center;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="origin purple"
+        style="display: flex; justify-content: center; align-content: center; position: fixed;">
+        <i class="xi-exchange xi-rotate-90" id="exchange"></i>
+        <span>
+            <input style="margin-bottom: 10px;" value="" class="search" id="departure" placeholder="출발지">
+            <input class="search" value="" placeholder="목적지" id="destination">
+        </span>
+        <i class="xi-close cancel"></i>
+    </header>
+    <div id="placesList"></div>
+    <div class="container" id="container">
+        <div class="margin"></div>
+    </div>
+    <script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1&libraries=services"></script>
+    <script src="main.js"></script>
+    <script src="./findMy.js"></script>
+    <script>
+        const subwayList = [
+            "1호선",
+            "2호선",
+            "3호선",
+            "4호선",
+            "5호선",
+            "6호선",
+            "7호선",
+            "8호선",
+            "9호선",
+            "호선",
+            "신분당선",
+            "분당선",
+            "공항철도",
+            "인천1호선",
+            "인천2호선",
+            "경의중앙선",
+            "경춘선"
+        ]
+        const startBox = document.getElementById("departure");
+        const endBox = document.getElementById("destination");
+        const path = localStorage.getItem("usePath");
+        const cancel = document.querySelector('.cancel');
+        const exchange = document.getElementById("exchange");
+        startBox.value = localStorage.getItem("startTitle");
+        endBox.value = localStorage.getItem("endTitle");
+        var geocoder = new kakao.maps.services.Geocoder()
+
+
+        let testStartX = localStorage.getItem("startX");
+        console.log(testStartX)
+        if (testStartX === null && path === "end") {
+            console.log("여기야!")
+            let currentX;
+            let currentY;
+            findMy()
+                .then(async (coordinates) => {
+                    localStorage.setItem("startX", await coordinates[0]);
+                    localStorage.setItem("startY", await coordinates[1]);
+
+                    position = await {
+                        lat: await coordinates[0],
+                        lng: await coordinates[1]
+                    }
+
+                    await new Promise(resolve => {
+                        searchDetailAddrFromCoords(position, (result, status) => {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var detailAddr = !!result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name
+                                localStorage.setItem("startTitle", detailAddr);
+                                startBox.value = detailAddr;
+                                console.log("1", startBox.value);
+                                console.log("2", localStorage.getItem("startTitle"))
+                            }
+                            resolve();
+                        });
+                    });
+                })
+                .then(makePath)
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+        
+        makePath();
+
+        exchange.addEventListener("click", () => {
+            let temp = startBox.value;
+            startBox.value = endBox.value;
+            endBox.value = temp;
+
+            temp = localStorage.getItem("startX");
+            localStorage.setItem("startX", localStorage.getItem("endX"));
+            localStorage.setItem("endX", temp);
+
+            temp = localStorage.getItem("startY");
+            localStorage.setItem("startY", localStorage.getItem("endY"));
+            localStorage.setItem("endY", temp);
+
+            temp = localStorage.getItem("startTitle");
+            localStorage.setItem("startTitle", localStorage.getItem("endTitle"));
+            localStorage.setItem("endTitle", temp)
+
+            let container = document.getElementById("container");
+            let listEl = document.getElementById("placesList");
+            removeAllChildNods(listEl);
+            removeAllChildNods(container);
+
+            let margin = '<div class="margin"></div>'
+            container.innerHTML += margin;
+            makePath();
+        });
+
+        startBox.addEventListener("click", () => {
+            localStorage.setItem("usePath", "start");
+            window.location.href = "./markerFromMain.html";
+        })
+        endBox.addEventListener("click", () => {
+            localStorage.setItem("usePath", "end");
+            window.location.href = "./markerFromMain.html";
+        })
+
+        function removeAllChildNods(el) {
+            while (el.hasChildNodes()) {
+                el.removeChild(el.lastChild);
+            }
+        }
+
+        cancel.addEventListener('click', function () {
+            window.location.href = '../mapPage.html';
+        })
+
+        async function makePath() {
+            if (startBox.value !== "" && endBox.value !== "") {
+                const startX = await localStorage.getItem("startX");
+                const startY = await localStorage.getItem("startY");
+                const endX = await localStorage.getItem("endX");
+                const endY = await localStorage.getItem("endY");
+                send(startX, startY, endX, endY)
+                    .then((topFiveDate) => {
+                        if (topFiveDate[0] === null) {
+                            console.log("해당하는 경로가 없습니다.");
+                            let listE = document.getElementById('placesList')
+                            const warningDiv = '<div class="warning"><i class="xi-warning"></i><p>해당 경로를 지원하지 않습니다.</p><span>도착지를 확인해 주세요.</span></div>'
+                            listE.innerHTML += warningDiv;
+
+                        } else {
+                            const container = document.getElementById("container");
+                            for (let i = 0; i < 5; i++) {
+                                let str = "";
+                                let last = 0;
+                                for (let j = 0; j < topFiveDate[i]["탑승지"].length; j++) {
+                                    if (subwayList.includes(topFiveDate[i]["호선노선"][j])) {
+                                        str += `<i class='xi-subway'></i> <span>${topFiveDate[i]["호선노선"][j]} ${topFiveDate[i]["탑승지"][j]} 승차</span>`;
+                                        str += `<p> ${topFiveDate[i]["하차지"][j]} 하차 </p>`
+                                    } else {
+                                        str += `<i class='xi-bus'></i> <span>${topFiveDate[i]["호선노선"][j]}</span>`;
+                                        str += `<p>${topFiveDate[i]["탑승지"][j]} =>  => ${topFiveDate[i]["하차지"][j]}</p>`;
+                                    }
+                                    last++;
+                                }
+                                str += `<p>${topFiveDate[i]["하차지"][last - 1]} => ${endBox.value}</p>`
+                                str += `<p style="align-self: center;">++++++++예상 소요시간: ${topFiveDate[i]["소요시간"][0]}++++++</p>`
+                                let row = `<div style="border-bottom: 1px solid black;">${str}</div>`;
+                                container.innerHTML += row;
+                                localStorage.setItem(`Top${i}Data`, JSON.stringify(topFiveDate[i]));
+                            }
+                        }
+                    })
+
+            } else {
+                console.log("not full")
+            }
+        }
+        function removeAllChildNods(el) {
+            while (el.hasChildNodes()) {
+                el.removeChild(el.lastChild);
+            }
+        }
+
+        async function searchDetailAddrFromCoords(position, callback) {
+            // 좌표로 행정동 주소 정보를 요청합니다
+            await geocoder.coord2Address(position.lng, position.lat, callback);
+        }
+
+        const pathDiv = document.querySelectorAll("#container");
+        for (let i=0; i<5; i++){
+            pathDiv[i].addEventListener("click", ()=>{
+                localStorage.setItem("pathSelector", i);
+                window.location.href = "./test.html"
+            })
+        }
+
+    </script>
+</body>
+
+</html>

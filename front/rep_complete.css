@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+p {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 100px; /* 텍스트와 밑줄 간 여백 설정 */
+}
+
+p::after {
+    content: "";
+    display: block;
+    height: 8px; /* 밑줄 두께 설정 */
+    background-color: #6658B1;
+    opacity: 40%;
+    position: relative; /* p를 기준으로 설정 */
+    bottom: 0;
+    margin-top: 10px;
+    width: 120%;
+    right: 10%;
+}
+

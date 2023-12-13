@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <!-- <link rel="stylesheet" href="./regist.css"> -->
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./regist.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">회원가입</span>
+    </header>
+
+    <form class="form_class" action="#">
+        <input type="hidden" id="isUserid" value="n"> <!--아이디 중복 확인-->
+        <input type="hidden" id="check" value="n"> <!--본인인증 확인-->
+
+        <div class="container">
+            <!-- placeholder, maxlength 추가, id 수정 -->
+            <p>
+                <!-- onclick 추가 -->
+                <label for="userid" class="txt_input">아이디:</label><input class="search" id="userid"
+                    placeholder="아이디를 입력하세요" maxlength="15"><button type="button" class="btn_inside" onclick="useridCheck()"
+                    id="id_check">중복확인</button>
+            </p>
+            <p>
+                <label for="userpw" class="txt_input">비밀번호:</label><input class="search" id="userpw" type="password"
+                    placeholder="비밀번호를 입력하세요" maxlength="15">
+            </p>
+            <p>
+                <label for="check_password" class="txt_input">비밀번호 확인:</label><input class="search" id="userpw_re"
+                    type="password" placeholder="비밀번호를 한번 더 입력하세요" maxlength="15">
+            </p>
+
+            <p><label for="name" class="txt_input">이름: </label><input class="search" id="name" type="text"
+                    maxlength="20"></input></p>
+
+            <!-- 주민번호 앞, 뒷자리 나눔 -->
+            <p><label for="ssn" class="txt_input">주민번호:</label><span class="ssn"><input class="search" id="ssn1"
+                        type="text" maxlength="6"> <span>-</span> <input class="search" id="ssn2" type="password"
+                        maxlength="7"></span></p>
+
+            <!-- 버튼 type=button으로 추가, onclick 추가 -->
+            <p><label for="hp" class="txt_input">연락처:</label>
+                <input class="search" id="hp" type="text" placeholder="하이픈( - )을 제외하고 입력하세요" maxlength="11"><button
+                    type="button" class="btn_inside" id="phone_check" onclick="openPopup()">본인 인증</button>
+            </p>
+
+            <!-- 첨부 버튼 삭제 -->
+            <p><label for="fileInput" class="txt_input">장애인 등록증:</label>
+                <!-- <span class>
+                    <input class="search" id="fileInput" type="file" placeholder="사진 또는 파일을 첨부하세요">
+                </span> -->
+                <span class="filebox">
+                    <input class="search" placeholder="사진 또는 파일을 첨부하세요" readonly>
+                    <label for="fileInput" class="btn_inside">파일 찾기</label>
+                    <input type="file" id="fileInput">
+                </span>
+            </p>
+            <!-- type 추가, id 변경 -->
+            <button type="button" id="signUp" class="button purple">가입</button>
+        </div>
+    </form>
+    <footer></footer>
+    <script src="./regist.js"></script>
+    <script>
+        const input = document.getElementById('fileInput');
+        console.log(input)
+        input.addEventListener('change', function(event){
+            let fileName = document.querySelector('.filebox .search');
+            let value = event.target.value.toString();
+            fileName.value = value.split("\\").reverse()[0]
+        })
+    
+    </script>
+</body>
+
+</html>

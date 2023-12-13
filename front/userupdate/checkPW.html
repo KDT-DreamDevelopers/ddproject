@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <!-- <link rel="stylesheet" href="./checkPW.css"> -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">비밀번호 확인</span>
+    </header>
+
+    <form class="form_class" action="#">
+        <input class="search" type="hidden" id="check" value="n">
+    <div class="container">
+        <p class="display">
+            <!-- onclick 추가 -->
+            <input type="password" class="search" id="check_pw" placeholder="비밀번호 입력하세요." maxlength="15">
+        </p>
+
+
+        <p class="display">
+            <!-- onclick 추가 -->
+            <button class="purple button" id="edit"maxlength="15">확인</button>
+        </p>
+
+    </div>
+        </form>
+    <script>
+      const userInfo = localStorage.getItem('userInfo')
+      const token = JSON.parse(userInfo).value
+      if(!token){
+          alert('로그인 후 사용바랍니다')
+          window.location.href = '../login.html'
+      }
+
+      // 뒤로가기
+      const back = document.getElementById('back')
+      back.addEventListener('click', (e)=>{
+          window.history.back()
+      })
+      
+      const editButton = document.getElementById('edit');
+      editButton.addEventListener('click', async (e)=>{
+        event.preventDefault();
+
+        const check_pw = document.getElementById('check_pw').value;
+
+        try {
+          const response = await fetch('http://localhost:8080/auth/checkPW', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ userpw: check_pw }), 
+          });
+
+          const result = await response.json();
+          if (result.message === 'ok'){
+            window.location.href = 'edit_profile.html'
+          }else{
+            alert(result.message)
+          }
+        } catch (error) {
+          console.error('Error checking user password:', error.message);
+        }
+      }) 
+    </script>
+    
+</body>
+</html>

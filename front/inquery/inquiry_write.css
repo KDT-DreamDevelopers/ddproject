@@ -1,0 +1,38 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%; /* 전체 높이를 100%로 설정 */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 수직 방향 가운데 정렬 */
+    align-items: center; /* 수평 방향 가운데 정렬 */
+}
+
+.search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+
+container p {
+    margin-bottom: 20px;
+}
+
+/* 내용 input 박스 변형 */
+.bigsearch {
+    height: 200px;
+    position: relative;
+}
+
+.bigsearch::placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50%, 100%);
+}

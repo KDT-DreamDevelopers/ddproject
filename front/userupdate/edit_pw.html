@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./edit_pw.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">새 비밀번호 입력</span>
+    </header>
+
+    <form class="form_class" action="#">
+        <p class="display">
+            <!-- onclick 추가 -->
+            <input type="password" class="search" id="new_pw" placeholder="새 비밀번호를 입력" maxlength="15">
+        </p>
+
+        <p class="display">
+            <!-- onclick 추가 -->
+            <input type="password" class="search" id="new_pw_re" placeholder="새 비밀번호를 확인" maxlength="15">
+        </p>
+
+        <p class="display">
+            <!-- onclick 추가 -->
+            <button type="button" class="purple button" id="edit"maxlength="15">수정</button>
+        </p>
+
+    </div>
+        </form>
+    
+    <script>
+        const userInfo = localStorage.getItem('userInfo')
+        const token = JSON.parse(userInfo).value
+        if(!token){
+            alert('로그인 후 사용바랍니다')
+            window.location.href = '../login.html'
+        }
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.history.back()
+        })
+        
+        const edit_Btn = document.getElementById('edit')
+        edit_Btn.addEventListener('click',(e)=>{
+            const new_pw = document.getElementById('new_pw').value
+
+            if (checkPw()){
+                fetch('http://localhost:8080/auth/newPW_id',{
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization":`Bearer ${token}`
+                    },
+                    body: JSON.stringify({new_pw: new_pw}), 
+                })
+                .then(res => {return res.json()})
+                .then((data)=>{
+                    console.log(data)
+                    alert(data.message)
+                    window.location.href = './change_done.html'
+                })
+            }
+        })
+
+        // 비밀번호 제대로 입력했는지 확인
+        function checkPw(){
+            const new_pw = document.getElementById('new_pw')
+            const new_pw_re = document.getElementById('new_pw_re')
+
+            const expPwText = /^(?=.*[A-Za-z])(?=.*[~!@#$%^*+=-])(?=.*[0-9])\S{8,15}$/
+            const expPw_reText = /^(?=.*[A-Za-z])(?=.*[~!@#$%^*+=-])(?=.*[0-9])\S{8,15}$/
+
+            if (!expPwText.test(new_pw.value)){
+                alert('비밀번호는 5자 이상 20자 이하의 영문자, 숫자, 특수기호(~!@#$%^*+=-)의 조합으로 입력하세요')
+                new_pw.focus()
+                return false
+            }
+            else if (new_pw_re.value !== new_pw.value){
+                alert('비밀번호가 일치하지 않습니다.')
+                new_pw_re.focus()
+                return false
+            }
+            else{
+                return true
+            }
+        }
+    </script>
+</body>
+</html>

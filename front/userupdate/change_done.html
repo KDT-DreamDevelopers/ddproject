@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./change_done.css">
+    <link rel="stylesheet" type="text/css" href="../a_XEIcon-2.2.0/xeicon.min.css">
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">새 비밀번호 입력</span>
+    </header>
+
+    
+    <div class="container">
+        <p class="display">
+            <!-- onclick 추가 -->
+            <p class="txt">비밀번호가 변경되었습니다.</p>
+            <div class="line"></div>
+        </p>
+        <button type="button" class="purple button" id="commit">확인</button>
+    </div>
+
+    <script>
+        const commit = document.getElementById('commit')
+        commit.addEventListener('click', (e)=>{
+            window.location.href = './edit_profile.html'
+        })
+    </script>
+    
+</body>
+</html>

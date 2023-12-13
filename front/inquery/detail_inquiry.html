@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세 문의내역</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./detail_inquiry.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <!-- <script src="./detail_inquiry.js"></script> -->
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">문의 내역</span>
+    </header>
+    <div class="container">
+        <!-- 동적으로 표시될 카테고리와 날짜 -->
+        <p class="goldfont" id="category"></p>
+        <p id="date"></p>
+
+         <!-- 내용 및 답변 등은 동적으로 생성될 부분 -->
+        <div class="content_box">
+            <div id="i_title"></div>
+            <div id="i_content"></div>
+            <div id="i_answer">
+                <i class="xi-subdirectory-arrow"></i>
+                답변: 안녕하세요. 불편을 드려 죄송합니다. 해당 문의의 첨부버튼 오류는 현재 수정되어 로그아웃 후 재접속 하시면 정상적으로 등록이 완료됩니다.
+            </div>
+        </div>
+          <!-- 삭제 버튼 -->
+        <button type="button" class="purple button" onclick="deleteInquiry()">문의내역 삭제</button>  
+        
+    </div>
+    <footer></footer>
+    <script>
+        const inquiry_id = localStorage.getItem('inquiry_id')
+        console.log(inquiry_id)
+
+        const userInfo = localStorage.getItem('userInfo')
+        const token = JSON.parse(userInfo).value
+        if(!token){
+            alert('로그인 후 사용바랍니다')
+            window.location.href = '../login.html'
+        }
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.history.back()
+        })
+
+        fetch(`http://localhost:8080/inquiry/myInquiry/${inquiry_id}`,{
+            method:"GET",
+            headers: {
+                "Authorization":`Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+
+            // 입력할 부분
+            const category = document.getElementById('category')
+            const date = document.getElementById('date')
+            const title = document.getElementById('i_title')
+            const content = document.getElementById('i_content')
+
+            category.textContent =`카테고리 > ${data.category}`
+            date.textContent =data.createdAt.slice(0, 10)
+            title.textContent =`제목: ${data.title}`
+            content.textContent =`내용: ${data.text}`
+        })
+
+        // 문의내역 삭제
+        function deleteInquiry(){
+            fetch(`http://localhost:8080/inquiry/delete/${inquiry_id}`,{
+                method:"DELETE",
+                headers: {
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+            .then(res => res.json())
+            .then((data) => {
+                alert(data.message)
+                window.location.href = './my_inquiry.html'
+            })
+            }
+    </script>
+</body>
+</html>

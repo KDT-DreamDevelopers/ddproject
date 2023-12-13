@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4, initial-scale=1.0">
+    <title>본인인증 페이지</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./findId.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="container1" style="display: block;">
+
+            <header>
+                <a href="../login.html"><i class="xi-angle-left" id="loginPage"></i></a>
+                <span class="title">아이디 찾기</span>
+            </header>
+
+            <form class="form_class" action="#">
+                <div class="container">
+                    <p>
+                        <label for="name" class="txt_input">이름:</label><input class="search" id="name"
+                            placeholder="이름을 입력하세요" maxlength="15">
+                    </p>
+        
+                    <p><label for="hp" class="txt_input">연락처:</label>
+                        <input class="search" id="hp" type="text" placeholder="하이픈( - )을 제외하고 입력하세요" maxlength="11">
+                    </p>
+        
+                    <button type="button" class="purple button" id="searchId">찾기</button>
+        
+                </div>
+        
+        
+            </form>
+
+        </div>
+        <div id="container2" style="display: none;">
+            <h2>PASS 본인확인</h2>
+            <form action="#" id="form2"> <!-- 마진값 수정을 위해id 추가함 (동휘)-->
+                <p class="input_title">인증번호</p>
+                <div id="checknum">
+                    <input class="search" type="text" id="codeCheck" placeholder="숫자 6자리 입력">
+                    <div id="timer"></div> <!--3분 지나면 local저장 사라지도록 구현-->
+                </div>
+                <!-- <p>시간연장 재전송</p>     시간연장, 재전송 버튼 구현 해야함(그냥 안해도될듯) -->
+                <button id="back">취소</button> <button type="button" id="codeBtn">확인</button>
+                <!--취소하면 이전 페이지, 확인은 코드 확인 후 회원가입창으로 다시 넘어가고 인증되었다고 표시-->
+            </form>
+            <div id="text">
+                <p>인증번호 문자를 못받으셨나요?</p>
+                <p class="sub">*입력하신 인증정보가 일치하지 않을 경우, 인증번호 문자는 발송되지 않습니다.</p>
+                <p class="sub">*인증번호가 문자로 수신되지 않을 경우 정확한 정보로 재시도해 주시기 바랍니다.</p>
+            </div>
+        </div>
+
+        <div id="container3" style="display: none;">
+
+            <div class="box">
+                <!-- 아이디 찾기 결과 -->
+                <p class="your_id" id="result">
+                    <!-- 결과값 들어갈 자리 -->
+                </p>
+            </div>
+
+            <a href="../login.html"><button class="purple button">확인</button></a>
+        </div>
+        
+    </div>
+    </div>
+
+    </div>
+    <script src="./findId.js"></script>
+</body>
+
+</html>

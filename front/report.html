@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>불편신고</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./report.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1"></script>
+    <!-- <script src="../day1/mypage_1.js"></script> -->
+    <script src="./report.js"></script> 
+    <style>.menu3 i{color: #EF9E3E !important;}</style>
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left"></i>
+        <span class="title">불편신고</span>
+    </header>
+    <div class="map-container">        
+        <div class="search-container">
+            <input class="search" type="text" maxlength="20" placeholder="위치:">
+            <i class="xi-maker" onclick="showCurrentLocation()"></i>
+        </div>
+        <div id="map">map</div>  
+    </div>
+    <div class="container">
+        <p class="display"><label for="fileInput" class="txt_input">불편사항:</label>
+            <input class="search bigsearch" type="text" placeholder="접수사항을 기재하세요:">
+        </p>
+        <p class="display"><label for="fileInput" class="txt_input">사진 첨부:</label>
+            <input class="search" id="fileInput" type="file" placeholder="사진 또는 파일을 첨부하세요">
+        </p>
+        <button type="button" class="purple button">접수</button>
+        <footer></footer>
+        <div data-include-file="./banner.html" class="footer-wrap includeJs"></div>
+    </div>
+    <script>
+        (function(){
+            function includeHtml() {
+                const includeTarget = document.querySelectorAll('.includeJs');
+                includeTarget.forEach(function(el, idx) {
+                    const targetFile = el.dataset.includeFile;
+                    if(targetFile){
+                        let xhttp = new XMLHttpRequest();
+                    
+                        xhttp.onreadystatechange = function() {
+                            if (this.readyState === XMLHttpRequest.DONE) {
+                                this.status === 200 ? (el.innerHTML = this.responseText) : null
+                                this.status === 404 ? (el.innerHTML = 'include not found.') : null
+                            }
+                        }
+                        xhttp.open('GET', targetFile, true);
+                        xhttp.send();
+                        return;
+                    }
+                });
+            };
+    
+            includeHtml();
+        })();
+    </script>
+</body>
+</html>
