@@ -81,13 +81,10 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
     }
 });
 
-app.use((req,res,next)=>{
-    res.sendStatus(404)
-})
 
 app.get("/isNear/:userX/:userY/:targetBusName", async (req, res) => {
     const { userX, userY, targetBusName } = req.params;
-    let result = false;
+    console.log(targetBusName)
     const busReturn = await distanceWithUserAndBusstop(targetBusName);
     console.log(busReturn)
     const busX = await busReturn[0];
@@ -118,6 +115,10 @@ async function getDistance(userX, userY, busX, busY){
 
     return dist;
 }
+
+app.use((req,res,next)=>{
+    res.sendStatus(404)
+})
 
 // DB연결
 connectDB().then(db=>{
