@@ -52,13 +52,6 @@ if(!token){
     window.location.href = '../login.html'
 }
 
-// 뒤로가기
-const back = document.getElementById('back')
-back.addEventListener('click', (e)=>{
-    console.log(2)
-    window.location.href = '../mypage_1.html'
-})
-
 const sendBtn = document.getElementById('sendBtn')
 sendBtn.addEventListener('click', async (e)=>{
     e.preventDefault();

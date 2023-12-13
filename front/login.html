@@ -20,7 +20,7 @@
         <div class="input_form"><label for="ID" class="txt_input">ID</label><input class="search" id="userid" type="text"></input></div>
 
         <div class="input_form"><label for="password" class="txt_input">PASSWORD</label><input class="search" id="userpw" type="password"></input></div>
-
+        <p class="Wmessage" style="display: flex; justify-content: center; color: rgb(255, 0, 0); height: 3rem; padding-top: 1rem;"></p>
         <button class="purple button" id="login">로그인</button>
         
 
@@ -67,10 +67,11 @@
             .then(data => {
                 if(data.message == '로그인 되었습니다'){ 
                     setItemWithExpiry('userInfo', data.token, 30)
-                    alert(data.message)
                     window.location.href = './mapPage.html'; //지도 화면으로 가야함
                 }else {
-                    alert(data.message)
+                    msg = document.querySelector(".Wmessage");
+                    msg.innerHTML = "<span>아이디 / 비밀번호를 확인해주세요</span>";
+                    // alert(data.message)
                 } 
                 
             })
