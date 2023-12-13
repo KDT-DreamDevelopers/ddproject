@@ -15,3 +15,7 @@ export function getUsers(){
 export function getInquiries(){
     return db.collection('inquiries')
 }
+
+export function getReports(){
+    return db.collection('reports')
+}
