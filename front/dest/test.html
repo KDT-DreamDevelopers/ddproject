@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./test.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 </head>
+
 <body>
-    <h2>welcome</h2>
-    <div id="container"></div>
+    <header class="purple">
+        <a href="./main.html"><i class="xi-angle-left"></i></a>
+        <span class="title">상세 경로</span>
+    </header>
+    <div id="container">
+    </div>
+    <script type="text/javascript" src="./test.js"></script>
     <script>
         const subwayList = [
             "1호선",
@@ -31,25 +41,107 @@
         const container = document.getElementById("container");
         const order = localStorage.getItem("pathSelector");
         const data = localStorage.getItem(`Top${order}Data`);
+        console.log(order)
         const useData = JSON.parse(data);
         console.log(useData)
-        let str = "";
-        let last =0;
+        let str = `<p>${localStorage.getItem("startTitle")}</p>`;
+        let last = 0;
         const lastValue = localStorage.getItem("endTitle")
+        let startBusStops = [];
 
-        for ( let i=0; i<useData["탑승지"].length; i++){
-            if(subwayList.includes(useData["호선노선"][i])){
-                str += `<i class='xi-subway'></i> <span>${useData["호선노선"][i]} ${useData["탑승지"][i]}에서 ${useData["호선노선"][i]} 승차</span>`;
-                str += `<p> ${useData["하차지"][i]} 에서 하차 </p>`
+
+        for (let i = 0; i < useData["탑승지"].length; i++) {
+            if (subwayList.includes(useData["호선노선"][i])) {
+                str += `<p><i class='xi-subway'></i> ${useData["호선노선"][i]} ${useData["탑승지"][i]} 승차</p>`;
+                str += "<span>|ㅡㅡㅡ정거장 이동ㅡㅡㅡ|</span>"
+                str += `<p> ${useData["하차지"][i]} 하차 </p>`
             }
             else {
-                str += `<i class='xi-bus'></i> <span>${useData["탑승지"][i]}에서 ${useData["호선노선"][i]}번 버스 승차 </span>`;
+                str += `<p><i class='xi-bus'></i> ${useData["탑승지"][i]} ${useData["호선노선"][i]}번 승차 </p>`;
+                str += "<span class='bus-stops'>|ㅡㅡㅡ정류장 이동ㅡㅡㅡ|</span>"
                 str += `<p>${useData["하차지"][i]} 에서 하차</p>`
+                startBusStops.push(useData["탑승지"][i]);
             }
-            last ++;
+            str += "<p>|ㅡㅡㅡ도보이동 </p>"
+            last++;
         }
-        str += `<p>${useData["하차지"][last-1]} => ${lastValue}</p>`
+        str += `<p>${lastValue}</p><p id="buttonParentP"><button type="button" id="confirm" class="big-buttons"> 경로 확정하기 </button></p>`
+
         container.innerHTML += str;
+
+
+        const buttonParentP = document.getElementById("buttonParentP");
+        const confirmButton = document.getElementById("confirm");
+
+        confirmButton.addEventListener("click", () => {
+            confirmButton.remove();
+            const newButton = "<button type='button' id='cancel' class='big-buttons'> 경로 취소하기 </button>"
+            buttonParentP.innerHTML += newButton;
+            window.alert("경로가 확정되었습니다!")
+
+
+            const cancelButton = document.getElementById("cancel");
+            cancelButton.addEventListener("click", () => {
+                window.location.href = "./main.html"
+            })
+
+            const busStop = document.getElementsByClassName("bus-stops");
+            for (let i = 0; i < busStop.length; i++) {
+                let newStartButton = document.createElement("button");
+                newStartButton.className = "start-buttons small-buttons";
+                newStartButton.textContent = " 탑 승 ";
+                newStartButton.disabled = true;
+
+                let newEndButton = document.createElement("button");
+                newEndButton.className = "end-buttons small-buttons";
+                newEndButton.textContent = " 하 차 ";
+                newEndButton.disabled = true;
+
+                busStop[i].appendChild(newStartButton);
+                busStop[i].appendChild(newEndButton);
+
+
+                newStartButton.addEventListener("click", () => {
+
+                    newStartButton.disabled = true;
+                    newEndButton.disabled = false;
+                    console.log("승차 신호 슛!");
+
+                })
+
+                newEndButton.addEventListener("click", () => {
+                    newEndButton.disabled = true;
+                    console.log("하차 신호 슛!!")
+                })
+            }
+
+            let idx = 0;
+            if (navigator.geolocation) {
+                const watchId = navigator.geolocation.watchPosition(
+                    async (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const startBusStops = document.getElementsByClassName("start-buttons")
+                        let isNear = await sendIsNear(latitude, longitude, startBusStops[idx]);
+                        if (isNear === true) {
+                            startBusStops[idx].disabled = false;
+                            idx ++;
+                            const test = "<p> 테스트 성공!! 테스트 성공!!테스트 성공!!테스트 성공!!테스트 성공!! </p>"
+                            container.innerHTML += test;
+                        }
+                        console.log(idx)
+                    },
+                    (error) => {
+                        console.error(error);
+                    }
+                )
+            } else {
+                console.error("Geolocation 지원 불가 브라우저")
+            }
+
+        })
+
     </script>
 </body>
+
 </html>
