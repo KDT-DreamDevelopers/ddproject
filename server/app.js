@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import authRouter from './router/auth.js'
 import inquiryRouter from './router/inquiry.js'
+import reportRouter from './router/report.js'
 import { config } from './config.js'
 import { connectDB } from './db/database.js';
 import bodyParser from "body-parser";
