@@ -15,7 +15,8 @@ export async function create(category, title, text, userId){
             title,
             text,
             userid: user.userid,
-            createdAt: new Date()
+            createdAt: new Date(),
+            answer: ''
         })
     )
     .then((result)=> getById(result.insertedId))
@@ -38,15 +39,6 @@ export async function getAllByUserid(userid){
         .then(mapInquiries)
 }
 
-// update()  문의 글 수정    수정 못하게 하기로함....
-// export async function update(id, category, title, text){
-//     return getInquiries().findOneAndUpdate(
-//         {_id: new ObjectID(id)},
-//         {$set: {category, title, text,}},
-//         {returnDocument: "after"}
-//     )
-// }
-
 // delete()   문의 글 삭제 
 export async function remove(id) {
     return getInquiries().deleteOne({_id: new ObjectID(id)})
@@ -59,4 +51,33 @@ function mapOptionalInquiry(inquiry){
 
 function mapInquiries(inquiries){
     return inquiries.map(mapOptionalInquiry)
+}
+
+// ---------------------------------------------------
+// 관리자 페이지
+
+// answer()  문의 글에 답변하기
+export async function answer(id, answer) {
+    try {
+        const objectId = new ObjectID(id);
+        const result = await getInquiries().findOneAndUpdate(
+            { _id: objectId },
+            { $set: { answer } },
+            { returnDocument: "after" }
+        );
+
+        return result;
+    } catch (error) {
+        console.error('Error updating document:', error);
+        throw error; 
+    }
+}
+
+// 모든 문의 내역
+export async function allInquiry() {
+    return getInquiries()
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray()
+        .then(mapInquiries);
 }

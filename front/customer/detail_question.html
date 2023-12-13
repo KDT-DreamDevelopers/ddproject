@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세 문의내역</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./detail_question.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <!-- <script src="./detail_inquiry.js"></script> -->
+</head>
+<body>
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">문의 내역</span>
+    </header>
+    <div class="container">
+        <!-- 동적으로 표시될 카테고리와 날짜 -->
+        <p class="goldfont" id="category"></p>
+
+         <!-- 내용 및 답변 등은 동적으로 생성될 부분 -->
+        <div class="content_box">
+            <div id="i_title"></div>
+            <div id="i_content"></div>
+            <div id="i_answer"></div>
+        </div>
+          <!-- 확인 버튼 -->
+        <button type="button" class="purple button" onclick="okay()">확인</button>  
+        
+    </div>
+    <footer></footer>
+    <script>
+        const inquiry_id = localStorage.getItem('question_id')
+        console.log(inquiry_id)
+
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.history.back()
+        })
+
+        fetch(`http://localhost:8080/inquiry/question/${inquiry_id}`,{
+            method:"GET"
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+
+            // 입력할 부분
+            const category = document.getElementById('category')
+            const title = document.getElementById('i_title')
+            const content = document.getElementById('i_content')
+            const answer = document.getElementById('i_answer')
+
+            category.textContent =`카테고리 > ${data.category}`
+            title.textContent =`제목: ${data.title}`
+            content.textContent =`내용: ${data.text}`
+            answer.innerHTML =`<i class="xi-subdirectory-arrow"></i>   답변:   ${data.answer}`
+        })
+
+        // 돌아가기
+        function okay(){
+            window.location.href = './customer.html'
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+.xi-angle-left {
+    color: rgb(255, 255, 255);
+}
+
+.title{ color: white;}
+
+
+body {
+    font-size: 1rem;
+    text-align: left; /* 텍스트 가운데 정렬 */
+    line-height: 2; /* 더 큰 간격으로 조절 */
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{width: 80%;}
+
+.container li {
+    position: relative; /* 상대 위치 설정 */
+    font-size: 1rem;
+    list-style-type: none;
+}
+
+.container li::after {
+    content: ""; /* 가상 요소를 생성 */
+    position: absolute;
+    top: 90%; /* 가로선을 요소의 중앙에 위치시키기 */
+    left: 0;
+    width: 100%; /* 가로선 길이 설정 */
+    border-bottom: 1px solid #ccc;
+    display: block;
+    margin-top: 5px; /* 가로선과 텍스트 사이의 간격을 조절 */
+    transform: translateY(-50%); /* 가로선의 높이 절반만큼 위로 이동 */
+}
+
+p,span {color: white;}
+p {font-size: 1.3rem; line-height: 1.3;}
+.goldfont { color: #EF9E3E;}
+.search {width: 90%;}

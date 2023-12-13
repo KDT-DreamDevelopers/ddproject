@@ -1,3 +1,7 @@
+.title {
+    color: white;
+}
+
 .bigsearch {
     height: 200px;
     position: relative;
@@ -9,7 +13,7 @@
 
 .map-container {
     position: relative;
-    margin: auto;
+    margin: 2rem auto;
     width: 80%;
 }
 
@@ -51,7 +55,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    transform: translate(10%, 100%);
+    transform: translate(18%, 100%);
 }
 
 footer {

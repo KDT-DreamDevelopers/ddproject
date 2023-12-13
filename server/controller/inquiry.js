@@ -21,8 +21,6 @@ export async function getAllInquiry(req, res){
 
 // 선택한 나의 문의글 하나만 가져오기   /inquiry/myInquiry/:id
 export async function getInquiry(req, res){
-    // 사용자 정보
-    const user = await authRepository.getById(req.userId)
     // 선택한 글의 id
     const id = req.params.id
     // 나의 문의글 전부
@@ -50,15 +48,45 @@ export async function deleteInquiry(req, res){
     res.status(201).json({message:'삭제되었습니다'})
 }
 
+// --------------------------------------------------------
 
+// 고객센터 자주하는 질문 내역    /inquiry/questions
+export async function getAllQuestion(req, res){
+    // 관리자 _id
+    const {id} = req.body
+    const user = await authRepository.getById(id)
+    // 관리자 문의글 전부
+    const inquiry = await inquiryRepository.getAllByUserid(user.userid)
+    res.status(200).json(inquiry)
+}
 
+// 관리자 페이지 문의 하나 선택해서 보기
+export async function getInquiryById(req, res) {
+    const id = req.params.id;
+    try {
+        const inquiry = await inquiryRepository.getById(id);
+        res.status(200).json(inquiry);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
+// 모든 문의 정보 가져오기
+export async function getAllInquery(req, res) {
+    try {
+        const data = await inquiryRepository.allInquiry();
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 
-// 문의하기 글 수정   /inquiry/update       수정 못하게 하기로함....
-// export async function updateInqury(req, res){
-//     // 문의하기 _id
-//     const id = req.params.id
-//     const {category, title, text} = req.body;
-//     const update = await inquiryRepository.update(id, category, title, text)
-//     res.status(201).json({message: '수정되었습니다', update})
-// }
+// 문의하기 답변
+export async function PostAnswer(req,res,next){
+    const id = req.params.id
+    const answer = req.body.answer;
+    const inquiry = await inquiryRepository.answer(id,answer)
+    res.status(201).json(inquiry)
+}

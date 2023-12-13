@@ -36,11 +36,16 @@
     <script>
         const userInfo = localStorage.getItem('userInfo')
         const token = JSON.parse(userInfo).value
-        if(!token){
+        if (!userInfo){
             alert('로그인 후 사용바랍니다')
             window.location.href = '../login.html'
+        }else{
+            const token = JSON.parse(userInfo).value
+            if(!token){
+                alert('로그인 후 사용바랍니다')
+                window.location.href = '../login.html'
+            }
         }
-
         // 뒤로가기
         const back = document.getElementById('back')
         back.addEventListener('click', (e)=>{

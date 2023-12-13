@@ -7,23 +7,10 @@ import path from 'path'
 import {isAuth} from '../middleware/auth.js';
 
 const router = express.Router()
-const upload = multer()
+
 
 // 로그인 validate
 const validateCredential = [
-    body('userid')
-        .trim()
-        .notEmpty()
-        .withMessage('userid는 반드시 입력해야 함'),
-    body('userpw')
-        .trim()
-        .isLength({min:3})
-        .withMessage('userpw는 반드시 4자 이상이여야 함'),
-    validate
-]
-
-// 회원가입 validate
-const validateSignup = [
     body('userid')
         .trim()
         .notEmpty().withMessage('userid는 반드시 입력해야 함')
@@ -35,6 +22,12 @@ const validateSignup = [
         .isLength({ min: 8, max: 15 }).withMessage('userpw는 8~15자 이어야 함')
         .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*+=-])[A-Za-z\d~!@#$%^&*+=-]+$/)
         .withMessage('userpw는 적어도 하나의 알파벳, 하나의 숫자, 하나의 특수문자(~!@#$%^&*+=-)가 포함된 8-15자리의 공백이 없는 문자열이어야 함'),
+    validate
+]
+
+// 회원가입 validate
+const validateSignup = [
+    ...validateCredential,
     body('name')
         .notEmpty().withMessage('name은 반드시 입력')
         .matches(/^(?:[A-Za-z]+|[가-힣]+)$/).withMessage('name은 영문 알파벳 또는 한글문자로 1-20자 이어야 함'),
@@ -57,7 +50,7 @@ router.post('/check', authController.check)
 // 회원가입
 router.post('/signup', authController.upload.single('file'), validateSignup, authController.signup)
 // 로그인
-router.post('/login', authController.login)
+router.post('/login', validateCredential, authController.login)
 // id 찾기
 router.post('/findID', authController.findID)
 // pw 찾기
@@ -77,5 +70,15 @@ router.put('/modify', isAuth, authController.modify)
 // 비밀번호 변경
 router.put('/newPW_id', isAuth, authController.newPW_id)
 
+
+// ----------------------------------------------------------
+// 관리자 페이지
+
+// 가입된 정보 확인
+router.get('/members',authController.getAllUsers)
+// 등록증 승인
+router.put('/identifyOk/:id', isAuth, authController.updateOkFieldById);
+// 등록증 거부
+router.put('/refuse/:id', isAuth, authController.updateOkFieldById_Refuse);
 
 export default router

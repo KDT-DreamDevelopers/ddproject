@@ -39,3 +39,70 @@ function showCurrentLocation() {
         alert("Geolocation을 지원하지 않습니다.");
     }
 }
+
+// 로그인 여부 확인
+const userInfo = localStorage.getItem('userInfo')
+if(!userInfo){
+    alert('로그인 후 사용바랍니다')
+    window.location.href = '../login.html'
+}
+const token = JSON.parse(userInfo).value
+if(!token){
+    alert('로그인 후 사용바랍니다')
+    window.location.href = '../login.html'
+}
+
+// 뒤로가기
+const back = document.getElementById('back')
+back.addEventListener('click', (e)=>{
+    console.log(2)
+    window.location.href = '../mypage_1.html'
+})
+
+const sendBtn = document.getElementById('sendBtn')
+sendBtn.addEventListener('click', async (e)=>{
+    e.preventDefault();
+
+    // 입력 정보 추출
+    const location = document.getElementById('location').value
+    const text = document.getElementById('text').value
+    const fileInput = document.getElementById('fileInput')
+    const file = fileInput.files[0]
+
+    if (!location){
+        alert('위치를 입력하세요')
+    }else if (!text){
+        alert('불편사항을 입력하세요')
+    }else if(!fileInput){
+        alert('사진파일을 함께 첨부하세요')
+    }else{
+        // 데이터 전송
+        const formData = new FormData()
+        formData.append('location', location)
+        formData.append('text', text)
+        formData.append('file', file)
+
+        try{
+            const response = await fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/report/write', {
+                method:'POST',
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                },
+                body: formData
+            })
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message)
+                window.location.href = './rep_complete.html';
+            } else {
+                const data = await response.json()
+                console.log(data)
+                console.error('신고하기 실패');
+                alert(data.message)
+            }
+        } catch (error) {
+            console.error('에러 발생', error);
+        }
+    }
+
+})

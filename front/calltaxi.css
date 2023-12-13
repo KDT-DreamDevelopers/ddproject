@@ -55,10 +55,6 @@ header {
     color: white ;
 }
 
-#callButton {
-    position: relative;
-}
-
 .calling {
     position: absolute;
     transform: translate(-30%, -180%);

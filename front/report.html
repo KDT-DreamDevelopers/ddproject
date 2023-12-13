@@ -13,8 +13,7 @@
     <style>.menu3 i{color: #EF9E3E !important;}</style>
 </head>
 <body>
-    <header>
-        <i class="xi-angle-left"></i>
+    <header class="purple">
         <span class="title">불편신고</span>
     </header>
     <div class="map-container">        
@@ -31,7 +30,7 @@
         <p class="display"><label for="fileInput" class="txt_input">사진 첨부:</label>
             <input class="search" id="fileInput" type="file" placeholder="사진 또는 파일을 첨부하세요">
         </p>
-        <button type="button" class="purple button">접수</button>
+        <button type="button" class="purple button" id="sendBtn">접수</button>
         <footer></footer>
         <div data-include-file="./banner.html" class="footer-wrap includeJs"></div>
     </div>
@@ -60,5 +59,6 @@
             includeHtml();
         })();
     </script>
+    <script src="./report.js"></script> 
 </body>
 </html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터</title>
+    <link rel="stylesheet" href="../userFrame.css">
+    <link rel="stylesheet" href="./customer.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+
+
+</head>
+<body class="purple">
+    <header>
+        <i class="xi-angle-left" id="back"></i>
+        <span class="title">고객센터</span>
+    </header>
+    <div class="container">
+        <p>이동의 꿈입니다.<br>무엇을 도와드릴까요?</p>
+        <!-- <input class="search" type="text" maxlength="20" placeholder="궁금한 내용의 키워드를 검색하세요."> -->
+        <p>자주묻는 질문</p>
+        <div id="questions"></div>
+        
+        <button type="button" class="gold button" onclick="callCustomerCenter()">고객센터 전화연결</button>
+    </div>
+    <footer></footer>
+    <input type="hidden" id="id" value="65794175be06f419797cc4ad">
+    <script>
+        // 뒤로가기
+        const back = document.getElementById('back')
+        back.addEventListener('click', (e)=>{
+            window.location.href = '../mypage_1.html'
+        })
+
+        // 데이터 불러오기
+        const id = document.getElementById('id').value
+
+        fetch("http://localhost:8080/inquiry/questions",{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: id}), 
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log(data)
+            const questions = document.getElementById('questions')
+
+            if(data){
+                data.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="goldfont">Q</span>&nbsp&nbsp<span>${item.title}</span>`
+                    li.setAttribute('data-id', item.id)
+                    li.addEventListener('click', handleClick)
+                    questions.insertBefore(document.createTextNode(' '), questions.firstChild);
+                    questions.insertBefore(li,questions.firstChild);
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        })
+
+        // li 클릭이벤트 핸들러
+        function handleClick(event){
+            const clickedNodeId= event.currentTarget.getAttribute('data-id')
+            console.log(clickedNodeId)
+            localStorage.setItem('question_id', clickedNodeId)
+            window.location.href = './detail_question.html'
+        }
+
+        // 고객센터 전화걸기
+        function callCustomerCenter() {
+        const phoneNumber = '010-2716-3951';  
+
+        // tel 링크를 사용하여 전화 걸기
+        window.location.href = `tel:${phoneNumber}`;
+    }
+    </script>
+</body>
+</html>

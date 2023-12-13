@@ -21,6 +21,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/inquiry', inquiryRouter)
+app.use('/report', reportRouter)
 
 
 app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
@@ -87,16 +88,13 @@ app.get("/isNear/:userX/:userY/:targetBusName", async (req, res) => {
     const { userX, userY, targetBusName } = req.params;
     let result = false;
     const busReturn = await distanceWithUserAndBusstop(targetBusName);
+    console.log(busReturn)
     const busX = await busReturn[0];
     const busY = await busReturn[1];
 
     const distance = await getDistance(userX, userY, busX, busY);
 
-    if (distance <= 10){
-        result = true;
-    }
-
-    res.status(200).json(result);
+    res.status(200).json(distance);
 })
 
 async function getDistance(userX, userY, busX, busY){

@@ -41,7 +41,6 @@
         const container = document.getElementById("container");
         const order = localStorage.getItem("pathSelector");
         const data = localStorage.getItem(`Top${order}Data`);
-        console.log(order)
         const useData = JSON.parse(data);
         console.log(useData)
         let str = `<p>${localStorage.getItem("startTitle")}</p>`;
@@ -73,17 +72,11 @@
         const buttonParentP = document.getElementById("buttonParentP");
         const confirmButton = document.getElementById("confirm");
 
-        confirmButton.addEventListener("click", () => {
+        confirmButton.addEventListener("click", async () => {
             confirmButton.remove();
-            const newButton = "<button type='button' id='cancel' class='big-buttons'> 경로 취소하기 </button>"
+            const newButton = "<button id='cancel' class='big-buttons' onclick='backToMain()'> 경로 취소하기 </button>"
             buttonParentP.innerHTML += newButton;
             window.alert("경로가 확정되었습니다!")
-
-
-            const cancelButton = document.getElementById("cancel");
-            cancelButton.addEventListener("click", () => {
-                window.location.href = "./main.html"
-            })
 
             const busStop = document.getElementsByClassName("bus-stops");
             for (let i = 0; i < busStop.length; i++) {
@@ -121,15 +114,15 @@
                     async (position) => {
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
-                        const startBusStops = document.getElementsByClassName("start-buttons")
                         let isNear = await sendIsNear(latitude, longitude, startBusStops[idx]);
-                        if (isNear === true) {
+                        const onload = `<p>현재 위치: ${latitude} ${longitude}, 거리 : ${isNear}</p>`
+                        container.innerHTML += onload
+                        if (isNear < 10) {
                             startBusStops[idx].disabled = false;
-                            idx ++;
+                            idx++;
                             const test = "<p> 테스트 성공!! 테스트 성공!!테스트 성공!!테스트 성공!!테스트 성공!! </p>"
                             container.innerHTML += test;
                         }
-                        console.log(idx)
                     },
                     (error) => {
                         console.error(error);
@@ -140,6 +133,10 @@
             }
 
         })
+
+        function backToMain(){
+            window.location.href = "./main.html"
+        }
 
     </script>
 </body>
