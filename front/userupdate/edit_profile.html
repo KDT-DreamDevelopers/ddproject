@@ -56,7 +56,7 @@
             window.location.href = '../mypage.html'
         })
         
-        fetch("http://localhost:8080/auth/userInfo",{
+        fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/userInfo",{
             method:"GET",
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -89,7 +89,7 @@
             }
             const jsonData = JSON.stringify(formData)
 
-            fetch("http://localhost:8080/auth/modify", {
+            fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/modify", {
                 method:"PUT",
                 headers:{
                     "Authorization":`Bearer ${token}`,

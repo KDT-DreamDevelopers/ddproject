@@ -36,7 +36,7 @@ searchId.addEventListener('click', async (e)=>{
         const container2 = document.getElementById('container2');
         container2.style.display = 'block';
 
-        fetch('http://localhost:8080/auth/check',{
+        fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/check',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ codeBtn.addEventListener('click', (e)=>{
         const jsonData = JSON.stringify(formData)
 
         // userid 찾기
-        fetch('http://localhost:8080/auth/findID',{
+        fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/findID',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

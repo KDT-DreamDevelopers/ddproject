@@ -52,7 +52,7 @@
             const new_pw = document.getElementById('new_pw').value
 
             if (checkPw()){
-                fetch('http://localhost:8080/auth/newPW_id',{
+                fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/newPW_id',{
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

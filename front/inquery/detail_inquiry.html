@@ -50,7 +50,7 @@
             window.history.back()
         })
 
-        fetch(`http://localhost:8080/inquiry/myInquiry/${inquiry_id}`,{
+        fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/myInquiry/${inquiry_id}`,{
             method:"GET",
             headers: {
                 "Authorization":`Bearer ${token}`
@@ -74,7 +74,7 @@
 
         // 문의내역 삭제
         function deleteInquiry(){
-            fetch(`http://localhost:8080/inquiry/delete/${inquiry_id}`,{
+            fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/delete/${inquiry_id}`,{
                 method:"DELETE",
                 headers: {
                     "Authorization":`Bearer ${token}`

@@ -33,7 +33,7 @@ searchPw.addEventListener('click', async (e)=>{
 
     if (checkAll()){
         // PW 찾기
-        fetch('http://localhost:8080/auth/findPW',{
+        fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/findPW',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ searchPw.addEventListener('click', async (e)=>{
         .then((data) => {
             // 해당 유저 정보 있으면 인증코드 전송
             if(data.message === 'ok'){
-                    fetch('http://localhost:8080/auth/check',{
+                    fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/check',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ edit.addEventListener('click',()=>{
         const jsonData = JSON.stringify(formData)
     
         // PW 찾기
-        fetch('http://localhost:8080/auth/newPW',{
+        fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/newPW',{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

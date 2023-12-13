@@ -61,7 +61,7 @@
             console.log(formData)
             const jsonData = JSON.stringify(formData)
 
-            fetch("http://localhost:8080/inquiry/write",{
+            fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/write",{
                 method:"POST",
                 headers:{
                     "Authorization":`Bearer ${token}`,

@@ -19,7 +19,7 @@ async function sendToMarking(data, title) {
 
 async function send(startX, startY, endX, endY) {
     console.log(startX, startY, endX, endY)
-    const response = await fetch(`http://localhost:8080/send/${startY}/${startX}/${endY}/${endX}`)
+    const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/send/${startY}/${startX}/${endY}/${endX}`)
 
     const result = await response.json();
 

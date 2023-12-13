@@ -31,7 +31,7 @@ function useridCheck(){
     }
     const useridData = {userid: userid.value}
     const userid_jsonData = JSON.stringify(useridData)
-    fetch('http://localhost:8080/auth/userid_check', {
+    fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/userid_check', {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -118,7 +118,7 @@ signUp.addEventListener('click', async (e)=>{
         formData.append('file', file)
         
         try{
-            const response = await fetch('http://localhost:8080/auth/signup', {
+            const response = await fetch('https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/signup', {
                 method:'POST',
                 body: formData
             })
