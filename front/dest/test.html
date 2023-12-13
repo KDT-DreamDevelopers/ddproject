@@ -117,7 +117,7 @@
                         let isNear = await sendIsNear(latitude, longitude, startBusStops[idx]);
                         const onload = `<p>현재 위치: ${latitude} ${longitude}, 거리 : ${isNear}</p>`
                         container.innerHTML += onload
-                        if (isNear < 10) {
+                        if (isNear <= 80) {
                             startBusStops[idx].disabled = false;
                             idx++;
                             const test = "<p> 테스트 성공!! 테스트 성공!!테스트 성공!!테스트 성공!!테스트 성공!! </p>"
