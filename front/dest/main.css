@@ -1,3 +1,4 @@
+/*/////////////////////헤더부분//////////////////*/
 .origin {
     display: block;
 }
@@ -15,6 +16,9 @@ header span {
     height: 11.55rem;
 }
 
+.container {
+    width: 87%;
+}
 form > button {
     width: 0;
     height: 0;
@@ -42,4 +46,76 @@ form > button {
 .warning span {
     font-size: 0.75rem;
     color: rgba(82, 82, 82, 0.5);
+}
+/*///////////////////////////////////////////////////////////*/
+/* 소요시간 바 */
+/* .bar {
+    height: 20px;
+    width: 100%;
+    position: relative;
+    margin-top: 5px;
+    border-radius: 2px;
+    overflow: hidden;
+} */
+
+
+/* 소요시간 */
+.time {font-size: 1.5em;}
+
+.inform {
+    height: 20px;
+    border-top: 0.1rem solid #e1e1e1b4;
+    border-bottom: 0.1rem solid #707070b4;
+    padding: 1.5rem 0 1rem 0;
+    height: fit-content;
+}
+
+.details{
+    display: flex;
+    justify-content: space-between;
+}
+
+.leftbox {
+    width: 30%;
+    height: fit-content;
+}
+
+.rightbox{   
+    width: 60%;
+    height: fit-content;
+}
+
+.rightbox p {
+    margin-top: 0;
+}
+
+.rightbox span {
+    margin-left: 0.5rem;
+}
+
+.bar {
+    width: 100%;
+    height: 1rem;
+    display: flex;
+    border-radius: 0.5rem;
+}
+
+.bar * {
+    height: 1rem;
+    font-size: 0.8rem;
+    color: white;
+    text-align: center;
+}
+
+.walk {
+    background-color :#d1d0d0;
+    color: black !important;
+}
+
+.bus {
+    background-color: blue;
+}
+
+.inform {
+    list-style: none;
 }
