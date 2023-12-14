@@ -12,7 +12,7 @@
 </head>
 <body class="purple">
     <header>
-        <i class="xi-angle-left" id="back"></i>
+        <a href="../mypage.html"><i class="xi-angle-left" id="back"></i></a>
         <span class="title">고객센터</span>
     </header>
     <div class="container">
@@ -29,7 +29,7 @@
         // 데이터 불러오기
         const id = document.getElementById('id').value
 
-        fetch("http://localhost:8080/inquiry/questions",{
+        fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/questions",{
             method:"POST",
             headers: {
                 'Content-Type': 'application/json'

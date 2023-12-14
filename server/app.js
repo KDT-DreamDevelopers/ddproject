@@ -128,7 +128,7 @@ app.use((req,res,next)=>{
 connectDB().then(db=>{
     console.log('init!')
     const server=app.listen(config.host.port, () => {
-        console.log("http://localhost:8080에서 실행중");
+        console.log("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app에서 실행중");
     })
     // initSocket(server)  //나중에 할거
 }).catch(console.error)

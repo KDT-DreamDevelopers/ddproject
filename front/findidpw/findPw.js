@@ -139,6 +139,7 @@ edit.addEventListener('click',()=>{
         .then((data) => {
             console.log(data)
             alert(data.message)
+            window.location.href = "../login.html"
         })
     }
 })
