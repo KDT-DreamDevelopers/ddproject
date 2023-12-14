@@ -35,7 +35,8 @@
     
     <script>
         const userInfo = localStorage.getItem('userInfo')
-        const token = JSON.parse(userInfo).value
+        let token;
+        token = JSON.parse(userInfo).value
         if (!userInfo){
             alert('로그인 후 사용바랍니다')
             window.location.href = '../login.html'

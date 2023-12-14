@@ -68,7 +68,6 @@
 
         container.innerHTML += str;
 
-
         const buttonParentP = document.getElementById("buttonParentP");
         const confirmButton = document.getElementById("confirm");
 
@@ -79,50 +78,39 @@
             window.alert("경로가 확정되었습니다!")
 
             const busStop = document.getElementsByClassName("bus-stops");
+            let idx = 0;
             for (let i = 0; i < busStop.length; i++) {
-                let newStartButton = document.createElement("button");
-                newStartButton.className = "start-buttons small-buttons";
-                newStartButton.textContent = " 탑 승 ";
-                newStartButton.disabled = true;
+                let newStartButton = `<button type="button" class="start-buttons small-buttons" onclick="clickStartButton(${i})"> 승 차 </button>`
+                let newEndButton = `<button type="button" class="end-buttons small-buttons" onclick="clickEndButton(${i})"> 하 차 </button>`
+                busStop[i].innerHTML += newStartButton + newEndButton;
 
-                let newEndButton = document.createElement("button");
-                newEndButton.className = "end-buttons small-buttons";
-                newEndButton.textContent = " 하 차 ";
-                newEndButton.disabled = true;
-
-                busStop[i].appendChild(newStartButton);
-                busStop[i].appendChild(newEndButton);
-
-
-                newStartButton.addEventListener("click", () => {
-
-                    newStartButton.disabled = true;
-                    newEndButton.disabled = false;
-                    console.log("승차 신호 슛!");
-
-                })
-
-                newEndButton.addEventListener("click", () => {
-                    newEndButton.disabled = true;
-                    console.log("하차 신호 슛!!")
-                })
+                let smallButtons = document.getElementsByClassName("small-buttons");
+                smallButtons[2*i].disabled = true;
+                smallButtons[2*i+1].disabled = true;
             }
 
-            let idx = 0;
+            
             if (navigator.geolocation) {
-                const watchId = navigator.geolocation.watchPosition(
+                let watchId;
+                watchId = navigator.geolocation.watchPosition(
                     async (position) => {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
-                        let isNear = await sendIsNear(latitude, longitude, startBusStops[idx]);
+                        const latitude = await position.coords.latitude;
+                        const longitude = await position.coords.longitude;
+                        let isNear = await sendIsNear(latitude, longitude, await startBusStops[idx]);
+
                         const onload = `<p>현재 위치: ${latitude} ${longitude}, 거리 : ${isNear}</p>`
                         container.innerHTML += onload
-                        if (isNear <= 90) {
+                        if (isNear <= 10000000) {
                             let startButtons = document.getElementsByClassName("start-buttons")
                             startButtons[idx].disabled = false;
-                            idx++;
                             const test = "<p> 테스트 성공!! 테스트 성공!!테스트 성공!!테스트 성공!!테스트 성공!! </p>"
                             container.innerHTML += test;
+                            idx++;
+                        }
+
+                        if ( startBusStops[idx] === undefined){
+                            navigator.geolocation.clearWatch(watchId);
+                            return;
                         }
                     },
                     (error) => {
@@ -137,6 +125,22 @@
 
         function backToMain(){
             window.location.href = "./main.html"
+        }
+
+        function clickStartButton(i){
+            console.log(i);
+            const smallButtons = document.getElementsByClassName("small-buttons");
+            const startButton = smallButtons[2*i];
+            const endButton = smallButtons[2*i + 1];
+            startButton.disabled = true;
+            endButton.disabled = false;
+        }
+
+        function clickEndButton(i){
+            console.log(i);
+            const smallButtons = document.getElementsByClassName("small-buttons");
+            const endButton = smallButtons[2*i + 1];
+            endButton.disabled = true;
         }
 
     </script>

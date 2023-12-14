@@ -1,41 +1,75 @@
 import { MongoClient } from "mongodb"
-
+import { getBestBusDriver } from "./busdriver.js";
+const subwayList = [
+    "1호선",
+    "2호선",
+    "3호선",
+    "4호선",
+    "5호선",
+    "6호선",
+    "7호선",
+    "8호선",
+    "9호선",
+    "호선",
+    "신분당선",
+    "분당선",
+    "공항철도",
+    "인천1호선",
+    "인천2호선",
+    "경의중앙선",
+    "경춘선"
+]
 export class MakePriorityAboutPath {
     constructor(pathList) {
         this.pathList = pathList;
         this.scoreList = [];
         this.url =
             'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
-        this.client =  new MongoClient(this.url);
+        this.client = new MongoClient(this.url);
         this.database = this.client.db('MoveOfDream');
         this.collection = this.database.collection('subways');
     }
 
     async isThereLiftOrElevator() {
+        let scoreIndex = 0;
+        
         for (const onePathList of this.pathList) {
             this.scoreList.push(0);
             let isSubway = false;
-            for (const i of onePathList['탑승지']) {
-                if (i.slice(-1) === '역') {
+            for (let i = 0; i < onePathList["탑승지"].length; i++) {
+                if (subwayList.includes(onePathList["호선노선"][i])) {
                     isSubway = true;
-                    const findData = { name: i.slice(0, -1).split('(')[0] };
+                    const findData = { name: onePathList["탑승지"][i].slice(0, -1).split("(")[0] };
                     const findResult = await this.collection.findOne(findData);
                     if (findResult === null) {
-                        this.scoreList[this.scoreList.length - 1] += 3;
-                        continue;
+                        this.pathList.splice(this.scoreList.length - 1, 1);
+                        this.scoreList.pop();
+                        break;
+                    } else {
+                        const numElev = findResult["elevLOC"].length;
+                        const numLift = findResult["liftLOC"].length;
+                        this.scoreList[scoreIndex] += numElev + numLift;
+                        scoreIndex ++;
                     }
-                    const numElev = findResult['elevLOC'].length;
-                    const numLift = findResult['liftLOC'].length;
-                    this.scoreList[this.scoreList.length - 1] += numElev + numLift;
                 } else {
+                    //  버스인 경우 해당 버스가 언제 도착하는지 소요시간에 추가
                     this.scoreList[this.scoreList.length - 1] += 3;
+                    const tmpdata = await getBestBusDriver(onePathList["탑승지"][i], onePathList["호선노선"][i]);
+
+                    if ( tmpdata && tmpdata.arrmsg1 && (await tmpdata.arrmsg1[0] === "운행종료" || await tmpdata.arrmsg1[0] === "출발대기")) {
+                        this.pathList.splice(this.scoreList.length - 1, 1);
+                        this.scoreList.pop();
+                        break;
+                    } else {
+                        // onePathList["소요시간"][0] += await tmpdata.exps1 / 60;
+                        scoreIndex ++;
+                        // console.log(tmpdata)
+                    }
                 }
             }
-            if (isSubway && this.scoreList[this.scoreList.length - 1] === 0) {
-                this.pathList.splice(this.pathList.indexOf(onePathList), 1);
-                this.scoreList.pop();
-            }
         }
+        // console.log(this.scoreList)
+        // console.log(this.pathList)
     }
 
     async lengthOfTransfer() {
@@ -62,15 +96,27 @@ export class MakePriorityAboutPath {
         const topFivePath = {};
         for (let i = 0; i < 5; i++) {
             const index = this.findMaxIndex(this.scoreList);
-            topFivePath[i] = this.pathList[index];
+            if ( index != -1){
+                topFivePath[i] = this.pathList[index];
+                this.scoreList[index] = 0;
+                console.log(index)
+            } else {
+                break;
+            }
         }
         return topFivePath;
     }
 
     findMaxIndex(list) {
-        const M = Math.max(...list);
-        const index = list.indexOf(M);
-        list[index] = 0;
-        return index;
+        let maxIndex = -1;
+        let maxValue = Number.NEGATIVE_INFINITY;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i] > maxValue) {
+                maxValue = list[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
+    
 }

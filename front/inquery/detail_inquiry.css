@@ -65,3 +65,8 @@
     margin-left: auto;
     margin-top: -20px;
 }
+
+#i_answer > div {
+    height: 150px;
+    overflow: scroll
+}

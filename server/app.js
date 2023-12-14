@@ -12,6 +12,7 @@ import { gybus_and_subway_transfer } from "./gy/gybus-and-subway-transfer.js";
 import { gybus } from "./gy/gybus.js";
 import { gysubway } from "./gy/gysubway.js";
 import { distanceWithUserAndBusstop } from "./distanceUserBus.js"
+import { getBestBusDriver } from './busdriver.js'
 
 const app = express()
 
@@ -28,18 +29,18 @@ app.use('/report', reportRouter)
 app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
     const { startX, startY, endX, endY } = req.params;
     let datas = [];
+                                                                                   
 
     try {
         const result_transfer = await gybus_and_subway_transfer(startX, startY, endX, endY);
-        datas = await datas.concat(result_transfer);
+        datas = datas.concat(result_transfer);
 
         const result_bus = await gybus(startX, startY, endX, endY);
-        datas = await datas.concat(result_bus);
+        datas = datas.concat(result_bus);
 
         const result_sub = await gysubway(startX, startY, endX, endY);
-        datas = await datas.concat(result_sub);
+        datas = datas.concat(result_sub);
     
-
         for (let i=0; i< datas.length; i++){
             if( datas[i]["역개수"] ){
                 if( datas[i]["역개수"].length === 0){
@@ -48,14 +49,8 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
             }
         }
 
-        console.log(datas.length)
-
         const uniqueSet = new Set(datas.map(item => JSON.stringify(item)));
         const uniqueData = Array.from(uniqueSet, JSON.parse);
-
-
-        console.log(uniqueData.length)
-
 
         if (datas.length === 0) {
             res.status(200).json({
@@ -74,29 +69,22 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
         const topFivePath = await priorityClass.makeLastFiveData();
         
         res.status(200).json(topFivePath);
-
     }
     catch (error) {
         console.error(error)
     }
 });
 
-
 app.get("/isNear/:userX/:userY/:targetBusName", async (req, res) => {
     const { userX, userY, targetBusName } = req.params;
     console.log(targetBusName)
     const busReturn = await distanceWithUserAndBusstop(targetBusName);
-    console.log(busReturn)
     const busX = await busReturn[0];
     const busY = await busReturn[1];
 
     const distance = await getDistance(userX, userY, busX, busY);
 
-    const result = {
-        "result": distance
-    }
-
-    res.status(200).json(result);
+    res.status(200).json(distance);
 })
 
 async function getDistance(userX, userY, busX, busY){
@@ -120,6 +108,16 @@ async function getDistance(userX, userY, busX, busY){
     return dist;
 }
 
+app.get("/clickstart/:busStopName/:busRoot", async(req, res) => {
+    const { busStopName, busRoot } = req.params;
+    const result = await getBestBusDriver(busStopName, busRoot);
+    const returnResult = {
+        "result": result
+    }
+    res.status(200).json(returnResult);
+})
+
+
 app.use((req,res,next)=>{
     res.sendStatus(404)
 })
@@ -128,7 +126,7 @@ app.use((req,res,next)=>{
 connectDB().then(db=>{
     console.log('init!')
     const server=app.listen(config.host.port, () => {
-        console.log("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app에서 실행중");
+        console.log("http://localhost:8080에서 실행중");
     })
     // initSocket(server)  //나중에 할거
 }).catch(console.error)

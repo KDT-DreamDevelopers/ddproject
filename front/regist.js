@@ -10,13 +10,13 @@ userid.addEventListener('input',() => {
 
 const hp = document.getElementById('hp')
 hp.addEventListener('input',() => {
-    document.getElementById('check').value = 'n'
+    localStorage.setItem("check",'')
 })
 
 // 시작 페이지로 이동
 const back = document.getElementById('back')
 back.addEventListener('click', (e)=>{
-    window.location.href = './index.html'
+    window.location.href = './start.html'
 })
 
 
@@ -127,13 +127,11 @@ signUp.addEventListener('click', async (e)=>{
                 alert('회원가입 되었습니다.')
                 console.log(data);
                 window.location.href = './login.html';
-                // 회원가입이 성공했다면 다음 페이지로 이동
-                // window.location.href = '/next-page'; // 변경하고 싶은 URL로 수정
             } else {
                 const data = await response.json()
                 console.log(data)
                 console.error('회원가입 실패');
-                alert('회원가입에 실패하였습니다.')
+                alert(data.message)
             }
         } catch (error) {
             console.error('에러 발생', error);

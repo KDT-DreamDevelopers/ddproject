@@ -14,3 +14,13 @@ export async function distanceWithUserAndBusstop(busstopName) {
     const busY = await findResult.crdnt_y;
     return [await busX, await busY]
 }
+
+export async function getBusStopIds(busstopName){
+    const findData = { sttn_nm: busstopName};
+    const findResult = await collection.find(findData).toArray();
+    const sttn_ids = [];
+    for (let i=0; i<findResult.length; i++){
+        sttn_ids.push(await findResult[i].sttn_id);
+    }
+    return sttn_ids;
+}
