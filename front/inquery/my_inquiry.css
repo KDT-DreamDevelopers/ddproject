@@ -4,17 +4,22 @@
     font-size: 1.5rem; 
     line-height: 4;
     text-align: center;
-    margin-top: 80px;
-    margin-bottom: 20px;
+    margin: 5rem auto 1.25rem auto;
+    text-align: left;
+}
+
+.container{
+    
 }
 
 .button {
-    margin-top: 80px; /* 문의하기 버튼과 위 요소 사이의 간격을 조절 */
+    margin-top: 5rem; /* 문의하기 버튼과 위 요소 사이의 간격을 조절 */
 }
 
 .container li {
     position: relative; /* 상대 위치 설정 */
     font-size: 1.2rem;
+    padding-left: 10%;
     color: rgb(110, 108, 108);
 }
 
@@ -28,9 +33,11 @@
     display: block;
     margin-top: 5px; /* 가로선과 텍스트 사이의 간격을 조절 */
     transform: translateY(-50%); /* 가로선의 높이 절반만큼 위로 이동 */
+    text-align: center;
 }
 
 li span {
+
     font-size: 12px; 
 }
 

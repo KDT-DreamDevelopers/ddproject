@@ -34,6 +34,16 @@ function showCurrentLocation() {
                 position: markerPosition
             });
             marker.setMap(map);
+
+            // 좌표를 주소로 변환
+            var geocoder = new kakao.maps.services.Geocoder();
+            geocoder.coord2Address(lon, lat, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var roadAddress = result[0].address.address_name;
+                    console.log(roadAddress);
+                    document.getElementById('location').value = roadAddress
+                }
+            })
         });
     } else {
         alert("Geolocation을 지원하지 않습니다.");
