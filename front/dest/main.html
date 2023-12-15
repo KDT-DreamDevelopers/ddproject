@@ -41,7 +41,7 @@
     </header>
     <div id="placesList"></div>
     <div class="container" id="container">
-        <div class="margin"></div>
+        <!-- <div class="margin"></div>
         <div class="route">
             <p class="timeNotice"></p>
             <div class="bar" id="routeBar1"></div>
@@ -66,7 +66,7 @@
             <p class="timeNotice"></p>
             <div class="bar" id="routeBar5"></div>
             <ul class="inform"></ul>
-        </div>
+        </div> -->
     </div>
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8dbd6d9789ef56436614750381b7f43d&libraries=services"></script>
@@ -177,8 +177,6 @@
             removeAllChildNods(listEl);
             removeAllChildNods(container);
 
-            let margin = '<div class="margin"></div>'
-            container.innerHTML += margin;
             makePath();
         });
 
@@ -191,17 +189,11 @@
             window.location.href = "./markerFromMain.html";
         })
 
-        function removeAllChildNods(el) {
-            while (el.hasChildNodes()) {
-                el.removeChild(el.lastChild);
-            }
-        }
-
         cancel.addEventListener('click', function () {
             window.location.href = '../mapPage.html';
         })
 
-        
+
         async function makePath() {
             const walkBar = '<div class="walk" style="width: 15%;">도보</div>'
             if (startBox.value !== "" && endBox.value !== "") {
@@ -218,7 +210,13 @@
                             const warningDiv = '<div class="warning"><i class="xi-warning"></i><p>해당 경로를 지원하지 않습니다.</p><span>도착지를 확인해 주세요.</span></div>'
                             listE.innerHTML += warningDiv;
                         } else {
+                            const container = document.getElementById("container");
+                            const margin = `<div class="margin"></div>`
+                            container.innerHTML += margin;
                             for (let i = 0; i < 5; i++) {
+                                const onelistpath = `<div class="route"><p class="timeNotice"></p><div class="bar" id="routeBar${i}"></div><ul class="inform"></ul></div>`
+                                container.innerHTML += onelistpath
+
                                 const route = document.getElementsByClassName("route")[i];
 
                                 const timeP = document.getElementsByClassName("timeNotice")[i];
@@ -232,14 +230,14 @@
 
                                 for (let j = 0; j < topFiveDate[i]["탑승지"].length; j++) {
                                     if (subwayList.includes(await topFiveDate[i]["호선노선"][j])) {
-                                        const barInfo = walkBar + `<div class="subway" style='width: ${(85 - 15*topFiveDate[i]["탑승지"].length)/topFiveDate[i]["탑승지"].length}%; background-color:${subwayColor[topFiveDate[i]["호선노선"][j]]}'>${topFiveDate[i]["호선노선"][j]}</div>`
+                                        const barInfo = walkBar + `<div class="subway" style='width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%; background-color:${subwayColor[topFiveDate[i]["호선노선"][j]]}'>${topFiveDate[i]["호선노선"][j]}</div>`
                                         bar.innerHTML += barInfo;
 
                                         const detail = `<li class="details"><div class="leftbox"><i class="xi-subway" style="color:${subwayColor[topFiveDate[i]["호선노선"][j]]}"></i>${topFiveDate[i]["호선노선"][j]}</div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></i></li>`
-                                        
+
                                         info.innerHTML += detail
                                     } else {
-                                        const barInfo = walkBar + `<div class="bus" style="width: ${(85 - 15*topFiveDate[i]["탑승지"].length)/topFiveDate[i]["탑승지"].length}%;">${topFiveDate[i]["호선노선"][j]}</div>`
+                                        const barInfo = walkBar + `<div class="bus" style="width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%;">${topFiveDate[i]["호선노선"][j]}</div>`
                                         bar.innerHTML += barInfo;
 
                                         const detail = `<li class="details"><div class="leftbox"><i class="xi-bus"> ${topFiveDate[i]["호선노선"][j]}</i></div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></li>`
@@ -300,4 +298,5 @@
         }
     </script>
 </body>
-</html> 
+
+</html>

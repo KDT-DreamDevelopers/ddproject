@@ -1,15 +1,126 @@
-.xi-angle-left {
-    color: white !important;
+.container {
+    border-bottom: 0.1rem solid #e1e1e1b4;
+}
+.margin {
+    height: 3rem;
 }
 header {
-    color: white;
+    padding-bottom: 1rem;
+    border-bottom: 0.1rem solid #e1e1e1b4;
+}
+.top {
+    font-size: 1rem;
+    line-height: 2.5rem
+}
+/* 소요시간 */
+.time {
+    margin: 0 0.5rem;
+    font-size: 2rem;
+    color: #6658B1;
+}
+.route {
+    list-style: none;
+    align-content: center;
+    padding: 0;
+}
+.detail {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+.leftbox {
+    width: 25%;
+    height: fit-content;
+    position: relative;
+}
+.endbox {
+    display: flex;
+    height: inherit;
+    align-items: end;
+    padding-bottom: 1.5rem;
+}
+.rightbox {
+    width: 70%;
+    padding-left: 1rem;
+    height: fit-content;
+}
+.spot {
+    margin: 0 0 1.5rem 0;
+}
+.sletter {
+    font-size: 0.8rem; color: gray;
+    margin: 0.5rem 0;
+}
+.walking {
+    border-left: 0.1rem dotted gray;
+}
+.start {
+    color: #6658B1;
+}
+.end {
+    color: #EF9E3E;
+    vertical-align: text-bottom;
+}
+hr {
+    background: #e1e1e1b6;
+    height: 1px;
+    border: 0;
+}
+.riding {
+    position: relative;
+    border-left: 2px solid black;
+}
+/* 동그라미 */
+.before {
+    position: absolute;
+    left: -0.375rem;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+.after {
+    position: absolute;
+    left: -0.375rem;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+.stationListTrigger{
+    margin-top: 2rem;
+}
+.bottom {
+    margin-bottom: 0;
 }
 .big-buttons {
-    width: 80%;
-    border-radius: 0.5;
+    width: 100%;
+    text-align: center;
+    margin: 2rem auto;
+}
+.big-buttons button {
+    width: 65%;
+    height: 2.5rem;
+    background-color: white;
+    border: 0.5px solid #6658B1;
+    border-radius: 5px;
 }
 
-.small-buttons {
-    width: 20%;
-    border-radius: 0.5;
-}
+
+
+
+
+
+
+
+
+
+
+
