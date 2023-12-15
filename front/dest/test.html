@@ -126,14 +126,20 @@
             }
             let idxb = 0;
             let idxs = 0;
+            let isNearBus;
+            let isNearSubway;
             if (navigator.geolocation) {
                 let watchId;
                 watchId = navigator.geolocation.watchPosition(
                     async (position) => {
                         const latitude = await position.coords.latitude;
                         const longitude = await position.coords.longitude;
-                        let isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[idxb]);
-                        let isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[idxs]);
+                        if (startBusStops.length >= 1) {
+                            isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[idxb]);
+                        }
+                        if (startSubwayList.length >= 1) {
+                            isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[idxs]);
+                        }
                         const onload = `현재 위치: ${latitude} ${longitude}, 거리 : ${isNearBus}`
                         console.log(onload)
                         if (isNearBus <= 30) {
@@ -142,7 +148,7 @@
                             alert("승차 버튼을 누르실 수 있습니다.")
                             idx++;
                         }
-                        if ( isNearSubway <= 100) {
+                        if (isNearSubway <= 100) {
                             alert("역무원에게 알림을 보냈습니다.");
                             // 역무원에게 알림을 보낼 코드 작성
                         }
@@ -213,10 +219,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
