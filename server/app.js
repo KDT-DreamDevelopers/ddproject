@@ -247,6 +247,7 @@ app.post("/ImAlmostInSubway", async (req, res) => {
         const findSub = await SubwayModel.findOne({"busId": {$elemMatch: {$eq: targetSubId}}});
         if ( findSub ){
             const expoPushToken = await findSub.token;
+            console.log(expoPushToken)
             const message = {
                 message: "AlmostThere",
                 userId: "Subway"
