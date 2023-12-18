@@ -184,6 +184,8 @@ app.post('/api/save-token', async (req, res) => {
 
 const sendPushNotification = async (expoPushToken, message) => {
     try {
+        const busName = message.busStopName;
+        const userId = message.userId
         const response = await fetch("https://exp.host/--/api/v2/push/send", {
             method: "POST",
             headers: {
@@ -194,8 +196,9 @@ const sendPushNotification = async (expoPushToken, message) => {
             body: JSON.stringify({
                 to: expoPushToken,
                 sound: "default",
-                title: "Push Notification Title",
-                body: JSON.stringify(message),
+                title: "승차 알림!",
+                body: `${busName}에서 승차 예정!`,
+                id: userId
             }),
         });
         const data = await response.json();
@@ -209,14 +212,11 @@ const sendPushNotification = async (expoPushToken, message) => {
 // 버스 푸시 알림 보내기 엔드포인트
 app.post("/ImOnTheBusStop", async (req, res) => {
     const { busStopId, busRoot, busStopName, userId } = req.body;
-    console.log("ImOnTheBusStop:", busStopId, busRoot)
     const result = await getBestBusDriver(busStopId, busRoot);
     if (result === 0) {
         res.status(400).json({ message: "noPath" });
         return;
     }
-    console.log(result);
-    console.log(typeof(result))
     const findBusClue = { mId: result };
     const findBus = await TokenModel.findOne(findBusClue);
     console.log("findBus:", findBus);
