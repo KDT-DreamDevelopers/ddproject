@@ -26,7 +26,6 @@ app.use(cors())
 app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/inquiry', inquiryRouter)
-app.use('/report', reportRouter)
 app.use(bodyParser.urlencoded({ extended: !0 }))
 
 
@@ -71,7 +70,7 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
         await priorityClass.lengthOfTransfer();
         await priorityClass.lengthOfWalk();
         const topFivePath = await priorityClass.makeLastFiveData();
-
+        console.log(topFivePath);
         res.status(200).json(topFivePath);
     }
     catch (error) {
@@ -79,10 +78,10 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
     }
 });
 
-app.get("/isNearBus/:userX/:userY/:targetBusName", async (req, res) => {
-    const { userX, userY, targetBusName } = req.params;
-    console.log(targetBusName);
-    const busReturn = await distanceWithUserAndBusstop(targetBusName);
+app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
+    const { userX, userY, targetBusId } = req.params;
+    console.log("targetBus", targetBusId);
+    const busReturn = await distanceWithUserAndBusstop(targetBusId);
     const busX = await busReturn[0];
     const busY = await busReturn[1];
 
@@ -118,40 +117,40 @@ async function getDistance(userX, userY, busX, busY) {
 
     return dist;
 }
- 
 
-app.get("/clickstart/:busStopName/:busRoot", async (req, res) => {
-    const { busStopName, busRoot } = req.params;
-    const result = await getBestBusDriver(busStopName, busRoot);
-    const returnResult = {
-        "result": result
-    }
-    res.status(200).json(returnResult);
-})
-
-
-
-
-const url = "mongodb+srv://jimini0920:JW4qxzzylk41IZe1@cluster0.kngcohp.mongodb.net/shop?retryWrites=true&w=majority"
 // MongoDB 연결
-Mongoose.connect(url);
+const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+Mongoose.connect(url, {
+    dbName: "MoveOfDream"
+})
 
 // MongoDB 모델 정의
-const pushToken = new Mongoose.Schema({
+const pushTokenSchema = new Mongoose.Schema({
     token: { type: String, required: true },
-    id: { type: String, required: true },
-    bus_subway: { type: String, required: true }
+    id: { type: String, required: true }
 })
+const TokenModel = Mongoose.model("tokens", pushTokenSchema);
 
-const PushToken = Mongoose.model("Token", pushToken);
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
-    const { token, id, bus_subway } = req.body;
-
+    const { token, id } = req.body;
     try {
-        const pushToken = new PushToken({ token, id, bus_subway });
-        await pushToken.save();
-        res.status(200).json({ success: true, message: 'Token saved successfully' });
+        const exists = await TokenModel.findOne({ token });
+
+        if (!exists) {
+            let inputdata = {
+                token: token,
+                id: id
+            }
+            let pushToken = new TokenModel(inputdata);
+            pushToken.save();
+            console.log("Token In!")
+            res.status(200).json({ success: true, message: 'Token saved successfully' })
+        } else{
+            console.log("Toekn Already in!");
+            res.status(200).json({ success: false, message: 'Token already exists' });
+        }
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -179,25 +178,45 @@ const sendPushNotification = async (expoPushToken, message) => {
 };
 
 
-// 푸시 알림 보내기 엔드포인트
-app.post('/ImOnTheBusStop/:targetBusStop/:targetBusRoot', async (req, res) => {
-    try {
-        const { targetBusStop, targetBusRoot } = req.params;
-
-        const { expoPushToken, message, id, bus_subway } = req.body;
-
-        // 특정 조건에 맞는 경우에만 푸시 알림 보내기
-        if (bus_subway === 'bus' && id === 'your_specific_id') {
-            await sendPushNotification(expoPushToken, message);
-            res.status(200).json({ success: true, message: 'Push notification sent successfully' });
-        } else {
-            res.status(200).json({ success: false, message: 'Not eligible for push notification' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+// 버스 푸시 알림 보내기 엔드포인트
+app.post("/ImOnTheBusStop", async (req, res) => {
+    const { busStopId, busRoot, busStopName } = req.body;
+    console.log("ImOnTheBusStop:", busStopId, busRoot)
+    const result = await getBestBusDriver(busStopId, busRoot);
+    if (result === 0) {
+        res.status(400).json({ message: "noPath" });
+        return;
     }
-});
+    const findBusClue = { id: result };
+    const findBus = await collection.findOne(findBusClue);
+    const expoPushToken = await findBus.token;
+    const message = busStopName;
+    await sendPushNotification(expoPushToken, message);
+    res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
+})
+
+app.post("/ImGoingToOut", async (req, res) => {
+    const { onbusid, message } = req.body;
+    console.log(onbusid, message);
+
+    const findBusClue = { id: onbusid };
+    const findBus = await collection.findOne(findBusClue);
+    const expoPushToken = await findBus.token;
+    await sendPushNotification(expoPushToken, message);
+    res.status(200).json({ success: true, message: 'Push Notification sent successfully'})
+})
+
+app.post("/ImAlmostInSubway", async (req, res) => {
+    const { targetSubId } = req.body;
+    const findSubClue = { id: targetSubId };
+    const findSub = await collection.findOne(findSubClue);
+    const expoPushToken = await findSub.token;
+    const message = "AlmostThere";
+    await sendPushNotification(expoPushToken, message);
+    res.status(200).json({ success: true, message: 'Push notification sent successfully'})
+})
+
+
 
 app.use((req, res, next) => {
     res.sendStatus(404)

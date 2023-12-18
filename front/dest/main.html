@@ -41,32 +41,6 @@
     </header>
     <div id="placesList"></div>
     <div class="container" id="container">
-        <!-- <div class="margin"></div>
-        <div class="route">
-            <p class="timeNotice"></p>
-            <div class="bar" id="routeBar1"></div>
-            <ul class="inform"></ul>
-        </div>
-        <div class="route">
-            <p class="timeNotice"></p>
-            <div class="bar" id="routeBar2"></div>
-            <ul class="inform"></ul>
-        </div>
-        <div class="route">
-            <p class="timeNotice"></p>
-            <div class="bar" id="routeBar3"></div>
-            <ul class="inform"></ul>
-        </div>
-        <div class="route">
-            <p class="timeNotice"></p>
-            <div class="bar" id="routeBar4"></div>
-            <ul class="inform"></ul>
-        </div>
-        <div class="route">
-            <p class="timeNotice"></p>
-            <div class="bar" id="routeBar5"></div>
-            <ul class="inform"></ul>
-        </div> -->
     </div>
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1&libraries=services"></script>
@@ -140,8 +114,6 @@
                                 var detailAddr = !!result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name
                                 localStorage.setItem("startTitle", detailAddr);
                                 startBox.value = detailAddr;
-                                console.log("1", startBox.value);
-                                console.log("2", localStorage.getItem("startTitle"))
                             }
                             resolve();
                         });
@@ -203,7 +175,6 @@
                 const endY = await localStorage.getItem("endY");
                 await send(startX, startY, endX, endY)
                     .then(async (topFiveDate) => {
-                        console.log(topFiveDate)
                         if (await topFiveDate[0] === null) {
                             console.log("해당하는 경로가 없습니다.");
                             let listE = document.getElementById('placesList')

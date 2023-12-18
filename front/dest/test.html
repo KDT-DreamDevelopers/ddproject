@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="./test.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 </head>
+
 <body>
     <header>
         <a href="./main.html"><i class="xi-angle-left"></i></a>
@@ -22,6 +24,7 @@
                     <i class="xi-maker start"><span>출발</span></i>
                 </div>
                 <div class="rightbox walking" id="startDiv">
+
                 </div>
             </li>
         </ul>
@@ -80,52 +83,82 @@
         let startBusStops = [];
         let BusRoots = [];
         let startSubwayList = [];
+        let onBusId = [];
+        let startSubwayIdList = [];
+
+
+
         const time = document.getElementsByClassName("time")[0];
         time.innerHTML += useData["소요시간"] + "분 "
+
         const startDiv = document.getElementById("startDiv")
         const startStr = `<p class="spot">${localStorage.getItem("startTitle")}</p><p class="sletter">${useData["탑승지"][0]} 까지 도보이동</p><hr>`
+
         startDiv.innerHTML += startStr
+
+
+
         const workPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox walking"><p class="sletter" style="height: 1rem"></p></div></li>`
+
+
         for (let i = 0; i < useData["탑승지"].length; i++) {
             if (subwayList.includes(useData["호선노선"][i])) {
                 const route = document.getElementById("route");
+
                 const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color:${subwayColor[useData['호선노선'][i]]}"><span class="before" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><span class="after" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><i class="xi-subway" style="color:${subwayColor[useData['호선노선'][i]]}"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><p class="sletter stationListTrigger"> N개 역 이동<i class="xi-angle-down-min"></i></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span></div></li>`
+
                 route.innerHTML += oneDetailPath
                 startSubwayList.push(useData["탑승지"][i]);
+                startSubwayIdList.push(useData["정류장ID"][i])
             }
             else {
+
                 const route = document.getElementById("route");
+
                 const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color: blue;"><span class="before" style="border-color: blue;"></span><span class="after" style="border-color: blue;"></span><i class="xi-bus" style="color: blue;"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><span class="busStart"></span><p class="sletter stationListTrigger"> N개 정거장 이동<i class="xi-angle-down-min"></i></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span><span class="busEnd"></span></div></li>`
+
                 route.innerHTML += oneDetailPath
-                startBusStops.push(useData["탑승지"][i]);
+                startBusStops.push([useData["탑승지"][i], useData["정류장ID"][i]]);
                 BusRoots.push(useData["호선노선"][i]);
             }
             if (i < useData["탑승지"].length - 1) {
                 route.innerHTML += workPath
             }
         }
+
         const lastPath = `<li class="detail"><div class="leftbox endbox"><i class="xi-maker end"><span>도착</span></i></div><div class="rightbox walking"><p class="sletter">${useData["하차지"][useData["하차지"].length - 1]}</p><p class="sletter">도보 이동</p><p class="spot">${localStorage.getItem("endTitle")} 도착</p></div></li>`
+
         route.innerHTML += lastPath;
+
+
+
         function selectThisPath() {
             const confirmButton = document.getElementById("confirmButton");
             const buttonDiv = document.getElementById("low-button")
+
             confirmButton.remove();
+
             const newButton = "<button type='button' id='cancel' onclick='backToMain()'> 경로 취소 </button>"
             buttonDiv.innerHTML += newButton;
             window.alert("경로가 확정되었습니다!")
+
             const busStart = document.getElementsByClassName("busStart");
             const busEnd = document.getElementsByClassName("busEnd");
+
+
             for (let i = 0; i < busStart.length; i++) {
                 let newStartButton = `<button type="button" class="start-buttons small-buttons" onclick="clickStartButton(${i})"> 승 차 </button>`
                 let newEndButton = `<button type="button" class="end-buttons small-buttons" onclick="clickEndButton(${i})"> 하 차 </button>`
                 busStart[i].innerHTML += newStartButton
                 busEnd[i].innerHTML += newEndButton;
+
                 let smallButtons = document.getElementsByClassName("small-buttons");
                 smallButtons[2 * i].disabled = true;
                 smallButtons[2 * i + 1].disabled = true;
             }
-            let idxb = 0;
-            let idxs = 0;
+
+            let orderBus = 0;
+            let orderSub = 0;
             let isNearBus;
             let isNearSubway;
             if (navigator.geolocation) {
@@ -135,23 +168,37 @@
                         const latitude = await position.coords.latitude;
                         const longitude = await position.coords.longitude;
                         if (startBusStops.length >= 1) {
-                            isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[idxb]);
+                            isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
+                            if (isNearBus <= 30) {
+                                let startButtons = document.getElementsByClassName("start-buttons")
+                                startButtons[0].disabled = false;
+                                alert("승차 버튼을 누르실 수 있습니다.")
+                                localStorage.setItem(`BusStart${orderBus}Name`, startBusStops[0][0]);
+                                localStorage.setItem(`BusStart${orderBus}Id`, startBusStops[0][1]);
+                                startBusStops.splice(0, 1);
+                                orderBus++;
+                            }
                         }
                         if (startSubwayList.length >= 1) {
-                            isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[idxs]);
+                            isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
+                            if (isNearSubway <= 100) {
+                                alert("역무원에게 알림을 보냈습니다.");
+                                // 역무원에게 알림을 보낼 코드 작성
+                                const targetSubId = startSubwayIdList[orderSub];
+                                const response = await fetch("/ImAlmostInSubway", {
+                                    mehthod: "POST",
+                                    headers: {
+                                        "Content-type": "application/json"
+                                    },
+                                    body: JSON.stringify(targetSubId)
+                                })
+
+                                localStorage.setItem(`SubwayStart${orderSub}`, startSubwayList[orderSub]);
+                                orderSub++;
+                            }
+
                         }
                         const onload = `현재 위치: ${latitude} ${longitude}, 거리 : ${isNearBus}`
-                        console.log(onload)
-                        if (isNearBus <= 30) {
-                            let startButtons = document.getElementsByClassName("start-buttons")
-                            startButtons[idx].disabled = false;
-                            alert("승차 버튼을 누르실 수 있습니다.")
-                            idx++;
-                        }
-                        if (isNearSubway <= 100) {
-                            alert("역무원에게 알림을 보냈습니다.");
-                            // 역무원에게 알림을 보낼 코드 작성
-                        }
                     },
                     (error) => {
                         console.error(error);
@@ -160,44 +207,89 @@
             } else {
                 console.error("Geolocation 지원 불가 브라우저")
             }
+
         }
+
         function backToMain() {
             window.location.href = "./main.html"
         }
+
         async function clickStartButton(i) {
-            console.log(i);
             const smallButtons = document.getElementsByClassName("small-buttons");
             const startButton = smallButtons[2 * i];
             const endButton = smallButtons[2 * i + 1];
             startButton.disabled = true;
             endButton.disabled = false;
-            const targetBusStop = startBusStops[i];
+
+            const targetBusStopName = localStorage.getItem(`BusStart${i}Name`);
+            const targetBusStopId = localStorage.getItem(`BusStart${i}Id`);
             const targetBusRoot = BusRoots[i];
-            // const response = await fetch(`http://localhost:8080/ImOnTheBusStop/${targetBusStop}/${targetBusRoot}`);
-            console.log(targetBusStop);
-            console.log(targetBusRoot);
+
+            const data = {
+                busStopId: targetBusStopId,
+                busRoot: targetBusRoot,
+                busStopName: targetBusStopName
+            };
+
+            const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImOnTheBusStop`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+
+            const result = await response.json()
+            if (result.message === "noPath") {
+                alert("해당 경로에 운행이 종료되었거나 대기시간이 너무 길 수 있습니다.");
+                window.location.href = "./main.html"
+            }
+            else {
+                alet("곧 버스가 도착합니다. 준비해 주세요.");
+                const onbus = result.onbus;
+                onBusId.push(onbus);
+            }
         }
+
         async function clickEndButton(i) {
-            console.log(i);
             const smallButtons = document.getElementsByClassName("small-buttons");
             const endButton = smallButtons[2 * i + 1];
             endButton.disabled = true;
-            // const response = await fetch(`http://localhost:8080/ImGoinToOut`);
+
+            const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImGoingToOut`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: "OUT", onbusid: onBusId[onBusId.length-1] })
+            });
+
+            if (response.success){
+                alert("하차 버튼을 눌렀습니다.");
+            }
+            else {
+                alert("에러가 발생했습니다.")
+                console.error
+            }
+
         }
+
+
         // 탑승 버튼 누르면 필요한 데이터가 해당 정류장 정보 -> 기사용, 버스 정보 -> 손님용
+
         async function sendIsNearSubway(latitude, longitude, address) {
             const addr = await findSubwayAddress(address);
-            console.log(addr)
             let geocoder = new kakao.maps.services.Geocoder();
             geocoder.addressSearch(addr, (result, status) => {
                 if (status === kakao.maps.services.Status.OK) {
                     const lat = result[0].y;
                     const lng = result[0].x;
-                    console.log("getlocation:", lat, lng)
                     return getDistance(latitude, longitude, lat, lng)
                 }
             })
         }
+
         async function getDistance(userX, userY, busX, busY) {
             if ((userX === busX) && (userY === busY)) {
                 return 0;
@@ -209,6 +301,7 @@
             var dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
             if (dist > 1)
                 dist = 1;
+
             dist = Math.acos(dist);
             dist = dist * 180 / Math.PI;
             dist = dist * 60 * 1.1515 * 1.609344 * 1000;
@@ -218,4 +311,5 @@
         }
     </script>
 </body>
+
 </html>

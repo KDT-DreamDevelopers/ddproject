@@ -36,7 +36,7 @@ export class MakePriorityAboutPath {
         for (const onePathList of this.pathList) {
             this.scoreList.push(0);
             let isSubway = false;
-            for (let i = 0; i < onePathList["탑승지"].length; i++) {
+            for (let i = 0; i < onePathList["정류장ID"].length; i++) {
                 if (subwayList.includes(onePathList["호선노선"][i])) {
                     isSubway = true;
                     const findData = { name: onePathList["탑승지"][i].slice(0, -1).split("(")[0] };
@@ -54,7 +54,7 @@ export class MakePriorityAboutPath {
                 } else {
                     //  버스인 경우 해당 버스가 언제 도착하는지 소요시간에 추가
                     this.scoreList[this.scoreList.length - 1] += 3;
-                    const tmpdata = await getBestBusDriver(onePathList["탑승지"][i], onePathList["호선노선"][i]);
+                    const tmpdata = await getBestBusDriver(onePathList["정류장ID"][i], onePathList["호선노선"][i]);
 
                     if ( tmpdata && tmpdata.arrmsg1 && (await tmpdata.arrmsg1[0] === "운행종료" || await tmpdata.arrmsg1[0] === "출발대기")) {
                         this.pathList.splice(this.scoreList.length - 1, 1);
@@ -99,7 +99,6 @@ export class MakePriorityAboutPath {
             if ( index != -1){
                 topFivePath[i] = this.pathList[index];
                 this.scoreList[index] = 0;
-                console.log(index)
             } else {
                 break;
             }
