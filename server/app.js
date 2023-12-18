@@ -242,6 +242,7 @@ app.post("/ImAlmostInSubway", async (req, res) => {
             message: "AlmostThere",
             userId: "Subway"
         };
+        console.log(message);
         await sendPushNotification(expoPushToken, message);
         res.status(200).json({ success: true, message: 'Push notification sent successfully'})
     } catch (error) {
