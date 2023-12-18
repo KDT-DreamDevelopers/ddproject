@@ -151,9 +151,9 @@ try {
 // MongoDB 모델 정의
 const pushTokenSchema = new Mongoose.Schema({
     token: { type: String, required: true },
-    id: { type: String, required: true }
+    mId: { type: String, required: true }
 })
-const TokenModel = db.collection("tokens", pushTokenSchema);
+const TokenModel = Mongoose.collection("tokens", pushTokenSchema);
 
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
@@ -164,7 +164,7 @@ app.post('/api/save-token', async (req, res) => {
         if (!exists) {
             let inputdata = {
                 token: token,
-                id: id
+                mId: id
             }
             let pushToken = new TokenModel(inputdata);
             pushToken.save();
@@ -228,7 +228,7 @@ app.post("/ImGoingToOut", async (req, res) => {
         const { onbusid, message, userId } = req.body;
         console.log(onbusid, message, userId);
 
-        const findBusClue = { id: onbusid };
+        const findBusClue = { mId: onbusid };
         const findBus = await TokenModel.findOne(findBusClue);
         const expoPushToken = await findBus.token;
         await sendPushNotification(expoPushToken, { message, userId });
@@ -242,7 +242,7 @@ app.post("/ImGoingToOut", async (req, res) => {
 app.post("/ImAlmostInSubway", async (req, res) => {
     try {
         const { targetSubId } = req.body;
-        const findSubClue = { id: targetSubId }
+        const findSubClue = { mId: targetSubId }
         const findSub = await TokenModel.findOne(findSubClue);
         if ( findSub ){
             const expoPushToken = await findSub.token;
