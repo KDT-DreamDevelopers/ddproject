@@ -153,7 +153,7 @@ const pushTokenSchema = new Mongoose.Schema({
     token: { type: String, required: true },
     id: { type: String, required: true }
 })
-const TokenModel = db.collection("tokens");
+const TokenModel = db.collection("tokens", pushTokenSchema);
 
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
