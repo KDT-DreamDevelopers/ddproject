@@ -215,7 +215,7 @@ app.post("/ImOnTheBusStop", async (req, res) => {
         res.status(400).json({ message: "noPath" });
         return;
     }
-    const findBusClue = { id: result };
+    const findBusClue = { mId: result };
     const findBus = await TokenModel.findOne(findBusClue);
     const expoPushToken = await findBus.token;
     const message = { busStopName, userId };
