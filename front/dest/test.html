@@ -302,22 +302,30 @@
         // 탑승 버튼 누르면 필요한 데이터가 해당 정류장 정보 -> 기사용, 버스 정보 -> 손님용
 
         async function sendIsNearSubway(latitude, longitude, address) {
-            const addr = await findSubwayAddress(address);
-            if (addr) {
-                let geocoder = new kakao.maps.services.Geocoder();
-                geocoder.addressSearch(addr, (result, status) => {
-                    if (status === kakao.maps.services.Status.OK) {
-                        const lat = result[0].y;
-                        const lng = result[0].x;
-                        return getDistance(latitude, longitude, lat, lng)
-                    }
-                })
-            }
-            else {
+            try {
+                const addr = await findSubwayAddress(address);
+                if (addr) {
+                    let geocoder = new kakao.maps.services.Geocoder();
+                    const result = await new Promise((resolve, reject) => {
+                    geocoder.addressSearch(addr, (result, status) => {
+                        if (status === kakao.maps.services.Status.OK) {
+                            const lat = result[0].y;
+                            const lng = result[0].x;
+                            resolve({ lat, lng });
+                        } else {
+                            reject(new Error("Geocoder 에러"))
+                        }
+                    });
+                });
+                const distance = getDistance(latitude, longitude, result.lat, result.lng);
+                return distance
+            } else {
                 return 500;
             }
-
-        }
+        } catch (error) {
+            console.error(error)
+            return 500;
+        }}
 
         async function getDistance(userX, userY, busX, busY) {
             if ((userX === busX) && (userY === busY)) {
