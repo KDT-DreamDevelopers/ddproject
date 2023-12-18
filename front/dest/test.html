@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Document</title>
     <link rel="stylesheet" href="../userFrame.css">
     <link rel="stylesheet" href="./test.css">
@@ -205,6 +205,7 @@
                                     })
 
                                     localStorage.setItem(`SubwayStart${orderSub}`, startSubwayList[orderSub]);
+                                    startSubwayList.splice(0, 1);
                                     orderSub++;
                                 }
 
@@ -307,25 +308,26 @@
                 if (addr) {
                     let geocoder = new kakao.maps.services.Geocoder();
                     const result = await new Promise((resolve, reject) => {
-                    geocoder.addressSearch(addr, (result, status) => {
-                        if (status === kakao.maps.services.Status.OK) {
-                            const lat = result[0].y;
-                            const lng = result[0].x;
-                            resolve({ lat, lng });
-                        } else {
-                            reject(new Error("Geocoder 에러"))
-                        }
+                        geocoder.addressSearch(addr, (result, status) => {
+                            if (status === kakao.maps.services.Status.OK) {
+                                const lat = result[0].y;
+                                const lng = result[0].x;
+                                resolve({ lat, lng });
+                            } else {
+                                reject(new Error("Geocoder 에러"))
+                            }
+                        });
                     });
-                });
-                const distance = getDistance(latitude, longitude, result.lat, result.lng);
-                return distance
-            } else {
+                    const distance = getDistance(latitude, longitude, result.lat, result.lng);
+                    return distance
+                } else {
+                    return 500;
+                }
+            } catch (error) {
+                console.error(error)
                 return 500;
             }
-        } catch (error) {
-            console.error(error)
-            return 500;
-        }}
+        }
 
         async function getDistance(userX, userY, busX, busY) {
             if ((userX === busX) && (userY === busY)) {
