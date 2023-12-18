@@ -4,9 +4,9 @@ import * as authRepository from '../data/auth.js'
 // 문의하기 글 생성   /inquiry/write
 export async function createInquiry(req, res, next){
     // body에서 받아온 정보
-    const {category, title, text} = req.body;
+    const {category, title, text, myanswer} = req.body;
     // 문의하기 생성   inquiry: 생성된 문의 글
-    const inquiry = await inquiryRepository.create(category, title, text, req.userId)
+    const inquiry = await inquiryRepository.create(category, title, text, myanswer, req.userId)
     res.status(201).json(inquiry)
 }
 

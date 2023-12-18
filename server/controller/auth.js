@@ -4,6 +4,8 @@ import {config} from '../config.js'
 import jwt from 'jsonwebtoken'
 import multer from 'multer'      // 파일업로드 할때 사용
 import path from 'path'
+import fs from 'fs/promises'
+import { fileURLToPath } from 'url'
 
 // 토큰 생성
 function createJwtToken(id){
@@ -64,7 +66,7 @@ export async function signup(req, res){
         ssn1,
         ssn2,
         hp,
-        img: `../uploads/${filename}`,
+        img: filename,
         identify : "no"
     })
     res.status(201).json({message:'가입되었습니다.', users})
@@ -82,7 +84,6 @@ const storage = multer.diskStorage({
       cb(null, filename); // 파일명을 고유하게 설정
     },
   });
-  
 // 미들웨어 설정
 export const upload = multer({ 
     storage: storage,
@@ -107,6 +108,9 @@ export async function login(req, res){
     const isValidpassword = bcrypt.compareSync(userpw, user.userpw)
     if (!isValidpassword){
         return res.status(401).json({message: '아이디 비밀번호가 틀렸습니다'})
+    }
+    if(user.identify == 'refuse'){
+        return res.status(405).json({message: '장애인인증서 인증 실패로 이용이 정지되었습니다.'})
     }
     const token = createJwtToken(user.id)
     console.log(token)
@@ -212,13 +216,23 @@ export async function modify(req,res){
 
 // 모든 유저 정보 가져오기
 export async function getAllUsers(req, res) {
-    try {
-        const data = await authRepository.allUsers();
-        res.status(200).json(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    const user = await authRepository.getById(req.userId)
+    if(!user){
+        res.status(403).json({ message: '인증에러' });
+    }else{
+        if(user.identify == 'admin'){
+            try {
+                const data = await authRepository.allUsers();
+                res.status(200).json(data);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        }else{
+            res.status(405).json({message: '관리자만 이용가능'})
+        }
     }
+    
 }
 
 // 등록증 승인
@@ -248,3 +262,109 @@ export async function updateOkFieldById_Refuse(req, res) {
 
     res.status(200).json({ message: `ok 값이 수정되었습니다.`, update });
 }
+
+// 관리자 로그인   /auth/adminlogin
+
+export async function login_Admin(req, res) {
+    const { userid, userpw } = req.body;
+    const user = await authRepository.findByUserid(userid);
+
+    if (!user || user.identify !== "admin") {
+        return res.status(401).json({ message: '관리자가 아닙니다.' });
+    }
+
+    const isValidpassword = bcrypt.compareSync(userpw, user.userpw);
+    if (!isValidpassword) {
+        return res.status(401).json({ message: '아이디 비밀번호가 틀렸습니다' });
+    }
+
+    const token = createJwtToken(user.id);
+    console.log(token);
+    res.status(200).json({ token, message: '관리자 로그인 되었습니다' });
+}
+
+// 관리자 부여
+export async function updateOkFieldById_Administrator(req, res) {
+    const { id } = req.params;
+    const identify = "admin";
+    
+    const update = await authRepository.updateOkFieldById(id, identify);
+
+    if (!update) {
+        return res.status(404).json({ message: `User with ID ${id} not found` });
+    }
+
+    res.status(200).json({ message: `당신은 이제 관리자입니다`, update });
+}
+
+//  회원 정보 하나 가져오기
+export async function getOneUser(req, res) {
+    const id = req.params.id;
+    try {
+        const inquiry = await authRepository.getById(id);
+        res.status(200).json(inquiry);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+// 관리자용 유저 정보 수정
+export async function user_modify(req, res) {
+    const { id } = req.params;
+    const { hp, userpw, name } = req.body;
+
+    try {
+        const user = await authRepository.getById(id);
+        if (!user) {
+            return res.status(404).json({ message: `User with ID ${id} not found` });
+        }
+
+        const update = await authRepository.admin_updateUserInfo(id, userpw, name, hp);
+        res.status(200).json({ message: '회원정보가 수정되었습니다', update });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+// 회원 정보 삭제
+export async function deleteUser(req, res, next) {
+    const id = req.params.id;
+
+    await authRepository.remove(id);
+    res.status(204).json({message: '회원이 삭제되었습니다'})
+}
+
+
+// 파일
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// readFile   /auth/getImage
+export async function readFile(req, res){
+    const id = req.params.id;
+    const user = await authRepository.getById(id);
+    if(!user){
+        res.status(401).json({message:'유저정보를 불러오지 못함'})
+    }
+    const filename = user.img
+    console.log('Requested File Path:', filename);
+    try {
+        const fullPath = path.join(__dirname, '..', 'uploads', filename);
+        console.log('Full File Path:', fullPath);
+    
+        // 파일 존재 여부 확인
+        await fs.access(fullPath, fs.constants.F_OK);
+    
+        // 파일을 클라이언트에게 전송
+        res.sendFile(fullPath, (err) => {
+          if (err) {
+            res.status(404).send('이미지를 찾을 수 없습니다.');
+          }
+        });
+      } catch (error) {
+        res.status(404).send('요청한 파일이 서버에 존재하지 않습니다.');
+      }
+}
+

@@ -101,3 +101,26 @@ export async function updateOkFieldById(id, identify) {
         { returnDocument: "after" }
     );
 }
+
+// 관리자용 회원정보수정
+export async function admin_updateUserInfo(id, userpw, name, hp) {
+    const updatedUser = await getUsers().findOneAndUpdate(
+        { _id: new ObjectID(id) },
+        {
+            $set: {
+                userpw: userpw,
+                name: name,
+                hp: hp
+            }
+        },
+        { returnDocument: "after" }
+    );
+
+    console.log("Updated user:", updatedUser);
+    return updatedUser;
+}
+
+// 회원정보 삭제
+export async function remove(id) {
+    return getUsers().deleteOne({ _id: new ObjectID(id) });
+}

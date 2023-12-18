@@ -2,6 +2,8 @@ import * as reportRepository from '../data/report.js'
 import * as authRepository from '../data/auth.js'
 import multer from 'multer'      // 파일업로드 할때 사용
 import path from 'path'
+import fs from 'fs/promises'
+import { fileURLToPath } from 'url'
 
 let filename
 
@@ -16,7 +18,16 @@ const storage = multer.diskStorage({
     },
   });
 // 미들웨어 설정
-export const upload = multer({ storage: storage });
+export const upload = multer({ 
+    storage: storage,
+    fileFilter: function (req, file, cb){
+        if(file.mimetype.startsWith('image/')){
+            cb(null, true)
+        }else{
+        cb(new Error('이미지 파일만 허용됩니다.'))
+        }
+    }
+});
 
 
 // 불편신고 글 생성   /report/write
@@ -24,7 +35,7 @@ export async function createreport(req, res, next){
     // body에서 받아온 정보
     const {location, text} = req.body;
     // 불편신고 생성   report: 생성된 불편신고 글
-    const report = await reportRepository.create(location, text, req.userId)
+    const report = await reportRepository.create(location, text, filename, req.userId)
     res.status(201).json({message: '신고가 접수되었습니다'})
 }
 
@@ -54,3 +65,29 @@ export async function DoneReport(req, res){
     const update = await reportRepository.checkOk(id)
     res.status(201).json(update)
 } 
+
+// 파일
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// readFile   /report/getImage
+export async function readFile(req, res){
+    const filename = req.params.filename;
+    console.log('Requested File Path:', filename);
+    try {
+        const fullPath = path.join(__dirname, '..', 'reports_img', filename);
+        console.log('Full File Path:', fullPath);
+    
+        // 파일 존재 여부 확인
+        await fs.access(fullPath, fs.constants.F_OK);
+    
+        // 파일을 클라이언트에게 전송
+        res.sendFile(fullPath, (err) => {
+          if (err) {
+            res.status(404).send('이미지를 찾을 수 없습니다.');
+          }
+        });
+      } catch (error) {
+        res.status(404).send('요청한 파일이 서버에 존재하지 않습니다.');
+      }
+}

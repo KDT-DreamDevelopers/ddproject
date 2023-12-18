@@ -74,11 +74,27 @@ router.put('/newPW_id', isAuth, authController.newPW_id)
 // ----------------------------------------------------------
 // 관리자 페이지
 
+// 관리자 로그인
+router.post('/adminlogin', validateCredential, authController.login_Admin)
+
+// 관리자 부여
+router.put('/admin/:id', isAuth, authController.updateOkFieldById_Administrator);
+
 // 가입된 정보 확인
-router.get('/members',authController.getAllUsers)
+router.get('/members',isAuth, authController.getAllUsers)
 // 등록증 승인
 router.put('/identifyOk/:id', isAuth, authController.updateOkFieldById);
 // 등록증 거부
 router.put('/refuse/:id', isAuth, authController.updateOkFieldById_Refuse);
+
+// 회원정보 하나 가져오기
+router.get('/user/:id',authController.getOneUser)
+// 회원정보 수정
+router.put('/edit/:id', isAuth, authController.user_modify)
+// 회원정보 삭제
+router.delete('/delete/:id', isAuth, authController.deleteUser);
+
+// 등록증 파일 보내기
+router.get('/getImage/:id', isAuth, authController.readFile)
 
 export default router

@@ -32,4 +32,7 @@ router.get('/:id', isAuth, reportController.getReportById);
 // 불편신고 데이터 신고완료
 router.put('/check/:id', isAuth, reportController.DoneReport)
 
+// 불편신고 이미지 파일 보내기
+router.get('/getImage/:filename', isAuth, reportController.readFile)
+
 export default router

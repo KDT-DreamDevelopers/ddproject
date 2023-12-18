@@ -7,7 +7,7 @@ import { Result } from 'express-validator'
 
 const ObjectID = MongoDb.ObjectId
 
-export async function create(category, title, text, userId){
+export async function create(category, title, text, answer, userId){
     return authRepository.getById(userId)
     .then((user)=>
         getInquiries().insertOne({
@@ -16,7 +16,7 @@ export async function create(category, title, text, userId){
             text,
             userid: user.userid,
             createdAt: new Date(),
-            answer: ''
+            answer
         })
     )
     .then((result)=> getById(result.insertedId))

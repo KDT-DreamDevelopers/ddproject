@@ -7,7 +7,7 @@ import * as authRepository from '../data/auth.js'
 const ObjectID = MongoDb.ObjectId
 
 // create()  불편신고글 생성
-export async function create(location, text, userId){
+export async function create(location, text, filename, userId){
     return authRepository.getById(userId)
     .then((user)=>
         getReports().insertOne({
@@ -15,6 +15,7 @@ export async function create(location, text, userId){
             text,
             userid: user.userid,
             createdAt: new Date(),
+            img: filename,
             check: ''
         })
     )
