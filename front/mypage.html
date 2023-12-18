@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,31 +10,34 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <!-- <script src=""></script>  -->
     <style>
-        .menu4 i{color: #EF9E3E !important;}
+        .menu4 i {
+            color: #EF9E3E !important;
+        }
     </style>
 </head>
+
 <body class="purple">
     <header class="purple ">
         <!-- <i class="xi-angle-left" id="back"></i> -->
         <span class="title">마이페이지</span>
     </header>
     <div class="purple container">
-        <i class="con-menu-button xi-play"><span id="customer">고객센터</span></i>  
-        <i class="con-menu-button xi-play"><span id="inquiry">나의 문의</span></i>   
-        <i class="con-menu-button xi-play"><span id="modify">회원정보 수정</span></i>   
-        <i class="con-menu-button xi-play"><span id="logout">로그아웃</span></i>        
+        <i class="con-menu-button xi-play"><span id="customer">고객센터</span></i>
+        <i class="con-menu-button xi-play"><span id="inquiry">나의 문의</span></i>
+        <i class="con-menu-button xi-play"><span id="modify">회원정보 수정</span></i>
+        <i class="con-menu-button xi-play"><span id="logout">로그아웃</span></i>
     </div>
     <div data-include-file="./banner.html" class="footer-wrap includeJs"></div>
     <script>
-        (function(){
+        (function () {
             function includeHtml() {
                 const includeTarget = document.querySelectorAll('.includeJs');
-                includeTarget.forEach(function(el, idx) {
+                includeTarget.forEach(function (el, idx) {
                     const targetFile = el.dataset.includeFile;
-                    if(targetFile){
+                    if (targetFile) {
                         let xhttp = new XMLHttpRequest();
-                    
-                        xhttp.onreadystatechange = function() {
+
+                        xhttp.onreadystatechange = function () {
                             if (this.readyState === XMLHttpRequest.DONE) {
                                 this.status === 200 ? (el.innerHTML = this.responseText) : null
                                 this.status === 404 ? (el.innerHTML = 'include not found.') : null
@@ -45,41 +49,48 @@
                     }
                 });
             };
-    
+
             includeHtml();
         })();
         // 로그인 여부 확인
+        let token;
         const userInfo = localStorage.getItem('userInfo')
-        const token = JSON.parse(userInfo).value
-        if(!token){
+        if (!userInfo) {
             alert('로그인 후 사용바랍니다')
-            window.location.href = './login.html'
+            window.location.href = '../login.html'
+        } else {
+            token = JSON.parse(userInfo).value
+            if (!token) {
+                alert('로그인 후 사용바랍니다')
+                window.location.href = '../login.html'
+            }
         }
 
         // 고객센터
         const customer = document.getElementById('customer')
-        customer.addEventListener('click', (e)=>{
+        customer.addEventListener('click', (e) => {
             window.location.href = './customer/customer.html'
         })
 
         // 나의 문의 페이지 
         const inquiry = document.getElementById('inquiry')
-        inquiry.addEventListener('click', async (e)=>{
+        inquiry.addEventListener('click', async (e) => {
             window.location.href = './inquery/my_inquiry.html'
         })
 
         // 회원정보 수정 
         const modify = document.getElementById('modify')
-        modify.addEventListener('click', async (e)=>{
+        modify.addEventListener('click', async (e) => {
             window.location.href = './userupdate/checkPW.html'
         })
 
         // 로그아웃
         const logout = document.getElementById('logout')
-        logout.addEventListener('click', (e)=>{
+        logout.addEventListener('click', (e) => {
             localStorage.setItem('userInfo', '')
             window.location.href = './login.html'
         })
     </script>
 </body>
+
 </html>

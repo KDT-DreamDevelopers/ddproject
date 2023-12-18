@@ -51,16 +51,18 @@ function showCurrentLocation() {
 }
 
 // 로그인 여부 확인
+let token;
 const userInfo = localStorage.getItem('userInfo')
-if(!userInfo){
-    alert('로그인 후 사용바랍니다')
-    window.location.href = '../login.html'
-}
-const token = JSON.parse(userInfo).value
-if(!token){
-    alert('로그인 후 사용바랍니다')
-    window.location.href = '../login.html'
-}
+if (!userInfo){
+      alert('로그인 후 사용바랍니다')
+      window.location.href = '../login.html'
+  }else{
+      token = JSON.parse(userInfo).value
+      if(!token){
+          alert('로그인 후 사용바랍니다')
+          window.location.href = '../login.html'
+      }
+  }
 
 const sendBtn = document.getElementById('sendBtn')
 sendBtn.addEventListener('click', async (e)=>{

@@ -70,11 +70,9 @@
           const result = await response.json();
           if (result.message === 'ok'){
             window.location.href = 'edit_profile.html'
-          }else{
-            alert(result.message)
           }
         } catch (error) {
-          console.error('Error checking user password:', error.message);
+          alert('비밀번호가 틀렸습니다')
         }
       }) 
     </script>

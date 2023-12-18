@@ -34,8 +34,8 @@
         </form>
     
     <script>
-        const userInfo = localStorage.getItem('userInfo')
         let token;
+        const userInfo = localStorage.getItem('userInfo')
         token = JSON.parse(userInfo).value
         if (!userInfo){
             alert('로그인 후 사용바랍니다')

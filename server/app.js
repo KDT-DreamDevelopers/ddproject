@@ -62,6 +62,7 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
                 "3": null,
                 "4": null
             });
+            return;
         }
 
         const priorityClass = new MakePriorityAboutPath(uniqueData);
@@ -71,6 +72,7 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
         const topFivePath = await priorityClass.makeLastFiveData();
         console.log(topFivePath);
         res.status(200).json(topFivePath);
+        return;
     }
     catch (error) {
         console.error(error)
@@ -84,6 +86,7 @@ app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
         const busReturn = await distanceWithUserAndBusstop(targetBusId);
         if ( !busReturn ){
             res.status(400).json({'message': "에러발생"})
+            return;
         }
         const busX = await busReturn[0];
         const busY = await busReturn[1];
@@ -91,9 +94,11 @@ app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
         const distance = await getDistance(userX, userY, busX, busY);
     
         res.status(200).json(distance);
+        return;
     } catch(error) {
         console.error(error);
         res.status(400).json({"message": "에러발생"})
+        return;
     }
 })
 
@@ -183,7 +188,7 @@ const sendPushNotification = async (expoPushToken, message) => {
                 to: expoPushToken,
                 sound: "default",
                 title: "Push Notification Title",
-                body: message,
+                body: JSON.stringify(message),
             }),
         });
         const data = await response.json();
@@ -196,7 +201,7 @@ const sendPushNotification = async (expoPushToken, message) => {
 
 // 버스 푸시 알림 보내기 엔드포인트
 app.post("/ImOnTheBusStop", async (req, res) => {
-    const { busStopId, busRoot, busStopName } = req.body;
+    const { busStopId, busRoot, busStopName, userId } = req.body;
     console.log("ImOnTheBusStop:", busStopId, busRoot)
     const result = await getBestBusDriver(busStopId, busRoot);
     if (result === 0) {
@@ -206,20 +211,20 @@ app.post("/ImOnTheBusStop", async (req, res) => {
     const findBusClue = { id: result };
     const findBus = await collection.findOne(findBusClue);
     const expoPushToken = await findBus.token;
-    const message = busStopName;
+    const message = {busStopName, userId};
     await sendPushNotification(expoPushToken, message);
     res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
 })
 
 app.post("/ImGoingToOut", async (req, res) => {
     try {
-        const { onbusid, message } = req.body;
-        console.log(onbusid, message);
+        const { onbusid, message, userId } = req.body;
+        console.log(onbusid, message, userId);
     
         const findBusClue = { id: onbusid };
         const findBus = await collection.findOne(findBusClue);
         const expoPushToken = await findBus.token;
-        await sendPushNotification(expoPushToken, message);
+        await sendPushNotification(expoPushToken, {message, userId});
         res.status(200).json({ success: true, message: 'Push Notification sent successfully'})
     } catch (error) {
         console.error(error);
@@ -233,7 +238,10 @@ app.post("/ImAlmostInSubway", async (req, res) => {
         const findSubClue = { id: targetSubId };
         const findSub = await collection.findOne(findSubClue);
         const expoPushToken = await findSub.token;
-        const message = "AlmostThere";
+        const message = {
+            message: "AlmostThere",
+            userId: "Subway"
+        };
         await sendPushNotification(expoPushToken, message);
         res.status(200).json({ success: true, message: 'Push notification sent successfully'})
     } catch (error) {
