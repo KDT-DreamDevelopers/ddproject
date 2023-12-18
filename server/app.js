@@ -33,7 +33,6 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
     const { startX, startY, endX, endY } = req.params;
     let datas = [];
 
-
     try {
         const result_transfer = await gybus_and_subway_transfer(startX, startY, endX, endY);
         datas = datas.concat(result_transfer);
@@ -81,20 +80,33 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
 app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
     const { userX, userY, targetBusId } = req.params;
     console.log("targetBus", targetBusId);
-    const busReturn = await distanceWithUserAndBusstop(targetBusId);
-    const busX = await busReturn[0];
-    const busY = await busReturn[1];
-
-    const distance = await getDistance(userX, userY, busX, busY);
-
-    res.status(200).json(distance);
+    try {
+        const busReturn = await distanceWithUserAndBusstop(targetBusId);
+        if ( !busReturn ){
+            res.status(400).json({'message': "에러발생"})
+        }
+        const busX = await busReturn[0];
+        const busY = await busReturn[1];
+    
+        const distance = await getDistance(userX, userY, busX, busY);
+    
+        res.status(200).json(distance);
+    } catch(error) {
+        console.error(error);
+        res.status(400).json({"message": "에러발생"})
+    }
 })
 
 app.get("/isNearSubway/:targetSubwayName", async (req, res) => {
-    const { targetSubwayName } = req.params
-    const subwayAddr = await getSubwayAddress(targetSubwayName);
-
-    res.status(200).json(subwayAddr);
+    try {
+        const { targetSubwayName } = req.params
+        const subwayAddr = await getSubwayAddress(targetSubwayName);
+    
+        res.status(200).json(subwayAddr);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({"message": "에러발생"})
+    }
 })
 
 async function getDistance(userX, userY, busX, busY) {
@@ -159,22 +171,26 @@ app.post('/api/save-token', async (req, res) => {
 
 
 const sendPushNotification = async (expoPushToken, message) => {
-    const response = await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Accept-encoding": "gzip, deflate",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            to: expoPushToken,
-            sound: "default",
-            title: "Push Notification Title",
-            body: message,
-        }),
-    });
-    const data = await response.json();
-    console.log("Push notification sent:", data);
+    try {
+        const response = await fetch("https://exp.host/--/api/v2/push/send", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Accept-encoding": "gzip, deflate",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                to: expoPushToken,
+                sound: "default",
+                title: "Push Notification Title",
+                body: message,
+            }),
+        });
+        const data = await response.json();
+        console.log("Push notification sent:", data);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 
@@ -196,24 +212,34 @@ app.post("/ImOnTheBusStop", async (req, res) => {
 })
 
 app.post("/ImGoingToOut", async (req, res) => {
-    const { onbusid, message } = req.body;
-    console.log(onbusid, message);
-
-    const findBusClue = { id: onbusid };
-    const findBus = await collection.findOne(findBusClue);
-    const expoPushToken = await findBus.token;
-    await sendPushNotification(expoPushToken, message);
-    res.status(200).json({ success: true, message: 'Push Notification sent successfully'})
+    try {
+        const { onbusid, message } = req.body;
+        console.log(onbusid, message);
+    
+        const findBusClue = { id: onbusid };
+        const findBus = await collection.findOne(findBusClue);
+        const expoPushToken = await findBus.token;
+        await sendPushNotification(expoPushToken, message);
+        res.status(200).json({ success: true, message: 'Push Notification sent successfully'})
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({success: false, message: "error incident"})
+    }
 })
 
 app.post("/ImAlmostInSubway", async (req, res) => {
-    const { targetSubId } = req.body;
-    const findSubClue = { id: targetSubId };
-    const findSub = await collection.findOne(findSubClue);
-    const expoPushToken = await findSub.token;
-    const message = "AlmostThere";
-    await sendPushNotification(expoPushToken, message);
-    res.status(200).json({ success: true, message: 'Push notification sent successfully'})
+    try { 
+        const { targetSubId } = req.body;
+        const findSubClue = { id: targetSubId };
+        const findSub = await collection.findOne(findSubClue);
+        const expoPushToken = await findSub.token;
+        const message = "AlmostThere";
+        await sendPushNotification(expoPushToken, message);
+        res.status(200).json({ success: true, message: 'Push notification sent successfully'})
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ success: false, message: "error incident"})
+    }
 })
 
 
@@ -226,7 +252,7 @@ app.use((req, res, next) => {
 connectDB().then(db => {
     console.log('init!')
     const server = app.listen(config.host.port, () => {
-        console.log("8080에서 실행중");
+        console.log("http://localhost:8080에서 실행중");
     })
     // initSocket(server)  //나중에 할거
 }).catch(console.error)

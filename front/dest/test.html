@@ -133,79 +133,83 @@
 
 
         function selectThisPath() {
-            const confirmButton = document.getElementById("confirmButton");
-            const buttonDiv = document.getElementById("low-button")
+            try {
+                const confirmButton = document.getElementById("confirmButton");
+                const buttonDiv = document.getElementById("low-button")
 
-            confirmButton.remove();
+                confirmButton.remove();
 
-            const newButton = "<button type='button' id='cancel' onclick='backToMain()'> 경로 취소 </button>"
-            buttonDiv.innerHTML += newButton;
-            window.alert("경로가 확정되었습니다!")
+                const newButton = "<button type='button' id='cancel' onclick='backToMain()'> 경로 취소 </button>"
+                buttonDiv.innerHTML += newButton;
+                window.alert("경로가 확정되었습니다!")
 
-            const busStart = document.getElementsByClassName("busStart");
-            const busEnd = document.getElementsByClassName("busEnd");
+                const busStart = document.getElementsByClassName("busStart");
+                const busEnd = document.getElementsByClassName("busEnd");
 
 
-            for (let i = 0; i < busStart.length; i++) {
-                let newStartButton = `<button type="button" class="start-buttons small-buttons" onclick="clickStartButton(${i})"> 승 차 </button>`
-                let newEndButton = `<button type="button" class="end-buttons small-buttons" onclick="clickEndButton(${i})"> 하 차 </button>`
-                busStart[i].innerHTML += newStartButton
-                busEnd[i].innerHTML += newEndButton;
+                for (let i = 0; i < busStart.length; i++) {
+                    let newStartButton = `<button type="button" class="start-buttons small-buttons" onclick="clickStartButton(${i})"> 승 차 </button>`
+                    let newEndButton = `<button type="button" class="end-buttons small-buttons" onclick="clickEndButton(${i})"> 하 차 </button>`
+                    busStart[i].innerHTML += newStartButton
+                    busEnd[i].innerHTML += newEndButton;
 
-                let smallButtons = document.getElementsByClassName("small-buttons");
-                smallButtons[2 * i].disabled = true;
-                smallButtons[2 * i + 1].disabled = true;
-            }
+                    let smallButtons = document.getElementsByClassName("small-buttons");
+                    smallButtons[2 * i].disabled = true;
+                    smallButtons[2 * i + 1].disabled = true;
+                }
 
-            let orderBus = 0;
-            let orderSub = 0;
-            let isNearBus;
-            let isNearSubway;
-            if (navigator.geolocation) {
-                let watchId;
-                watchId = navigator.geolocation.watchPosition(
-                    async (position) => {
-                        const latitude = await position.coords.latitude;
-                        const longitude = await position.coords.longitude;
-                        if (startBusStops.length >= 1) {
-                            isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
-                            if (isNearBus <= 30) {
-                                let startButtons = document.getElementsByClassName("start-buttons")
-                                startButtons[0].disabled = false;
-                                alert("승차 버튼을 누르실 수 있습니다.")
-                                localStorage.setItem(`BusStart${orderBus}Name`, startBusStops[0][0]);
-                                localStorage.setItem(`BusStart${orderBus}Id`, startBusStops[0][1]);
-                                startBusStops.splice(0, 1);
-                                orderBus++;
+                let orderBus = 0;
+                let orderSub = 0;
+                let isNearBus;
+                let isNearSubway;
+                if (navigator.geolocation) {
+                    let watchId;
+                    watchId = navigator.geolocation.watchPosition(
+                        async (position) => {
+                            const latitude = await position.coords.latitude;
+                            const longitude = await position.coords.longitude;
+                            if (startBusStops.length >= 1) {
+                                isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
+                                if (isNearBus <= 30) {
+                                    let startButtons = document.getElementsByClassName("start-buttons")
+                                    startButtons[0].disabled = false;
+                                    alert("승차 버튼을 누르실 수 있습니다.")
+                                    localStorage.setItem(`BusStart${orderBus}Name`, startBusStops[0][0]);
+                                    localStorage.setItem(`BusStart${orderBus}Id`, startBusStops[0][1]);
+                                    startBusStops.splice(0, 1);
+                                    orderBus++;
+                                }
                             }
-                        }
-                        if (startSubwayList.length >= 1) {
-                            isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
-                            if (isNearSubway <= 100) {
-                                alert("역무원에게 알림을 보냈습니다.");
-                                // 역무원에게 알림을 보낼 코드 작성
-                                const targetSubId = startSubwayIdList[orderSub];
-                                const response = await fetch("/ImAlmostInSubway", {
-                                    mehthod: "POST",
-                                    headers: {
-                                        "Content-type": "application/json"
-                                    },
-                                    body: JSON.stringify(targetSubId)
-                                })
+                            if (startSubwayList.length >= 1) {
+                                isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
+                                if (isNearSubway <= 100) {
+                                    alert("역무원에게 알림을 보냈습니다.");
+                                    // 역무원에게 알림을 보낼 코드 작성
+                                    const targetSubId = startSubwayIdList[orderSub];
+                                    const response = await fetch("/ImAlmostInSubway", {
+                                        mehthod: "POST",
+                                        headers: {
+                                            "Content-type": "application/json"
+                                        },
+                                        body: JSON.stringify(targetSubId)
+                                    })
 
-                                localStorage.setItem(`SubwayStart${orderSub}`, startSubwayList[orderSub]);
-                                orderSub++;
+                                    localStorage.setItem(`SubwayStart${orderSub}`, startSubwayList[orderSub]);
+                                    orderSub++;
+                                }
+
                             }
-
+                            const onload = `현재 위치: ${latitude} ${longitude}, 거리 : ${isNearBus}`
+                        },
+                        (error) => {
+                            console.error(error);
                         }
-                        const onload = `현재 위치: ${latitude} ${longitude}, 거리 : ${isNearBus}`
-                    },
-                    (error) => {
-                        console.error(error);
-                    }
-                )
-            } else {
-                console.error("Geolocation 지원 불가 브라우저")
+                    )
+                } else {
+                    console.error("Geolocation 지원 불가 브라우저")
+                }
+            } catch (error) {
+                console.error(error)
             }
 
         }
@@ -215,62 +219,70 @@
         }
 
         async function clickStartButton(i) {
-            const smallButtons = document.getElementsByClassName("small-buttons");
-            const startButton = smallButtons[2 * i];
-            const endButton = smallButtons[2 * i + 1];
-            startButton.disabled = true;
-            endButton.disabled = false;
-
-            const targetBusStopName = localStorage.getItem(`BusStart${i}Name`);
-            const targetBusStopId = localStorage.getItem(`BusStart${i}Id`);
-            const targetBusRoot = BusRoots[i];
-
-            const data = {
-                busStopId: targetBusStopId,
-                busRoot: targetBusRoot,
-                busStopName: targetBusStopName
-            };
-
-            const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImOnTheBusStop`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-
-            const result = await response.json()
-            if (result.message === "noPath") {
-                alert("해당 경로에 운행이 종료되었거나 대기시간이 너무 길 수 있습니다.");
-                window.location.href = "./main.html"
-            }
-            else {
-                alet("곧 버스가 도착합니다. 준비해 주세요.");
-                const onbus = result.onbus;
-                onBusId.push(onbus);
+            try {
+                const smallButtons = document.getElementsByClassName("small-buttons");
+                const startButton = smallButtons[2 * i];
+                const endButton = smallButtons[2 * i + 1];
+                startButton.disabled = true;
+                endButton.disabled = false;
+    
+                const targetBusStopName = localStorage.getItem(`BusStart${i}Name`);
+                const targetBusStopId = localStorage.getItem(`BusStart${i}Id`);
+                const targetBusRoot = BusRoots[i];
+    
+                const data = {
+                    busStopId: targetBusStopId,
+                    busRoot: targetBusRoot,
+                    busStopName: targetBusStopName
+                };
+    
+                const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImOnTheBusStop`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+    
+                const result = await response.json()
+                if (result.message === "noPath") {
+                    alert("해당 경로에 운행이 종료되었거나 대기시간이 너무 길 수 있습니다.");
+                    window.location.href = "./main.html"
+                }
+                else {
+                    alet("곧 버스가 도착합니다. 준비해 주세요.");
+                    const onbus = result.onbus;
+                    onBusId.push(onbus);
+                }
+            } catch (error) {
+                console.error(error)
             }
         }
 
         async function clickEndButton(i) {
-            const smallButtons = document.getElementsByClassName("small-buttons");
-            const endButton = smallButtons[2 * i + 1];
-            endButton.disabled = true;
-
-            const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImGoingToOut`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ message: "OUT", onbusid: onBusId[onBusId.length-1] })
-            });
-
-            if (response.success){
-                alert("하차 버튼을 눌렀습니다.");
-            }
-            else {
-                alert("에러가 발생했습니다.")
-                console.error
+            try {
+                const smallButtons = document.getElementsByClassName("small-buttons");
+                const endButton = smallButtons[2 * i + 1];
+                endButton.disabled = true;
+    
+                const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/ImGoingToOut`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: "OUT", onbusid: onBusId[onBusId.length - 1] })
+                });
+    
+                if (response.success) {
+                    alert("하차 버튼을 눌렀습니다.");
+                }
+                else {
+                    alert("에러가 발생했습니다.")
+                    console.error
+                }
+            } catch (error) {
+                console.error(error);
             }
 
         }
@@ -280,14 +292,20 @@
 
         async function sendIsNearSubway(latitude, longitude, address) {
             const addr = await findSubwayAddress(address);
-            let geocoder = new kakao.maps.services.Geocoder();
-            geocoder.addressSearch(addr, (result, status) => {
-                if (status === kakao.maps.services.Status.OK) {
-                    const lat = result[0].y;
-                    const lng = result[0].x;
-                    return getDistance(latitude, longitude, lat, lng)
-                }
-            })
+            if (addr) {
+                let geocoder = new kakao.maps.services.Geocoder();
+                geocoder.addressSearch(addr, (result, status) => {
+                    if (status === kakao.maps.services.Status.OK) {
+                        const lat = result[0].y;
+                        const lng = result[0].x;
+                        return getDistance(latitude, longitude, lat, lng)
+                    }
+                })
+            }
+            else {
+                return 500;
+            }
+
         }
 
         async function getDistance(userX, userY, busX, busY) {

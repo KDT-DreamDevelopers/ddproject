@@ -32,7 +32,7 @@ export class MakePriorityAboutPath {
 
     async isThereLiftOrElevator() {
         let scoreIndex = 0;
-        
+
         for (const onePathList of this.pathList) {
             this.scoreList.push(0);
             let isSubway = false;
@@ -49,20 +49,20 @@ export class MakePriorityAboutPath {
                         const numElev = findResult["elevLOC"].length;
                         const numLift = findResult["liftLOC"].length;
                         this.scoreList[scoreIndex] += numElev + numLift;
-                        scoreIndex ++;
+                        scoreIndex++;
                     }
                 } else {
                     //  버스인 경우 해당 버스가 언제 도착하는지 소요시간에 추가
                     this.scoreList[this.scoreList.length - 1] += 3;
                     const tmpdata = await getBestBusDriver(onePathList["정류장ID"][i], onePathList["호선노선"][i]);
 
-                    if ( tmpdata && tmpdata.arrmsg1 && (await tmpdata.arrmsg1[0] === "운행종료" || await tmpdata.arrmsg1[0] === "출발대기")) {
+                    if (tmpdata && tmpdata.arrmsg1 && (await tmpdata.arrmsg1[0] === "운행종료" || await tmpdata.arrmsg1[0] === "출발대기")) {
                         this.pathList.splice(this.scoreList.length - 1, 1);
                         this.scoreList.pop();
                         break;
                     } else {
                         // onePathList["소요시간"][0] += await tmpdata.exps1 / 60;
-                        scoreIndex ++;
+                        scoreIndex++;
                         // console.log(tmpdata)
                     }
                 }
@@ -76,9 +76,11 @@ export class MakePriorityAboutPath {
         const basicScore = 50;
         let idx = 0;
         for (const onePathList of this.pathList) {
-            const howMany = onePathList['탑승지'].length;
-            this.scoreList[idx] += basicScore - Math.pow(howMany, 2);
-            idx += 1;
+            if (onePathList) {
+                const howMany = onePathList['탑승지'].length;
+                this.scoreList[idx] += basicScore - Math.pow(howMany, 2);
+                idx += 1;
+            }
         }
     }
 
@@ -86,21 +88,30 @@ export class MakePriorityAboutPath {
         const basicScore = 150;
         let idx = 0;
         for (const onePathList of this.pathList) {
-            const havingTime = parseInt(onePathList['소요시간'][0]);
-            this.scoreList[idx] += basicScore - Math.pow(havingTime, 0.8);
-            idx += 1;
+            if (onePathList){
+                const havingTime = parseInt(onePathList['소요시간'][0]);
+                this.scoreList[idx] += basicScore - Math.pow(havingTime, 0.8);
+                idx += 1;
+            }
         }
     }
 
-    async makeLastFiveData() {
+    async makeLastFiveData() {        
         const topFivePath = {};
-        for (let i = 0; i < 5; i++) {
-            const index = this.findMaxIndex(this.scoreList);
-            if ( index != -1){
-                topFivePath[i] = this.pathList[index];
-                this.scoreList[index] = 0;
-            } else {
-                break;
+
+        if ( this.pathList.length <= 5){
+            for ( let i=0; i<this.pathList.length; i++){
+                topFivePath[i] = this.pathList[i];
+            }
+        } else {
+            for (let i = 0; i < 5; i++) {
+                const index = this.findMaxIndex(this.scoreList);
+                if (index != -1) {
+                    topFivePath[i] = this.pathList[index];
+                    this.scoreList[index] = 0;
+                } else {
+                    break;
+                }
             }
         }
         return topFivePath;
@@ -117,5 +128,5 @@ export class MakePriorityAboutPath {
         }
         return maxIndex;
     }
-    
+
 }

@@ -8,12 +8,19 @@ const database = client.db("MoveOfDream");
 const collection = database.collection("busstops");
 
 export async function distanceWithUserAndBusstop(busStopId) {
-    console.log(busStopId)
-    const findData = { sttn_id: Number(busStopId) };
-    console.log(findData)
-    const findResult = await collection.findOne(findData);
-    const busX = await findResult.crdnt_x;
-    const busY = await findResult.crdnt_y;
-    return [await busX, await busY]
+    try {
+        console.log(busStopId)
+        const findData = { sttn_id: Number(busStopId) };
+        console.log(findData)
+        if ( findData){
+            const findResult = await collection.findOne(findData);
+            const busX = await findResult.crdnt_x;
+            const busY = await findResult.crdnt_y;
+            return [await busX, await busY];
+        }
+    } catch (error){
+        console.error(error);
+        return;
+    }
 }
 
