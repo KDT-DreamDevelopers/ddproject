@@ -180,7 +180,7 @@
                             const longitude = await position.coords.longitude;
                             if (startBusStops.length >= 1) {
                                 isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
-                                if (isNearBus <= 30) {
+                                if (isNearBus <= 7000000) {
                                     let startButtons = document.getElementsByClassName("start-buttons")
                                     startButtons[0].disabled = false;
                                     alert("승차 버튼을 누르실 수 있습니다.")
@@ -192,7 +192,7 @@
                             }
                             if (startSubwayList.length >= 1) {
                                 isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
-                                if (isNearSubway <= 100) {
+                                if (isNearSubway <= 7000000) {
                                     alert("역무원에게 알림을 보냈습니다.");
                                     // 역무원에게 알림을 보낼 코드 작성
                                     const targetSubId = startSubwayIdList[orderSub];
