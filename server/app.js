@@ -208,19 +208,32 @@ const sendPushNotification = async (expoPushToken, message) => {
 
 // 버스 푸시 알림 보내기 엔드포인트
 app.post("/ImOnTheBusStop", async (req, res) => {
-    const { busStopId, busRoot, busStopName, userId } = req.body;
-    const result = await getBestBusDriver(busStopId, busRoot);
-    if (result === 0) {
-        res.status(400).json({ message: "noPath" });
-        return;
+    try {
+        const { busStopId, busRoot, busStopName, userId } = req.body;
+        const result = await getBestBusDriver(busStopId, busRoot);
+        if (result === 0) {
+            res.status(400).json({ message: "noPath" });
+            return;
+        }
+        const findBusClue = { mId: result };
+        const findBus = await TokenModel.findOne(findBusClue);
+        if ( findBus ){
+            const expoPushToken = findBus.token;
+            const message = {
+                message: busStopName,
+                userId: userId
+            };
+            await sendPushNotification(expoPushToken, message);
+            res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
+        }
+        else{
+            console.log("findBus가 없다.")
+            res.status(404).json({success: false, message: "Bus Error"})
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ success: false, message: "error incident"})
     }
-    const findBusClue = { mId: result };
-    const findBus = await TokenModel.findOne(findBusClue);
-    console.log("findBus:", findBus);
-    const expoPushToken = findBus.token;
-    const message = { busStopName, userId };
-    await sendPushNotification(expoPushToken, message);
-    res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
 })
 
 app.post("/ImGoingToOut", async (req, res) => {
@@ -230,7 +243,7 @@ app.post("/ImGoingToOut", async (req, res) => {
 
         const findBusClue = { mId: onbusid };
         const findBus = await TokenModel.findOne(findBusClue);
-        const expoPushToken = await findBus.token;
+        const expoPushToken = findBus.token;
         await sendPushNotification(expoPushToken, { message, userId });
         res.status(200).json({ success: true, message: 'Push Notification sent successfully' })
     } catch (error) {
@@ -244,20 +257,18 @@ app.post("/ImAlmostInSubway", async (req, res) => {
         const { targetSubId } = req.body;
         const findSubClue = { mId: targetSubId }
         const findSub = await TokenModel.findOne(findSubClue);
-        if ( findSub ){
-            const expoPushToken = await findSub.token;
-            console.log(expoPushToken)
+        if (findSub) {
+            const expoPushToken = findSub.token;
             const message = {
                 message: "AlmostThere",
                 userId: "Subway"
             };
-            console.log(message);
             await sendPushNotification(expoPushToken, message);
             res.status(200).json({ success: true, message: 'Push notification sent successfully' })
         }
         else {
             console.log("findSub가 없다.")
-            res.status(404).json({ success: false, message: "Subway Error"})
+            res.status(404).json({ success: false, message: "Subway Error" })
         }
     } catch (error) {
         console.error(error);
