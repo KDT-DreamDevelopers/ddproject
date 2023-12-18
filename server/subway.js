@@ -9,8 +9,8 @@ const collection = database.collection("subways");
 
 export async function getSubwayAddress(subwayName) {
     try {
-        const findname = subwayName.split("역")[0]
-
+        const findname = subwayName.slice(0, -1);
+        console.log(findname);
         const findData = { "name": findname };
         const findResult = await collection.findOne(findData);
 
