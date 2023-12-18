@@ -184,8 +184,6 @@ app.post('/api/save-token', async (req, res) => {
 
 const sendPushNotification = async (expoPushToken, message) => {
     try {
-        const busName = message.busStopName;
-        const userId = message.userId
         const response = await fetch("https://exp.host/--/api/v2/push/send", {
             method: "POST",
             headers: {
@@ -197,8 +195,7 @@ const sendPushNotification = async (expoPushToken, message) => {
                 to: expoPushToken,
                 sound: "default",
                 title: "승차 알림!",
-                body: `${busName}에서 승차 예정!`,
-                id: userId
+                body: JSON.stringify(message),
             }),
         });
         const data = await response.json();
