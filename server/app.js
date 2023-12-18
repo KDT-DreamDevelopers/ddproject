@@ -154,8 +154,6 @@ const pushTokenSchema = new Mongoose.Schema({
     id: { type: String, required: true }
 })
 const TokenModel = db.collection("tokens");
-const SubwayModel = db.collection("subways");
-const BusModel = db.collection("busstops")
 
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
@@ -218,7 +216,7 @@ app.post("/ImOnTheBusStop", async (req, res) => {
         return;
     }
     const findBusClue = { id: result };
-    const findBus = await BusModel.findOne(findBusClue);
+    const findBus = await TokenModel.findOne(findBusClue);
     const expoPushToken = await findBus.token;
     const message = { busStopName, userId };
     await sendPushNotification(expoPushToken, message);
@@ -231,7 +229,7 @@ app.post("/ImGoingToOut", async (req, res) => {
         console.log(onbusid, message, userId);
 
         const findBusClue = { id: onbusid };
-        const findBus = await BusModel.findOne(findBusClue);
+        const findBus = await TokenModel.findOne(findBusClue);
         const expoPushToken = await findBus.token;
         await sendPushNotification(expoPushToken, { message, userId });
         res.status(200).json({ success: true, message: 'Push Notification sent successfully' })
@@ -244,7 +242,8 @@ app.post("/ImGoingToOut", async (req, res) => {
 app.post("/ImAlmostInSubway", async (req, res) => {
     try {
         const { targetSubId } = req.body;
-        const findSub = await SubwayModel.findOne({"busId": {$elemMatch: {$eq: targetSubId}}});
+        const findSubClue = { id: targetSubId }
+        const findSub = await TokenModel.findOne(findSubClue);
         if ( findSub ){
             const expoPushToken = await findSub.token;
             console.log(expoPushToken)
