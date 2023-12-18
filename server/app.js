@@ -26,6 +26,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/inquiry', inquiryRouter)
+app.use('/report', reportRouter)
 app.use(bodyParser.urlencoded({ extended: !0 }))
 
 
@@ -243,16 +244,21 @@ app.post("/ImGoingToOut", async (req, res) => {
 app.post("/ImAlmostInSubway", async (req, res) => {
     try {
         const { targetSubId } = req.body;
-        const findSubClue = { id: targetSubId };
-        const findSub = await SubwayModel.findOne(findSubClue);
-        const expoPushToken = await findSub.token;
-        const message = {
-            message: "AlmostThere",
-            userId: "Subway"
-        };
-        console.log(message);
-        await sendPushNotification(expoPushToken, message);
-        res.status(200).json({ success: true, message: 'Push notification sent successfully' })
+        const findSub = await SubwayModel.findOne({"busId": {$eleMatch: {"eq": targetSubId}}});
+        if ( findSub ){
+            const expoPushToken = await findSub.token;
+            const message = {
+                message: "AlmostThere",
+                userId: "Subway"
+            };
+            console.log(message);
+            await sendPushNotification(expoPushToken, message);
+            res.status(200).json({ success: true, message: 'Push notification sent successfully' })
+        }
+        else {
+            console.log("findSub가 없다.")
+            res.status(404).json({ success: false, message: "Subway Error"})
+        }
     } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, message: "error incident" })
