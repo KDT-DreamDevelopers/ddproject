@@ -215,9 +215,12 @@ app.post("/ImOnTheBusStop", async (req, res) => {
         res.status(400).json({ message: "noPath" });
         return;
     }
+    console.log(result);
+    console.log(typeof(result))
     const findBusClue = { mId: result };
     const findBus = await TokenModel.findOne(findBusClue);
-    const expoPushToken = await findBus.token;
+    console.log("findBus:", findBus);
+    const expoPushToken = findBus.token;
     const message = { busStopName, userId };
     await sendPushNotification(expoPushToken, message);
     res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
