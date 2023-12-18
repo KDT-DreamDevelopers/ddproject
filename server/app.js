@@ -153,7 +153,7 @@ const pushTokenSchema = new Mongoose.Schema({
     token: { type: String, required: true },
     mId: { type: String, required: true }
 })
-const TokenModel = Mongoose.collection("tokens", pushTokenSchema);
+const TokenModel = Mongoose.model("tokens", pushTokenSchema);
 
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
@@ -167,7 +167,7 @@ app.post('/api/save-token', async (req, res) => {
                 mId: id
             }
             let pushToken = new TokenModel(inputdata);
-            pushToken.save();
+            await pushToken.save();
             console.log("Token In!")
             res.status(200).json({ success: true, message: 'Token saved successfully' })
         } else {
