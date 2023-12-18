@@ -115,7 +115,7 @@
             if (subwayList.includes(useData["호선노선"][i])) {
                 const route = document.getElementById("route");
 
-                const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color:${subwayColor[useData['호선노선'][i]]}"><span class="before" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><span class="after" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><i class="xi-subway" style="color:${subwayColor[useData['호선노선'][i]]}"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><p class="sletter stationListTrigger"> <i class="xi-angle-down-min"></i></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span></div></li>`
+                const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color:${subwayColor[useData['호선노선'][i]]}"><span class="before" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><span class="after" style="border-color:${subwayColor[useData['호선노선'][i]]}"></span><i class="xi-subway" style="color:${subwayColor[useData['호선노선'][i]]}"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><p class="sletter stationListTrigger"></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span></div></li>`
 
                 route.innerHTML += oneDetailPath
                 startSubwayList.push(useData["탑승지"][i]);
@@ -125,7 +125,7 @@
 
                 const route = document.getElementById("route");
 
-                const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color: blue;"><span class="before" style="border-color: blue;"></span><span class="after" style="border-color: blue;"></span><i class="xi-bus" style="color: blue;"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><span class="busStart"></span><p class="sletter stationListTrigger"> <i class="xi-angle-down-min"></i></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span><span class="busEnd"></span></div></li>`
+                const oneDetailPath = `<li class="detail"><div class="leftbox"></div><div class="rightbox riding" style="border-color: blue;"><span class="before" style="border-color: blue;"></span><span class="after" style="border-color: blue;"></span><i class="xi-bus" style="color: blue;"><span>${useData["호선노선"][i]}</span></i><span> ${useData["탑승지"][i]} 승차</span><span class="busStart"></span><p class="sletter stationListTrigger"></p><p><div class="stationList" style="display: none;"></div></p><span class="bottom">${useData["하차지"][i]} 하차</span><span class="busEnd"></span></div></li>`
 
                 route.innerHTML += oneDetailPath
                 startBusStops.push([useData["탑승지"][i], useData["정류장ID"][i]]);
@@ -180,7 +180,7 @@
                             const longitude = await position.coords.longitude;
                             if (startBusStops.length >= 1) {
                                 isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
-                                if (isNearBus <= 30) {
+                                if (isNearBus <= 5000) {
                                     let startButtons = document.getElementsByClassName("start-buttons")
                                     startButtons[0].disabled = false;
                                     alert("승차 버튼을 누르실 수 있습니다.")
@@ -192,7 +192,7 @@
                             }
                             if (startSubwayList.length >= 1) {
                                 isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
-                                if (isNearSubway <= 100) {
+                                if (isNearSubway <= 5000) {
                                     alert("역무원에게 알림을 보냈습니다.");
                                     // 역무원에게 알림을 보낼 코드 작성
                                     const targetSubId = startSubwayIdList[orderSub];
