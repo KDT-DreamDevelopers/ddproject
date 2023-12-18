@@ -84,20 +84,20 @@ app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
     console.log("targetBus", targetBusId);
     try {
         const busReturn = await distanceWithUserAndBusstop(targetBusId);
-        if ( !busReturn ){
-            res.status(400).json({'message': "에러발생"})
+        if (!busReturn) {
+            res.status(400).json({ 'message': "에러발생" })
             return;
         }
         const busX = await busReturn[0];
         const busY = await busReturn[1];
-    
+
         const distance = await getDistance(userX, userY, busX, busY);
-    
+
         res.status(200).json(distance);
         return;
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        res.status(400).json({"message": "에러발생"})
+        res.status(400).json({ "message": "에러발생" })
         return;
     }
 })
@@ -106,11 +106,11 @@ app.get("/isNearSubway/:targetSubwayName", async (req, res) => {
     try {
         const { targetSubwayName } = req.params
         const subwayAddr = await getSubwayAddress(targetSubwayName);
-    
+
         res.status(200).json(subwayAddr);
     } catch (error) {
         console.error(error);
-        res.status(400).json({"message": "에러발생"})
+        res.status(400).json({ "message": "에러발생" })
     }
 })
 
@@ -136,17 +136,25 @@ async function getDistance(userX, userY, busX, busY) {
 }
 
 // MongoDB 연결
-const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
-Mongoose.connect(url, {
-    dbName: "MoveOfDream"
-})
+let db;
 
+const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+try {
+    const connection = await Mongoose.connect(url, {
+        dbName: "MoveOfDream"
+    })
+    db = connection.connection;
+} catch (error) {
+    console.error(error);
+}
 // MongoDB 모델 정의
 const pushTokenSchema = new Mongoose.Schema({
     token: { type: String, required: true },
     id: { type: String, required: true }
 })
-const TokenModel = Mongoose.model("tokens", pushTokenSchema);
+const TokenModel = db.collection("tokens");
+const SubwayModel = db.collection("subways");
+const BusModel = db.collection("busstops")
 
 // 토큰 저장 엔드포인트
 app.post('/api/save-token', async (req, res) => {
@@ -163,7 +171,7 @@ app.post('/api/save-token', async (req, res) => {
             pushToken.save();
             console.log("Token In!")
             res.status(200).json({ success: true, message: 'Token saved successfully' })
-        } else{
+        } else {
             console.log("Toekn Already in!");
             res.status(200).json({ success: false, message: 'Token already exists' });
         }
@@ -209,9 +217,9 @@ app.post("/ImOnTheBusStop", async (req, res) => {
         return;
     }
     const findBusClue = { id: result };
-    const findBus = await collection.findOne(findBusClue);
+    const findBus = await BusModel.findOne(findBusClue);
     const expoPushToken = await findBus.token;
-    const message = {busStopName, userId};
+    const message = { busStopName, userId };
     await sendPushNotification(expoPushToken, message);
     res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
 })
@@ -220,23 +228,23 @@ app.post("/ImGoingToOut", async (req, res) => {
     try {
         const { onbusid, message, userId } = req.body;
         console.log(onbusid, message, userId);
-    
+
         const findBusClue = { id: onbusid };
-        const findBus = await collection.findOne(findBusClue);
+        const findBus = await BusModel.findOne(findBusClue);
         const expoPushToken = await findBus.token;
-        await sendPushNotification(expoPushToken, {message, userId});
-        res.status(200).json({ success: true, message: 'Push Notification sent successfully'})
+        await sendPushNotification(expoPushToken, { message, userId });
+        res.status(200).json({ success: true, message: 'Push Notification sent successfully' })
     } catch (error) {
         console.error(error);
-        res.status(400).json({success: false, message: "error incident"})
+        res.status(400).json({ success: false, message: "error incident" })
     }
 })
 
 app.post("/ImAlmostInSubway", async (req, res) => {
-    try { 
+    try {
         const { targetSubId } = req.body;
         const findSubClue = { id: targetSubId };
-        const findSub = await collection.findOne(findSubClue);
+        const findSub = await SubwayModel.findOne(findSubClue);
         const expoPushToken = await findSub.token;
         const message = {
             message: "AlmostThere",
@@ -244,10 +252,10 @@ app.post("/ImAlmostInSubway", async (req, res) => {
         };
         console.log(message);
         await sendPushNotification(expoPushToken, message);
-        res.status(200).json({ success: true, message: 'Push notification sent successfully'})
+        res.status(200).json({ success: true, message: 'Push notification sent successfully' })
     } catch (error) {
         console.error(error);
-        res.status(400).json({ success: false, message: "error incident"})
+        res.status(400).json({ success: false, message: "error incident" })
     }
 })
 
