@@ -18,12 +18,11 @@ async function sendToMarking(data, title) {
 
 
 async function send(startX, startY, endX, endY) {
-    console.log(startX, startY, endX, endY)
     const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/send/${startY}/${startX}/${endY}/${endX}`)
 
     const result = await response.json();
-
-    const next_data = await [
+    
+    const next_data = [
         result["0"],
         result["1"],
         result["2"],
@@ -31,6 +30,6 @@ async function send(startX, startY, endX, endY) {
         result["4"]
     ]
 
-    return await next_data;
+    return next_data;
 
 }

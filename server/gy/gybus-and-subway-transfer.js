@@ -17,27 +17,30 @@ export async function gybus_and_subway_transfer(startX, startY, endX, endY) {
         
         const response = await fetch(link);
         const xmldata = await response.text();
-
+        console.log("gybusandsubway 실행")
 
         // XML 데이터를 JSON으로 변환
         const result = await useParse(xmldata);
 
         // JSON 데이터를 콘솔에 출력 및 변수에 저장
-        console.log("gy bus and subway함수 실행");
         const items = await result.ServiceResult.msgBody[0].itemList;
 
         // 각각의 dic을 담을 배열 초기화
+        let fidList = [];
         let fnameList = [];
         let railLinkListLengthList = [];
         let routeNmList = [];
         let tnameList = [];
         let timeList = [];
-
         await items.forEach((bodyItem) => {
             if (bodyItem.time !== undefined) {
                 timeList.push(bodyItem.time[0]);
             }
             bodyItem.pathList.forEach((listItem) => {
+                if (listItem.fid !== undefined) {
+                    fidList.push(listItem.fid[0])
+                }
+
                 if (listItem.fname !== undefined) {
                     fnameList.push(listItem.fname[0]);
                 }
@@ -54,6 +57,7 @@ export async function gybus_and_subway_transfer(startX, startY, endX, endY) {
 
             // 각 dic을 li 배열에 추가
             let dic = {
+                "정류장ID": fidList,
                 "탑승지": fnameList,
                 "역개수": railLinkListLengthList,
                 "호선노선": routeNmList,
@@ -62,6 +66,7 @@ export async function gybus_and_subway_transfer(startX, startY, endX, endY) {
             };
             li.push(dic);
             // 다음 아이템을 위해 배열 초기화
+            fidList = [];
             fnameList = [];
             railLinkListLengthList = [];
             routeNmList = [];
