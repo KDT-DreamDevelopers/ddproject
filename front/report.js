@@ -1,5 +1,5 @@
 var script = document.createElement('script');
-script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1';
+script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=f4a2aebd448b6fcc485c8aea465c19a1&libraries=services';
 document.head.appendChild(script);
 
 // Kakao Maps API 스크립트 로드 완료 후 실행될 콜백 함수 정의
