@@ -195,7 +195,7 @@ const sendPushNotification = async (expoPushToken, message) => {
                 to: expoPushToken,
                 sound: "default",
                 title: "승차 알림!",
-                body: JSON.stringify(message),
+                data: JSON.stringify(message),
             }),
         });
         const data = await response.json();
