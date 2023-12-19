@@ -10,7 +10,7 @@ userid.addEventListener('input',() => {
 
 const hp = document.getElementById('hp')
 hp.addEventListener('input',() => {
-    localStorage.setItem("check",'')
+    document.getElementById('check').value = 'n'
 })
 
 // 시작 페이지로 이동
