@@ -19,6 +19,7 @@ function loginPage(){
 const searchPw = document.getElementById('searchPw')
 searchPw.addEventListener('click', async (e)=>{
     e.preventDefault()
+    searchPw.disabled = true
 
     // 입력 정보 추출
     const userid = document.getElementById('userid').value
@@ -56,6 +57,10 @@ searchPw.addEventListener('click', async (e)=>{
                 code = data.code
                 console.log(code)
             })
+            .catch(error=>{
+                alert('에러발생')
+                searchPw.disabled = false
+            })
 
                 // container1 div 숨김
                 const container1 = document.getElementById('container1');
@@ -68,8 +73,7 @@ searchPw.addEventListener('click', async (e)=>{
                 // 해당 유저 정보없음
                 alert(data.message)
                 location.reload()
-            }
-            
+            }            
         })
     }
 })
@@ -94,6 +98,7 @@ console.log(code)
 // 코드 인증번호 맞는지 확인하기 (맞다면 container3)
 const codeBtn = document.getElementById('codeBtn')
 codeBtn.addEventListener('click', (e)=>{
+    codeBtn.disabled = true
     const codeCheck = document.getElementById('codeCheck').value
     console.log(codeCheck)
     if (codeCheck == code){
@@ -109,6 +114,7 @@ codeBtn.addEventListener('click', (e)=>{
         
     }else{
         alert('인증번호가 틀렸습니다')
+        codeBtn.disabled = false
     }
 })
 // page3 -----------------------------------------------
