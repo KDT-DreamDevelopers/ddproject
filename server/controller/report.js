@@ -10,7 +10,7 @@ let filename
 // 파일이 저장될 폴더 설정
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './/reports_img/'); 
+      cb(null, '../reports_img/'); 
     },
     filename: function (req, file, cb) {
         filename = Date.now() + path.extname(file.originalname)
