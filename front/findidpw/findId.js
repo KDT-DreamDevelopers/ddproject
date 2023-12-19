@@ -102,7 +102,7 @@ codeBtn.addEventListener('click', (e)=>{
                 <br> <span class="your_id2" id="result2">[${userid}]</span> <span>입니다</span>`
             }else{
                 message = data.message
-                console.log(message)
+                alert(message)
             }
             
         })
