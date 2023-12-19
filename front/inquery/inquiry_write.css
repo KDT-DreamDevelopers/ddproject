@@ -14,25 +14,19 @@ body {
 
 .search {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 0.625rem 0.625rem 0.625rem 1rem;
+    margin-bottom: 0.625rem;
     box-sizing: border-box;
 }
 
 
 .container p {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
-/* 내용 input 박스 변형 */
-.bigsearch {
-    height: 200px;
+.search.bigsearch {
+    height: 12.5rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
     position: relative;
-}
-
-.bigsearch::placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(50%,100%);
 }

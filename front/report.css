@@ -46,10 +46,7 @@
     cursor: pointer;
 }
 
-.bigsearch {
-    height: 200px;
-    /* position: relative; */
-}
+
 #i_answer > div {
     height: 150px;
     overflow: scroll
