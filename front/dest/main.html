@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>Document</title>
     <link rel="stylesheet" href="../userFrame.css">
     <link rel="stylesheet" href="./main.css">
@@ -95,6 +94,7 @@
         startBox.value = localStorage.getItem("startTitle");
         endBox.value = localStorage.getItem("endTitle");
         var geocoder = new kakao.maps.services.Geocoder();
+        let loading = false;
 
 
         let testStartX = localStorage.getItem("startX");
@@ -171,6 +171,8 @@
 
         async function makePath() {
             try {
+                loading = true;
+                showLoadingMessage();
                 const walkBar = '<div class="walk" style="width: 15%;">도보</div>'
                 if (startBox.value !== "" && endBox.value !== "") {
                     const startX = await localStorage.getItem("startX");
@@ -262,6 +264,9 @@
                 }
             } catch (error) {
                 console.error(error)
+            } finally {
+                loading = false;
+                hideLoadingMessage();
             }
         }
         function removeAllChildNods(el) {
@@ -281,6 +286,34 @@
                 console.error(error)
             }
         }
+
+        // 화면에 로딩 메시지를 보여주는 함수
+        function showLoadingMessage() {
+            const loadingDiv = document.createElement("div");
+            const placeList = document.getElementById("placeList")
+            loadingDiv.innerHTML += "<p><i class='xi-spinner-1'></i></p><span>Loading 중입니다...</span>";
+            loadingDiv.id = "loading";
+            placeList.innerHTML += loadingDiv;
+        }
+
+        // 화면에서 로딩 메시지를 감추는 함수
+        function hideLoadingMessage() {
+            const loadingDiv = document.getElementById("loading");
+            if (loadingDiv) {
+                loadingDiv.parentNode.removeChild(loadingDiv);
+            }
+        }
+
+        // 전역에서 로딩 상태를 확인하여 메시지를 보여주거나 감추는 업데이트 함수
+        function updateLoadingMessage() {
+            if (loading) {
+                showLoadingMessage();
+            } else {
+                hideLoadingMessage();
+            }
+        }
+
+
     </script>
 </body>
 
