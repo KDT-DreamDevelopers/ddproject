@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
     <!-- <link rel="stylesheet" href="./regist.css"> -->
     <link rel="stylesheet" href="./userFrame.css">
@@ -51,12 +51,13 @@
                 <input class="search" id="hp" type="text" placeholder="하이픈( - )을 제외하고 입력하세요" maxlength="11"><button
                     type="button" class="btn_inside" id="phone_check" onclick="openPopup()">본인 인증</button>
             </p>
+            <div id="container2" style="display: none;">
+                <input class="search" type="text" id="codeCheck" placeholder="인증번호 입력"><div id="timer"></div> 
+                <button type="button" class="purple" id="codeBtn">확인</button>
+            </div>
 
             <!-- 첨부 버튼 삭제 -->
             <p><label for="fileInput" class="txt_input">장애인 등록증:</label>
-                <!-- <span class>
-                    <input class="search" id="fileInput" type="file" placeholder="사진 또는 파일을 첨부하세요">
-                </span> -->
                 <span class="filebox">
                     <input class="search" placeholder="사진 또는 파일을 첨부하세요" readonly>
                     <label for="fileInput" class="btn_inside">파일 찾기</label>

@@ -16,7 +16,7 @@ hp.addEventListener('input',() => {
 // 시작 페이지로 이동
 const back = document.getElementById('back')
 back.addEventListener('click', (e)=>{
-    window.location.href = './start.html'
+    window.location.href = './index.html'
 })
 
 
@@ -49,38 +49,81 @@ function useridCheck(){
         })
 }
 
-// 본인인증 팝업창 열기 (아; 근데 앱이면 필요없겠다)
-function openPopup(){
+let code
+// 본인인증
+const phone_check = document.getElementById('phone_check')
+phone_check.addEventListener('click', async (e)=>{
     const expNameText = /^(?:[가-힣]{1,20}|[A-Za-z]{1,20})$/
     const expSsn1Text = /^\d{6}$/
     const expSsn2Text = /^\d{7}$/
     const expHpText = /^\d{11}$/
 
-    if (!expNameText.test(document.getElementById('name').value)){
+    const name = document.getElementById('name').value;
+    const ssn1 = document.getElementById('ssn1').value;
+    const ssn2 = document.getElementById('ssn2').value;
+    const hp = document.getElementById('hp').value;
+
+    if (!expNameText.test(name)){
         alert('이름을 올바르게 작성하세요.')
         return false
     }
-    else if (!expSsn1Text.test(document.getElementById('ssn1').value)){
+    else if (!expSsn1Text.test(ssn1)){
         alert('주민등록 번호가 올바르지 않습니다')
         return false
     }
-    else if (!expSsn2Text.test(document.getElementById('ssn2').value)){
+    else if (!expSsn2Text.test(ssn2)){
         alert('주민등록 번호가 올바르지 않습니다')
         return false
     }
-    else if (!expHpText.test(document.getElementById('hp').value)){
+    else if (!expHpText.test(hp)){
         alert('하이픈(-)을 제외한 전화번호 11자리를 올바르게 입력하세요')
         return false
     }
-    const data = {
-        name : document.getElementById('name').value,
-        ssn1 : document.getElementById('ssn1').value,
-        ssn2 : document.getElementById('ssn2').value,
-        hp : document.getElementById('hp').value
+    const formData = {
+        name:name,
+        ssn1:ssn1,
+        ssn2:ssn2,
+        hp:hp
     }
-    localStorage.setItem("checkInfo",JSON.stringify(data))
-    window.open('check.html', '본인인증 페이지', 'width=500, height=600')
-}
+    const jsonData = JSON.stringify(formData)
+
+    try {
+        const response = await fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/check", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: jsonData
+        });
+
+        const data = await response.json();
+        code = data.code;
+
+        const container2 = document.getElementById('container2');
+        container2.style.display = 'block';
+        document.getElementById('check').value = 'y'
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+})
+
+// 본인인증 확인
+const codeBtn = document.getElementById('codeBtn')
+codeBtn.addEventListener('click', async (e)=>{
+    const codeCheck = document.getElementById('codeCheck').value
+    if (codeCheck == code){
+        alert('인증되었습니다')
+        
+        const container2 = document.getElementById('container2');
+        container2.style.display = 'none';
+        document.getElementById('check').value = 'y'
+    }else{
+        alert('인증번호가 틀렸거나 시간초과 되었습니다.')
+    }
+
+})
+
 // 처음으로 돌아가기
 function home(){
     window.location.href =  './index.html'
@@ -101,10 +144,8 @@ signUp.addEventListener('click', async (e)=>{
     const fileInput = document.getElementById('fileInput')
     const file = fileInput.files[0]
     
-    // 본인인증 했으면 hidden value 'y'로 변경
-        selfCheck()
     
-        // 정규표현식 확인  // 중복아이디, 본인인증 확인
+    // 정규표현식 확인  // 중복아이디, 본인인증 확인
     if (checkAll() && okUserid()&& okSelf()) {       
 
         // 데이터 전송  (파일때문에 json이 아닌 FormData()로 전송해야함)
@@ -208,13 +249,6 @@ function checkAll(){
     }
 }
 
-// 본인인증 완료 함수
-function selfCheck(){
-    const selfCheck = localStorage.getItem('check')
-    if (selfCheck == 'ok'){
-        document.getElementById('check').value = 'y'
-    }
-}
 
 // 본인인증 완료했는지 확인하는 함수
 function okSelf(){
@@ -242,3 +276,4 @@ function okUserid(){
         return true
     }
 }
+
