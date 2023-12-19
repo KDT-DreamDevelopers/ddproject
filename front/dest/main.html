@@ -291,10 +291,9 @@
         function showLoadingMessage() {
             const loadingDiv = document.createElement("div");
             loadingDiv.id = "loading";
-            loadingDiv.innerHTML += "<p><i class='xi-spinner-1'></i></p><span>Loading 중입니다...</span>";
-
             const placeList = document.getElementById("placeList")
             placeList.appendChild(loadingDiv);
+            loadingDiv.innerHTML += "<p><i class='xi-spinner-1'></i></p><span>Loading 중입니다...</span>";
         }
 
         // 화면에서 로딩 메시지를 감추는 함수
