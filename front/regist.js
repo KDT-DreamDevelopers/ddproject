@@ -22,7 +22,6 @@ back.addEventListener('click', (e)=>{
 
 // 아이디 중복 확인
 function useridCheck(){
-    document.getElementById('id_check').disabled = true
     const userid = document.getElementById('userid')
     const expIdText = /^[A-Za-z0-9]{5,15}$/
     if (!expIdText.test(userid.value)){
@@ -209,9 +208,11 @@ signUp.addEventListener('click', async (e)=>{
                 console.log(data)
                 console.error('회원가입 실패');
                 alert(data.message)
+                signUp.disabled = false
             }
         } catch (error) {
             console.error('에러 발생', error);
+            signUp.disabled = false
         }
     }
 })

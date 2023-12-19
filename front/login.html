@@ -73,11 +73,12 @@
                 }else if(data.message == '장애인인증서 인증 실패로 이용이 정지되었습니다.'){
                     msg = document.querySelector(".Wmessage");
                     msg.innerHTML = "<span>장애인인증서 인증 실패로 이용이 정지되었습니다.</span>";
+                    login.disabled = false
                 }
                 else {
                     msg = document.querySelector(".Wmessage");
                     msg.innerHTML = "<span>아이디 / 비밀번호를 확인해주세요</span>";
-                    // alert(data.message)
+                    login.disabled = false
                 } 
                 
             })
