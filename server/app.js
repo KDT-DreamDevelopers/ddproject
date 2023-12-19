@@ -82,7 +82,7 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
 
 app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
     const { userX, userY, targetBusId } = req.params;
-    console.log("targetBus", targetBusId);
+    console.log("targetBusStop", targetBusId);
     try {
         const busReturn = await distanceWithUserAndBusstop(targetBusId);
         if (!busReturn) {
@@ -215,6 +215,7 @@ app.post("/ImOnTheBusStop", async (req, res) => {
             res.status(400).json({ message: "noPath" });
             return;
         }
+        console.log("선택해야 하는 버스 아이디: ", result);
         const findBusClue = { mId: result };
         const findBus = await TokenModel.findOne(findBusClue);
         if ( findBus ){
