@@ -22,6 +22,7 @@ back.addEventListener('click', (e)=>{
 
 // 아이디 중복 확인
 function useridCheck(){
+    document.getElementById('id_check').disabled = true
     const userid = document.getElementById('userid')
     const expIdText = /^[A-Za-z0-9]{5,15}$/
     if (!expIdText.test(userid.value)){
@@ -56,6 +57,7 @@ phone_check.disabled = false;
 phone_check.addEventListener('click', function(){
     selfCheckButton()
 })
+
 function selfCheckButton(){
     const expNameText = /^(?:[가-힣]{1,20}|[A-Za-z]{1,20})$/
     const expSsn1Text = /^\d{6}$/
@@ -166,6 +168,7 @@ function home(){
 const signUp = document.getElementById('signUp')
 signUp.addEventListener('click', async (e)=>{
     e.preventDefault();
+    signUp.disabled = true
 
     // 입력 정보 추출
     const userid = document.getElementById('userid').value

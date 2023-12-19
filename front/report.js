@@ -67,6 +67,7 @@ if (!userInfo){
 const sendBtn = document.getElementById('sendBtn')
 sendBtn.addEventListener('click', async (e)=>{
     e.preventDefault();
+    sendBtn.disabled = true
 
     // 입력 정보 추출
     const location = document.getElementById('location').value
