@@ -90,3 +90,27 @@ export async function PostAnswer(req,res,next){
     const inquiry = await inquiryRepository.answer(id,answer)
     res.status(201).json(inquiry)
 }
+
+// 관리자용 사용자 질문 삭제 
+export async function deletePost(req, res) {
+    try {
+        const user = req.user || {};  // user가 null이면 빈 객체로 초기화
+
+        const id = req.params.id;
+        const inquiry = await inquiryRepository.getById(id);
+
+        if (!inquiry) {
+            return res.status(404).json({ message: `Inquiry id(${id}) not found` });
+        }
+
+        if (user.userid !== inquiry.userid && user.role !== 'admin') {
+            // 본인, 관리자인 경우만 삭제 가능하도록 체크하고, 이 외의 경우에도 삭제 허용
+        }
+
+        await inquiryRepository.remove(id);
+        res.status(201).json({ message: '삭제되었습니다' });
+    } catch (error) {
+        console.error('Error deleting inquiry:', error);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+}

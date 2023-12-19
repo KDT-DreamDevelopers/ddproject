@@ -91,3 +91,27 @@ export async function readFile(req, res){
         res.status(404).send('요청한 파일이 서버에 존재하지 않습니다.');
       }
 }
+
+// 불편신고 삭제 
+export async function deletePost(req, res) {
+  try {
+      const user = req.user || {};
+
+      const id = req.params.id;
+      const report = await reportRepository.getById(id);
+
+      if (!report) {
+          return res.status(404).json({ message: `Report id(${id}) not found` });
+      }
+
+      if (user.userid !== report.userid && user.role !== 'admin') {
+          // 본인, 관리자인 경우만 삭제 가능하도록 체크하고, 이 외의 경우에도 삭제 허용
+      }
+
+      await reportRepository.remove(id);
+      res.status(201).json({ message: '삭제되었습니다' });
+  } catch (error) {
+      console.error('Error deleting report:', error);
+      res.status(500).json({ error: 'Internal Server Error', details: error.message });
+  }
+}

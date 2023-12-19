@@ -35,4 +35,7 @@ router.put('/check/:id', isAuth, reportController.DoneReport)
 // 불편신고 이미지 파일 보내기
 router.get('/getImage/:filename', isAuth, reportController.readFile)
 
+// 문의글 삭제
+router.delete('/deletebyadmin/:id',reportController.deletePost)
+
 export default router
