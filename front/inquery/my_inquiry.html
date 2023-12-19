@@ -51,7 +51,7 @@
             if (data && data.length > 0) {
                 data.forEach((item, index) => {
                     const li = document.createElement('li');
-                    li.innerHTML = `${index + 1}. ${item.category} > ${item.title}<span>${item.createdAt.slice(0, 10)}</span>`;
+                    li.innerHTML = `${index + 1}. ${item.category} > ${item.title}&nbsp;<span>${item.createdAt.slice(0, 10)}</span>`;
                     li.setAttribute('data-id', item.id)
                     li.addEventListener('click', handleClick)
                     inquiries.insertBefore(document.createTextNode(' '), inquiries.firstChild);
