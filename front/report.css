@@ -2,14 +2,13 @@
     color: white;
 }
 
-.bigsearch {
+.search.bigsearch {
     height: 200px;
+    padding: 1rem;
+    margin-top: 0.5rem;
     position: relative;
 }
 
-.search.bigsearch {
-    padding-bottom: 130px; /* 접수사항을 기재하세요 */
-}
 
 .map-container {
     position: relative;
@@ -34,6 +33,7 @@
 
 .search {
     width: 100%;
+    margin-top: 0.5rem;
 }
 
 .xi-maker {
@@ -48,17 +48,11 @@
 
 .bigsearch {
     height: 200px;
-    position: relative;
+    /* position: relative; */
 }
 #i_answer > div {
     height: 150px;
     overflow: scroll
-}
-.bigsearch::placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(18%, 100%);
 }
 
 footer {

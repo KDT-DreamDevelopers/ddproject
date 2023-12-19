@@ -147,7 +147,20 @@ hr {
     width: 6rem;
     margin-top: 0.5rem;
     background-color: white;
-    border: 0.5px solid #6658B1;
     border-radius: 5px;
+}
+
+.gray {
+    border: 0.5px solid #bdbdbdb4;
+    color: #bdbdbdb4;
+}
+
+.black {
+    border: 1px solid black;
     color: black;
+}
+
+.orange {
+    border: 0.5px solid #EF9E3E;
+    color: #EF9E3E;
 }
