@@ -1,16 +1,25 @@
 input {
-    margin: 10px 0 10px 0;
+    margin: 0.625rem 0 0.625rem 0;
     position: relative;
 }
+.timer{
+    width: fit-content;
+    text-wrap: nowrap;
+    color: rgb(185, 0, 0);
+    font-size: 0.8rem;
+    position: absolute;
+transform: translate(-300%, 150%);
+}
+
 .btn_inside{
     width: fit-content;
     text-wrap: nowrap; /*버튼 크기가 텍스트 사이즈에 맞게 커지도록 설정, 텍스트가 밑으로 가지 않고 옆으로 가게끔*/
     background-color: #636163;
     color: white;
     font-weight: 500;
-    border-radius: 7px;
+    border-radius: 0.438rem;
     border: 0px;
-    padding: 5px;
+    padding: 0.313rem;
     position: absolute;
     transform: translate(-120%, 65%);
 }
@@ -43,4 +52,20 @@ input {
     padding: 0;
     overflow: hidden;
     border: 0;
+}
+
+#phone_check:disabled{
+    background-color :lightgray;
+    color: darkgray;
+    cursor: not-allowed;
+}
+
+div {
+    margin: 0 auto 2rem auto;
+}
+.sub{
+    color: #6658B1;
+    font-size: 0.66rem;
+    margin-top: 0;
+    text-align: center;
 }

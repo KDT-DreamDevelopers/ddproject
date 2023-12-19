@@ -33,11 +33,11 @@ h2{
 }
 
 #codeBtn{
-    margin-left: 20px;
+    margin-left: 1.25rem;
 }
 
 #check{
-    margin-left: 20px;
+    margin-left: 1.25rem;
 }
 
-#text { background-color: rgb(244, 244, 244); margin-top: 20px; padding: 20px;}
+#text { background-color: rgb(244, 244, 244); margin-top: 20/16rem; padding: 20/16rem;}

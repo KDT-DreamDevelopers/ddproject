@@ -9,24 +9,24 @@ body {
 
 .container {
     text-align: center;
-    padding: 20px;
+    padding: 1.25rem;
 }
 
 p {
     position: relative;
     display: inline-block;
-    margin-bottom: 100px; /* 텍스트와 밑줄 간 여백 설정 */
+    margin-bottom: 0.16rem; /* 텍스트와 밑줄 간 여백 설정 */
 }
 
 p::after {
     content: "";
     display: block;
-    height: 8px; /* 밑줄 두께 설정 */
+    height: 0.5rem; /* 밑줄 두께 설정 */
     background-color: #6658B1;
     opacity: 40%;
     position: relative; /* p를 기준으로 설정 */
     bottom: 0;
-    margin-top: 10px;
+    margin-top: 0.625rem;
     width: 120%;
     right: 10%;
 }

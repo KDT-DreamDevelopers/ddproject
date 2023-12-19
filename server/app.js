@@ -239,13 +239,17 @@ app.post("/ImOnTheBusStop", async (req, res) => {
 
 app.post("/ImGoingToOut", async (req, res) => {
     try {
-        const { onbusid, message, userId } = req.body;
-        console.log(onbusid, message, userId);
+        const {  message, onbusid, userId } = req.body;
+        console.log( message, onbusid, userId);
 
         const findBusClue = { mId: onbusid };
         const findBus = await TokenModel.findOne(findBusClue);
         const expoPushToken = findBus.token;
-        await sendPushNotification(expoPushToken, { message, userId });
+        const messages = {
+            message: message,
+            userId: userId
+        }
+        await sendPushNotification(expoPushToken, messages);
         res.status(200).json({ success: true, message: 'Push Notification sent successfully' })
     } catch (error) {
         console.error(error);

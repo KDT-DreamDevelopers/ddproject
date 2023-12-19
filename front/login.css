@@ -8,13 +8,13 @@
 
 .input_form{
     padding-top: 1.5rem;
-    margin: 10px auto;
+    margin: 0.625rem auto;
 }
 
 #find_id{
     margin: auto;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 1.875rem;
 }
 
 label{
@@ -22,5 +22,5 @@ label{
 }
 
 #regist{
-    margin-top: 20px;
+    margin-top: 1.25rem;
 }

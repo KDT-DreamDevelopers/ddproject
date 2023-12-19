@@ -16,7 +16,7 @@ hp.addEventListener('input',() => {
 // 시작 페이지로 이동
 const back = document.getElementById('back')
 back.addEventListener('click', (e)=>{
-    window.location.href = './index.html'
+    window.location.href = './start.html'
 })
 
 
@@ -52,7 +52,11 @@ function useridCheck(){
 let code
 // 본인인증
 const phone_check = document.getElementById('phone_check')
-phone_check.addEventListener('click', async (e)=>{
+phone_check.disabled = false;
+phone_check.addEventListener('click', function(){
+    selfCheckButton()
+})
+function selfCheckButton(){
     const expNameText = /^(?:[가-힣]{1,20}|[A-Za-z]{1,20})$/
     const expSsn1Text = /^\d{6}$/
     const expSsn2Text = /^\d{7}$/
@@ -87,26 +91,55 @@ phone_check.addEventListener('click', async (e)=>{
     }
     const jsonData = JSON.stringify(formData)
 
-    try {
-        const response = await fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/check", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: jsonData
-        });
+    phone_check.disabled = true;
 
-        const data = await response.json();
+    // 3분 후에 다시 활성화
+    setTimeout(()=>{
+        phone_check.disabled = false;
+    }, 180000)
+    console.log(1)
+
+    fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/check", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: jsonData
+    })
+    .then(res => res.json())
+    .then(data => {
         code = data.code;
-
+        console.log(code)
         const container2 = document.getElementById('container2');
         container2.style.display = 'block';
+        startTimer()
         document.getElementById('check').value = 'y'
+    })
+    .catch(error => {
+        alert(error)
+    })
+}
 
-    } catch (error) {
-        console.error('Error:', error);
-    }
-})
+let durationInSeconds = 180;
+const timerElement = document.getElementById('timer')
+// 타이머 시작 함수
+function startTimer(){
+    let timer = durationInSeconds
+
+     let interval = setInterval(function(){
+         let minutes = Math.floor(timer / 60)
+         let seconds = timer % 60
+
+         timerElement.textContent = minutes + ':' + seconds
+         timer --
+
+         if (timer<0){
+         clearInterval(interval)
+         timerElement.textContent = '인증시간 초과'
+         }
+     }, 1000)
+ }
+    
 
 // 본인인증 확인
 const codeBtn = document.getElementById('codeBtn')
@@ -119,7 +152,7 @@ codeBtn.addEventListener('click', async (e)=>{
         container2.style.display = 'none';
         document.getElementById('check').value = 'y'
     }else{
-        alert('인증번호가 틀렸거나 시간초과 되었습니다.')
+        alert('인증번호가 틀렸습니다.')
     }
 
 })

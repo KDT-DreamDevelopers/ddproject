@@ -3,7 +3,7 @@
 }
 
 .search.bigsearch {
-    height: 200px;
+    height: 12.5rem;
     padding: 1rem;
     margin-top: 0.5rem;
     position: relative;
@@ -48,7 +48,7 @@
 
 
 #i_answer > div {
-    height: 150px;
+    height: 9.375rem;
     overflow: scroll
 }
 

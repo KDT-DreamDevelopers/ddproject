@@ -19,7 +19,7 @@ header {
     flex-direction: column; /* 메뉴를 세로로 배치 */
     align-items: flex-start; /* 가운데 정렬 */
     justify-content: center; /* 가운데 정렬 */
-    padding-left: 20px; 
+    padding-left: 1.25rem; 
     margin: auto;
 }
 
@@ -33,18 +33,18 @@ ul {
     cursor: pointer;
     font-size: 1.5rem;
     color: white;
-    margin-bottom: 50px; /* 간격 더 벌리기 */
+    margin-bottom: 3.125rem; /* 간격 더 벌리기 */
     margin-left: 0; /* 좌측 여백 추가 */
 }
 /* 
 .menu-container {
     background-color: #ffffff;
-    padding: 10px;
-    height: 100px;
+    padding: 0.625rem;
+    height: 6.25rem;
     display: flex;
     justify-content: space-around;
-    border-radius: 25px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 1.5625rem;
+    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.2);
 } */
 
 .xi-play {
