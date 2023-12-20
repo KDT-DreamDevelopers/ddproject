@@ -94,7 +94,6 @@
         startBox.value = localStorage.getItem("startTitle");
         endBox.value = localStorage.getItem("endTitle");
         var geocoder = new kakao.maps.services.Geocoder();
-        let loading = false;
 
 
         let testStartX = localStorage.getItem("startX");
@@ -170,105 +169,98 @@
 
 
         async function makePath() {
-            try {
-                loading = true;
-                showLoadingMessage();
-                const walkBar = '<div class="walk" style="width: 15%;">도보</div>'
-                if (startBox.value !== "" && endBox.value !== "") {
-                    const startX = await localStorage.getItem("startX");
-                    const startY = await localStorage.getItem("startY");
-                    const endX = await localStorage.getItem("endX");
-                    const endY = await localStorage.getItem("endY");
-                    await send(startX, startY, endX, endY)
-                        .then(async (topFiveDate) => {
-                            if (await topFiveDate[0] === null) {
-                                console.log("해당하는 경로가 없습니다.");
-                                let listE = document.getElementById('placesList')
-                                const warningDiv = '<div class="warning"><i class="xi-warning"></i><p>해당 경로를 지원하지 않습니다.</p><span>도착지를 확인해 주세요.</span></div>'
-                                listE.innerHTML += warningDiv;
-                            } else {
-                                const container = document.getElementById("container");
-                                const margin = `<div class="margin"></div>`
-                                container.innerHTML += margin;
-                                for (let i = 0; i < 5; i++) {
-                                    const onelistpath = `<div class="route"><p class="timeNotice"></p><div class="bar" id="routeBar${i}"></div><ul class="inform"></ul></div>`
-                                    container.innerHTML += onelistpath
 
-                                    const route = document.getElementsByClassName("route")[i];
+            const walkBar = '<div class="walk" style="width: 15%;">도보</div>'
+            if (startBox.value !== "" && endBox.value !== "") {
+                const startX = await localStorage.getItem("startX");
+                const startY = await localStorage.getItem("startY");
+                const endX = await localStorage.getItem("endX");
+                const endY = await localStorage.getItem("endY");
+                await send(startX, startY, endX, endY)
+                    .then(async (topFiveDate) => {
+                        if (await topFiveDate[0] === null) {
+                            console.log("해당하는 경로가 없습니다.");
+                            let listE = document.getElementById('placesList')
+                            const warningDiv = '<div class="warning"><i class="xi-warning"></i><p>해당 경로를 지원하지 않습니다.</p><span>도착지를 확인해 주세요.</span></div>'
+                            listE.innerHTML += warningDiv;
+                        } else {
+                            const container = document.getElementById("container");
+                            const margin = `<div class="margin"></div>`
+                            container.innerHTML += margin;
+                            for (let i = 0; i < 5; i++) {
+                                const onelistpath = `<div class="route"><p class="timeNotice"></p><div class="bar" id="routeBar${i}"></div><ul class="inform"></ul></div>`
+                                container.innerHTML += onelistpath
 
-                                    const timeP = document.getElementsByClassName("timeNotice")[i];
+                                const route = document.getElementsByClassName("route")[i];
 
-                                    const timeNoticeWord = `소요시간: <span class="time">${topFiveDate[i]["소요시간"]}</span>`
+                                const timeP = document.getElementsByClassName("timeNotice")[i];
 
-                                    timeP.innerHTML += timeNoticeWord
+                                const timeNoticeWord = `소요시간: <span class="time">${topFiveDate[i]["소요시간"]}</span>`
 
-                                    const info = document.getElementsByClassName("inform")[i]
-                                    const bar = document.getElementsByClassName("bar")[i]
+                                timeP.innerHTML += timeNoticeWord
 
-                                    for (let j = 0; j < topFiveDate[i]["탑승지"].length; j++) {
-                                        if (subwayList.includes(await topFiveDate[i]["호선노선"][j])) {
-                                            const barInfo = walkBar + `<div class="subway" style='width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%; background-color:${subwayColor[topFiveDate[i]["호선노선"][j]]}'>${topFiveDate[i]["호선노선"][j]}</div>`
-                                            bar.innerHTML += barInfo;
+                                const info = document.getElementsByClassName("inform")[i]
+                                const bar = document.getElementsByClassName("bar")[i]
 
-                                            const detail = `<li class="details"><div class="leftbox"><i class="xi-subway" style="color:${subwayColor[topFiveDate[i]["호선노선"][j]]}"></i>${topFiveDate[i]["호선노선"][j]}</div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></i></li>`
+                                for (let j = 0; j < topFiveDate[i]["탑승지"].length; j++) {
+                                    if (subwayList.includes(await topFiveDate[i]["호선노선"][j])) {
+                                        const barInfo = walkBar + `<div class="subway" style='width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%; background-color:${subwayColor[topFiveDate[i]["호선노선"][j]]}'>${topFiveDate[i]["호선노선"][j]}</div>`
+                                        bar.innerHTML += barInfo;
 
-                                            info.innerHTML += detail
-                                        } else {
-                                            const barInfo = walkBar + `<div class="bus" style="width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%;">${topFiveDate[i]["호선노선"][j]}</div>`
-                                            bar.innerHTML += barInfo;
+                                        const detail = `<li class="details"><div class="leftbox"><i class="xi-subway" style="color:${subwayColor[topFiveDate[i]["호선노선"][j]]}"></i>${topFiveDate[i]["호선노선"][j]}</div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></i></li>`
 
-                                            const detail = `<li class="details"><div class="leftbox"><i class="xi-bus"> ${topFiveDate[i]["호선노선"][j]}</i></div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></li>`
+                                        info.innerHTML += detail
+                                    } else {
+                                        const barInfo = walkBar + `<div class="bus" style="width: ${(85 - 15 * topFiveDate[i]["탑승지"].length) / topFiveDate[i]["탑승지"].length}%;">${topFiveDate[i]["호선노선"][j]}</div>`
+                                        bar.innerHTML += barInfo;
 
-                                            info.innerHTML += detail
-                                        }
+                                        const detail = `<li class="details"><div class="leftbox"><i class="xi-bus"> ${topFiveDate[i]["호선노선"][j]}</i></div><div class="rightbox"><p>${topFiveDate[i]["탑승지"][j]}</p></div></li>`
+
+                                        info.innerHTML += detail
                                     }
-
-                                    const detail = `<li class="details"><div class="leftbox"><i class="xi-radiobox-blank" style="color: gray"></i> 하차 </div><div class="rightbox"><p>${localStorage.getItem("endTitle")}</p></div></li>`
-                                    info.innerHTML += detail
-
-                                    bar.innerHTML += walkBar;
-                                    localStorage.setItem(`Top${i}Data`, JSON.stringify(await topFiveDate[i]));
                                 }
+
+                                const detail = `<li class="details"><div class="leftbox"><i class="xi-radiobox-blank" style="color: gray"></i> 하차 </div><div class="rightbox"><p>${localStorage.getItem("endTitle")}</p></div></li>`
+                                info.innerHTML += detail
+
+                                bar.innerHTML += walkBar;
+                                localStorage.setItem(`Top${i}Data`, JSON.stringify(await topFiveDate[i]));
                             }
+                        }
+                    })
+                    .then(() => {
+                        const pathDiv = document.getElementsByClassName("route");
+
+                        pathDiv[0].addEventListener("click", () => {
+                            localStorage.setItem("pathSelector", 0);
+                            window.location.href = "./test.html";
+                        });
+
+                        pathDiv[1].addEventListener("click", () => {
+                            localStorage.setItem("pathSelector", 1);
+                            window.location.href = "./test.html"
                         })
-                        .then(() => {
-                            const pathDiv = document.getElementsByClassName("route");
 
-                            pathDiv[0].addEventListener("click", () => {
-                                localStorage.setItem("pathSelector", 0);
-                                window.location.href = "./test.html";
-                            });
-
-                            pathDiv[1].addEventListener("click", () => {
-                                localStorage.setItem("pathSelector", 1);
-                                window.location.href = "./test.html"
-                            })
-
-                            pathDiv[2].addEventListener("click", () => {
-                                localStorage.setItem("pathSelector", 2);
-                                window.location.href = "./test.html"
-                            })
-
-                            pathDiv[3].addEventListener("click", () => {
-                                localStorage.setItem("pathSelector", 3);
-                                window.location.href = "./test.html"
-                            })
-
-                            pathDiv[4].addEventListener("click", () => {
-                                localStorage.setItem("pathSelector", 4);
-                                window.location.href = "./test.html"
-                            })
+                        pathDiv[2].addEventListener("click", () => {
+                            localStorage.setItem("pathSelector", 2);
+                            window.location.href = "./test.html"
                         })
-                } else {
-                    console.log("not full")
-                }
-            } catch (error) {
-                console.error(error)
-            } finally {
-                loading = false;
-                hideLoadingMessage();
+
+                        pathDiv[3].addEventListener("click", () => {
+                            localStorage.setItem("pathSelector", 3);
+                            window.location.href = "./test.html"
+                        })
+
+                        pathDiv[4].addEventListener("click", () => {
+                            localStorage.setItem("pathSelector", 4);
+                            window.location.href = "./test.html"
+                        })
+                    })
+            } else {
+                console.log("not full")
             }
         }
+
         function removeAllChildNods(el) {
             try {
                 while (el.hasChildNodes()) {
@@ -284,37 +276,6 @@
                 await geocoder.coord2Address(position.lng, position.lat, callback);
             } catch (error) {
                 console.error(error)
-            }
-        }
-
-        // 화면에 로딩 메시지를 보여주는 함수
-        function showLoadingMessage() {
-            const margin = `<div class="margin"></div>`
-            container.innerHTML += margin;
-
-            const loadingDiv = document.createElement("div");
-            loadingDiv.id = "loading";
-            const placeList = document.getElementById("placesList")
-            placeList.appendChild(loadingDiv);
-            loadingDiv.innerHTML += "<p><i class='xi-spinner-1'></i></p><span>Loading 중입니다...</span>";
-        }
-
-        // 화면에서 로딩 메시지를 감추는 함수
-        function hideLoadingMessage() {
-            const loadingDiv = document.getElementById("loading");
-            if (loadingDiv) {
-                const container = document.getElementById("container");
-                removeAllChildNods(container);
-                loadingDiv.parentNode.removeChild(loadingDiv);
-            }
-        }
-
-        // 전역에서 로딩 상태를 확인하여 메시지를 보여주거나 감추는 업데이트 함수
-        function updateLoadingMessage() {
-            if (loading) {
-                showLoadingMessage();
-            } else {
-                hideLoadingMessage();
             }
         }
 
