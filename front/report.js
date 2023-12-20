@@ -67,6 +67,7 @@ if (!userInfo){
 const sendBtn = document.getElementById('sendBtn')
 sendBtn.addEventListener('click', async (e)=>{
     e.preventDefault();
+    sendBtn.disabled = true
 
     // 입력 정보 추출
     const location = document.getElementById('location').value
@@ -104,9 +105,11 @@ sendBtn.addEventListener('click', async (e)=>{
                 console.log(data)
                 console.error('신고하기 실패');
                 alert(data.message)
+                login.disabled = false
             }
         } catch (error) {
             console.error('에러 발생', error);
+            login.disabled = false
         }
     }
 

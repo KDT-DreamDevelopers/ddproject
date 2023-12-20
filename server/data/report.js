@@ -48,6 +48,11 @@ export async function checkOk(id){
     )
 } 
 
+// remove()   문의 글 삭제 
+export async function remove(id) {
+    return getReports().deleteOne({_id: new ObjectID(id)})
+}
+
 // _id 값 가져오는 함수
 function mapOptionalReport(report){
     return report? {...report, id: report._id.toString()} : report;

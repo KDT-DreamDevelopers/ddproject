@@ -15,6 +15,7 @@ let message
 const searchId = document.getElementById('searchId')
 searchId.addEventListener('click', async (e)=>{
     e.preventDefault()
+    searchId.disabled = true
 
     // 입력 정보 추출
     const name = document.getElementById('name').value
@@ -48,6 +49,10 @@ searchId.addEventListener('click', async (e)=>{
             code = data.code
             console.log(code)
         })
+        .catch(error=>{
+            alert('에러발생')
+            searchId.disabled = false
+        })
     }
 })
 
@@ -62,6 +67,7 @@ console.log(code)
 // 코드 인증번호 맞는지 확인하기 (맞다면 userid받아오기)
 const codeBtn = document.getElementById('codeBtn')
 codeBtn.addEventListener('click', (e)=>{
+    codeBtn.disabled = true
     const codeCheck = document.getElementById('codeCheck').value
     console.log(codeCheck)
     if (codeCheck == code){
@@ -112,6 +118,7 @@ codeBtn.addEventListener('click', (e)=>{
         
     }else{
         alert('인증번호가 틀렸습니다')
+        codeBtn.disabled = false
     }
 })
 // page3 -----------------------------------------------

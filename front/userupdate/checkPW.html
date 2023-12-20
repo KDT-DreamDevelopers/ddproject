@@ -55,6 +55,7 @@
       const editButton = document.getElementById('edit');
       editButton.addEventListener('click', async (e)=>{
         event.preventDefault();
+        editButton.disabled = true
 
         const check_pw = document.getElementById('check_pw').value;
 
@@ -74,6 +75,7 @@
           }
         } catch (error) {
           alert('비밀번호가 틀렸습니다')
+          editButton.disabled = false
         }
       }) 
     </script>

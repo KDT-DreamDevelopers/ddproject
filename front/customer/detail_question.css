@@ -38,6 +38,8 @@
     border-radius: 0 0 15px 15px;
     margin-top: 5px;
     line-height: 1.5;
+    height: 150px;
+    overflow: scroll
 }
 
 /* 각 섹션 간의 선 스타일 */

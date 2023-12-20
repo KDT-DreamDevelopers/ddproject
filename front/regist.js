@@ -10,7 +10,7 @@ userid.addEventListener('input',() => {
 
 const hp = document.getElementById('hp')
 hp.addEventListener('input',() => {
-    localStorage.setItem("check",'')
+    document.getElementById('check').value = 'n'
 })
 
 // 시작 페이지로 이동
@@ -56,6 +56,7 @@ phone_check.disabled = false;
 phone_check.addEventListener('click', function(){
     selfCheckButton()
 })
+
 function selfCheckButton(){
     const expNameText = /^(?:[가-힣]{1,20}|[A-Za-z]{1,20})$/
     const expSsn1Text = /^\d{6}$/
@@ -166,6 +167,7 @@ function home(){
 const signUp = document.getElementById('signUp')
 signUp.addEventListener('click', async (e)=>{
     e.preventDefault();
+    signUp.disabled = true
 
     // 입력 정보 추출
     const userid = document.getElementById('userid').value
@@ -206,9 +208,11 @@ signUp.addEventListener('click', async (e)=>{
                 console.log(data)
                 console.error('회원가입 실패');
                 alert(data.message)
+                signUp.disabled = false
             }
         } catch (error) {
             console.error('에러 발생', error);
+            signUp.disabled = false
         }
     }
 })

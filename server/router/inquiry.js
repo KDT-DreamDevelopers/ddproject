@@ -51,4 +51,7 @@ router.get('/:id', isAuth, inquiryController.getInquiryById);
 // 답변 달기
 router.put('/answer/:id',isAuth,inquiryController.PostAnswer)
 
+// 문의글 삭제
+router.delete('/deletebyadmin/:id',inquiryController.deletePost)
+
 export default router
