@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>회원관리</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/dataframe.css" rel="stylesheet" />
+        <style>
+
+            #datatablesSimple th:nth-child(5),
+            #datatablesSimple td:nth-child(5) {
+                width: 500px !important; 
+                max-width: 500px !important; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-left: 10px;
+            }
+
+            #edit{
+                background-color: rgb(33, 62, 75);
+                color: white;
+            }
+
+            .btn_status_ok {
+                border-radius: 7px;
+                background-color: #14301F;
+                color: white;
+                width: 55px;
+                height: 25px;
+                font-size: 13px;
+                margin: 0 5px;
+                margin-left: 10px;
+            }
+        </style>
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">이동의 꿈_관리자페이지</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Menu</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"></div>
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"></div>
+                                등록증 관리
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="auth_yet.html">미승인 목록</a>
+                                    <a class="nav-link" href="auth_no.html">승인 거부 회원</a>
+                                </nav>
+                            </div>
+                           
+                            <a class="nav-link" href="member.html">
+                                <div class="sb-nav-link-icon"></div>
+                                회원 관리
+                            </a>
+                            <a class="nav-link" href="customer.html">
+                                <div class="sb-nav-link-icon"></div>
+                                고객센터
+                            </a>
+                            <a class="nav-link" href="report.html">
+                                <div class="sb-nav-link-icon"></div>
+                                불편신고
+                            </a>
+                            <a class="nav-link" href="inquiry.html">
+                                <div class="sb-nav-link-icon"></div>
+                                문의사항
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        DreamDeveloper
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">회원 관리</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item">회원관리</li>
+                            <li class="breadcrumb-item active">회원정보 열람, 수정, 삭제</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                전체 회원의 장애인 등록증 승인 여부 확인과 회원정보 수정, 삭제가 가능합니다.
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                데이터 목록
+                            </div>
+                            <div class="card-body">
+                                <div id="userTableContainer"></div>
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이름</th>
+                                            <th>비밀번호</th>
+                                            <th>전화번호</th>
+                                            <th>장애인 등록증</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이름</th>
+                                            <th>비밀번호</th>
+                                            <th>전화번호</th>
+                                            <th>장애인 등록증</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td>apple</td>
+                                            <td>김사과</td>
+                                            <td>abcd1234</td>
+                                            <td>010-1111-1111</td>
+                                            <td class="btn-td">
+                                                <button class="btn_status" id="status1">승인</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>banana</td>
+                                            <td>반하나</td>
+                                            <td>efgh1234</td>
+                                            <td>010-2222-2222</td>
+                                            <td class="btn-td">
+                                                <button class="btn_status2" id="status2">미승인</button>
+                                            </td>
+                                        </tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <div class="modal fade" id="editWrite" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">회원정보 수정</h5>
+                                            <button type="button" id="close" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="edit_profile"></div>  
+                                        </div>
+                                        <div class="modal-footer">                                    
+                                            <button type="button" class="btn btn-secondary"
+                                                id="delete">삭제</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                id="save">저장</button>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; DD project 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>     
+<script>
+
+const token = localStorage.getItem('token');
+
+function edit_profile(item) {
+    document.getElementById('edit_profile').innerHTML = `
+        <div id="edit_profile">
+            <form class="form-group">
+                <table>
+                    <tr>
+                        <th>_id</th>
+                        <td><textarea class="cls_answer title" id="_id" readonly>${item.id}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>아이디</th>
+                        <td><textarea class="cls_answer title" id="userid" readonly>${item.userid}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td><textarea class="cls_answer title" id="name">${item.name}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>휴대전화</th>
+                        <td><textarea class="cls_answer title" id="hp">${item.hp}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>장애인 인증서</th>
+                        <td><textarea class="cls_answer title" id="filename" readonly>${item.img}</textarea></td>
+                    </tr>
+                </table>
+            </form>
+        </div>`;
+
+    const inquiryModal = new bootstrap.Modal(document.getElementById('editWrite'));
+    inquiryModal.show();
+
+    document.getElementById('close').addEventListener('click', function () {
+        const inquiryModal = new bootstrap.Modal(document.getElementById('editWrite'));
+        inquiryModal.hide();
+    });
+    document.getElementById('save').addEventListener('click', function () {
+        const clickedUserId = localStorage.getItem('clicked_user_id'); // 클릭된 유저의 ID를 가져옴
+        saveUser(clickedUserId); 
+    });
+
+    document.getElementById('delete').addEventListener('click', function () {
+        const clickedUserId = localStorage.getItem('clicked_user_id'); // 클릭된 유저의 ID를 가져옴
+        document.getElementById('delete').disabled = true
+        deleteUser(clickedUserId); 
+    });
+
+}
+// 회원 삭제
+function deleteUser(userId) {
+    fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/delete/${userId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    })
+    // .then((res) => res.json())
+    .then(updatedData => {
+        console.log("회원 삭제:", updatedData);
+        alert('회원정보가 삭제되었습니다.')
+        location.reload()
+    })
+    .catch(error => {
+        console.error("Error deleting user information:", error);
+    });
+}
+
+// 수정
+function saveUser(userId) {
+    const formData = {
+        name: document.getElementById('name').value,
+        userpw: document.getElementById('userpw').value,
+        hp: document.getElementById('hp').value,
+    };
+
+    fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/edit/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+    })
+    .then(updatedData => {
+        console.log("User information updated:", updatedData);
+        alert(updatedData.message)
+        location.reload()
+    })
+    .catch(error => {
+        console.error("Error updating user information:", error);
+    });
+}
+
+
+if (token) {
+    fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/members", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then((data) => {
+        console.log(data)
+        const inquiriesTableBody = document.getElementById('datatablesSimple').getElementsByTagName('tbody')[0];
+
+        // 비우기
+        inquiriesTableBody.innerHTML = '';
+        
+        if (data && data.length > 0) {
+            data.forEach((item, index) => {
+                let identify
+                const tr = document.createElement('tr');
+                if(item.identify ==='ok'){
+                    identify = '승인'
+                } else if(item.identify ==='no'){
+                    identify = '미승인'
+                } else if(item.identify ==='admin'){
+                    identify = '관리자'
+                } else if(item.identify ==='refuse'){
+                    identify = '거부'
+                }else{
+                    identify = 'error'
+                }
+
+                tr.innerHTML = `
+                        <td>${item.userid}</td>
+                        <td>${item.name}</td>
+                        <td>${item.userpw}</td>
+                        <td>${item.hp}</td>
+                        <td class="btn-td">
+                            <button class="btn_status_ok" id="status">${identify}</button>
+                            <button class="btn_status_ok" id="edit" type="button">수정</button>
+                        </td>
+                    `;
+                    if (identify === '거부') {
+                        const statusButton = tr.querySelector('.btn_status_ok');
+                        statusButton.style.backgroundColor = '#930000';
+                        statusButton.style.color = 'white';
+                    }else if (identify === '승인' || identify === '관리자'){
+                        const statusButton = tr.querySelector('.btn_status_ok');
+                        statusButton.style.backgroundColor = 'white';
+                        statusButton.style.color = '#14301F';
+                    }
+                tr.setAttribute('data-id', item.id);
+                tr.addEventListener('click', handleClick);
+                
+                inquiriesTableBody.appendChild(tr);
+            });
+        } else {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td colspan="5">error: 가입된 회원이 없습니다.</td>
+            `;
+            inquiriesTableBody.appendChild(tr);
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+    });
+
+
+    // 클릭
+function handleClick(item) {
+    const clickedElement = item.target;
+    const edit = clickedElement.id === 'edit';
+
+    if (edit) {
+        const clickedNodeId = clickedElement.closest('tr').getAttribute('data-id');
+        localStorage.setItem('inquiry_id', clickedNodeId);
+
+        fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/user/${clickedNodeId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then((data) => {
+            console.log("Received data in handleClick:", data);
+
+            if (data && data.id) {
+                localStorage.setItem('clicked_user_id', data.id); // 클릭된 유저의 ID를 저장
+                edit_profile(data);
+                console.log(`${data.userid}`);
+            } else {
+                console.error("Invalid data structure:", data);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching details:", error);
+        });
+    } else {
+        console.log('no');
+    }
+}
+} else {
+    console.log('토큰이 없습니다.');
+}
+
+
+</script>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <title>코드 인증</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./code_confirm.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <p id="slogan">꿈꾸던 이동을 실현시키다</p>
+            <img id="login_logo" src="./img/mainlogo.png">
+        </div>
+        <div class="line"></div>
+
+        <div class="input_form">
+            <!-- <p class="transport">
+                <label>
+                    <input type="radio" name="transfort" value="bus" checked>버스
+                </label>
+                <label>
+                    <input type="radio" name="transfort" value="subway">지하철<br>
+                </label>
+            </p> -->
+
+            <input class="search" id="CODE" type="text" placeholder="코드입력">
+        </div>
+        <button class="purple button" type="buttons">확인</button>
+    </div>
+</body>
+<script>
+    // 웹뷰에서 React Native 함수 호출을 위한 코드
+    document.querySelector(".button").addEventListener("click", function () {
+        // 입력된 메시지 가져오기
+        let transfort = document.getElementsByName("transfort");
+        let bus;
+        transfort.forEach((Element) => {
+            if (Element.checked) {
+                bus = Element.values
+            }
+        })
+        var message = document.getElementById("CODE").value
+
+        // React Native 애플리케이션으로 메시지 전송
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'sendTokenToServer',
+            message: message,
+        }));
+
+        window.location.href = "./message.html";
+    });
+</script>
+
+</html>

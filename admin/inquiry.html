@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>관리자 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/dataframe.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">이동의 꿈_관리자페이지</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+                class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+                    aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                        class="fas fa-search"></i></button>
+            </div>
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">Settings</a></li>
+                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Menu</div>
+                        <a class="nav-link" href="index.html">
+                            <div class="sb-nav-link-icon"></div>
+                        </a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"></div>
+                            등록증 관리
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="auth_yet.html">미승인 목록</a>
+                                <a class="nav-link" href="auth_no.html">승인 거부 회원</a>
+                            </nav>
+                        </div>
+
+                        <a class="nav-link" href="member.html">
+                            <div class="sb-nav-link-icon"></div>
+                            회원 관리
+                        </a>
+                        <a class="nav-link" href="customer.html">
+                            <div class="sb-nav-link-icon"></div>
+                            고객센터
+                        </a>
+                        <a class="nav-link" href="report.html">
+                            <div class="sb-nav-link-icon"></div>
+                            불편신고
+                        </a>
+                        <a class="nav-link" href="inquiry.html">
+                            <div class="sb-nav-link-icon"></div>
+                            문의사항
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as:</div>
+                    DreamDeveloper
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">문의사항</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item"><a href="member.html">회원관리</a></li>
+                        <li class="breadcrumb-item active">문의사항</li>
+                    </ol>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            문의사항 접수 목록입니다.
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            데이터 목록
+                        </div>
+                        <div class="card-body">
+                            <div id="inquiries"></div>
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>카테고리</th>
+                                        <th>제목</th>
+                                        <th>내용</th>
+                                        <th>작성일</th>
+                                        <th>작성자</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>비밀번호가 기..</td>
+                                        <td>비밀번호가 기억이..</td>
+                                        <td>2023/10/25</td>
+                                        <td>banana</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- Add this modal structure at the end of your HTML body -->
+                            <div class="modal fade" id="inquiryModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">문의사항 상세 내용</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="inquiryDetailContent"></div>
+                                        </div>
+                                        <div class="modal-footer">     
+                                            <button type="button" class="btn btn-secondary"data-bs-dismiss="modal" id="delete">삭제</button>                                      
+                                            <button type="button" class="btn btn-secondary"id="submit">답변 등록</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; DD project 2023</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+
+        if (token) {
+        fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/all", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                console.log(data);
+                const inquiriesTableBody = document.getElementById('datatablesSimple').getElementsByTagName('tbody')[0];
+
+                
+                inquiriesTableBody.innerHTML = '';
+
+                if (data && data.length > 0) {
+                    
+                    data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                    data.forEach((item, index) => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.category}</td>
+                            <td>${item.title}</td>
+                            <td>${item.text}</td>
+                            <td>${item.createdAt.slice(0, 10)}</td>
+                            <td>${item.userid}</td>
+                        `;
+                        tr.setAttribute('data-id', item._id); // Use _id instead of id
+                        tr.addEventListener('click', handleClick);
+                        inquiriesTableBody.appendChild(tr);
+
+                    });
+                } else {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td colspan="5">아직 문의한 내용이 없습니다.</td>
+                    `;
+                    inquiriesTableBody.appendChild(tr);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+
+            // 글 삭제
+            function deletePost(id) {
+                    if (!id) {
+                    console.error('Invalid inquiry ID');
+                    return;
+                }
+
+                fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/deletebyadmin/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! Status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(updatedData => {
+                    console.log("Inquiry deleted:", updatedData);
+                    alert('문의사항이 성공적으로 삭제되었습니다.');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error("Error deleting inquiry:", error);
+                });
+            }
+
+        function handleClick(event) {
+            const clickedNodeId = event.currentTarget.getAttribute('data-id');
+            localStorage.setItem('inquiry_id', clickedNodeId);
+
+            if (clickedNodeId) {
+                
+                fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/${clickedNodeId}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        const inquiryDetailContent = document.getElementById('inquiryDetailContent');
+                        inquiryDetailContent.innerHTML = `
+                        <div id="inquiryDetailContent">
+                        <form class="form-group">
+                        <table>
+                            <tr>
+                                <th>_id</th>
+                                <td>${data._id}</td>
+                            </tr>
+                            <tr>
+                                <th>카테고리</th>
+                                <td>${data.category}</td>
+                            </tr>
+                            <tr>
+                                <th>제목</th>
+                                <td>${data.title}</td>
+                            </tr>
+                            <tr>
+                                <th>작성자</th>
+                                <td>${data.userid}</td>
+                            </tr>
+                            <tr>
+                                <th>등록일자</th>
+                                <td>${data.createdAt ? data.createdAt.slice(0, 10) : 'N/A'}</td>
+                            </tr>
+                            <tr>
+                                <th>내용</th>
+                                <td><textarea class="cls_answer answer-textarea" id="txt" readonly>${data.text}</textarea></td>
+                            </tr>
+                            <tr>
+                                <th>답변 작성하기</th>
+                                <td><textarea class="cls_answer" id="answer">${data.answer}</textarea></td>
+                        </table>
+                        </form>
+                    </div>
+                `;  
+                        const inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
+                        inquiryModal.show();
+                        document.getElementById('submit').addEventListener('click', putAnswer);
+
+                        document.getElementById('delete').addEventListener('click', function () {
+                        const inquiryId = localStorage.getItem('inquiry_id');
+                        document.getElementById('delete').disabled = true
+                        deletePost(inquiryId); 
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching detailed data:", error);
+                    });
+            } else {
+                console.error("Clicked node ID is undefined.");
+            }
+        }
+
+
+        async function putAnswer() {
+        try {
+            const answerText = document.getElementById('answer').value;
+            const inquiryId = localStorage.getItem('inquiry_id');
+
+    
+
+            const response = await fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/inquiry/answer/${inquiryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({ answer: answerText })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Answer submitted successfully:', data);
+            alert('답변이 성공적으로 등록되었습니다.')
+            location.reload();
+    
+        } catch (error) {
+            console.error('Error submitting answer:', error);
+            
+        }
+    }
+        }
+    </script>
+
+
+</body>
+
+</html>

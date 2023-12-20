@@ -1,0 +1,105 @@
+#inquiryDetailContent table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#inquiryDetailContent table th,
+#inquiryDetailContent table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#inquiryDetailContent table th {
+    background-color: #f2f2f2;
+    width: 15%;
+}
+
+#inquiryDetailWrite table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+
+#inquiryDetailWrite table th,
+#inquiryDetailWrite table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#inquiryDetailWrite table th{
+    background-color: #f2f2f2;
+    width: 15%;
+}
+
+
+#inquiryDetailWrite .cls_answer {
+    width: 100%;
+    box-sizing: border-box; 
+    resize: vertical; 
+}
+
+#inquiryDetailWrite .title {
+    height: 30px; 
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.cls_answer{
+    height: 250px;
+    width: 300px;
+    box-sizing: border-box;
+    text-align: start;
+    width: 100%;
+}
+
+#inquiryDetailContent .cls_answer {
+    width: 100%;
+    box-sizing: border-box; 
+    resize: vertical; 
+}
+
+#inquiryDetailContent .answer-textarea {
+    height: 250px; 
+    
+}
+
+#edit_profile table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+
+#edit_profile table th,
+#edit_profile table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#edit_profile table th{
+    background-color: #f2f2f2;
+    width: 15%;
+}
+
+
+#edit_profile .cls_answer {
+    width: 100%;
+    box-sizing: border-box; 
+    resize: vertical; 
+}
+
+#edit_profile .title {
+    height: 30px; 
+}
+
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>탑승알림 메시지</title>
+    <link rel="stylesheet" href="./userFrame.css">
+    <link rel="stylesheet" href="./message.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+</head>
+
+<body>
+    <header class="purple">
+
+    </header>
+    <div class="container">
+        <!--         <div id="alarm">
+            <p>새로운 알람</p>
+        </div> -->
+        <!-- 메시지 출력할 리스트 -->
+        <ul class="msg_list">
+
+        </ul>
+    </div>
+    <script>
+        document.addEventListener("message", function (event) { //window
+            const datas = JSON.parse(event.data)
+            ReloadingList(datas.message, datas.userId);
+        });
+        window.addEventListener('message', function (event) { //ios
+            console.log(event.data);
+            const datas = JSON.parse(event.data)
+            ReloadingList(datas.message, datas.userId);
+        })
+
+        let lists = '';
+        function ReloadingList(message, userId) {
+            let Lists = document.querySelector('.msg_list');
+            let msg;
+            let today = new Date();
+            let hours = today.getHours(); // 시
+            let minutes = today.getMinutes();  // 분
+            if (message === "AlmostThere") {
+                msg = `<li class="message" id="${userId}">
+                <p>${hours}:${minutes}</p>
+                <span>잠시후 승객이 도착할 예정입니다.</span>
+            </li>`;
+            }
+            else if (message === "OUT") {
+                msg = `<li class="message out" id="${userId}">
+                    <p>${hours}:${minutes}</p>
+                    <span>이번 정류장에서 승객이 하차합니다.</span>
+                    </li>`;
+            }
+            else {
+                msg = `<li class="message" id="${userId}">
+                <p>${hours}:${minutes}</p>
+                <span class="where" id="w2">[ ${message} ] 에서</span>
+                <span class="persons" id="p2">승객이 탑승할 예정입니다.</span>
+                 </li>`;
+            }
+            Lists.innerHTML = (msg + lists);
+            alert(msg + lists);
+            lists = msg + lists;
+            if (message === "OUT") {
+                Lists.firstElementChild.classList.add('out')
+
+            }
+            else {
+                Lists.firstElementChild.classList.add('new')
+            }
+        }
+
+    </script>
+</body>
+
+</html>
