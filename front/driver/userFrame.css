@@ -1,0 +1,101 @@
+/*색상*/
+.purple {
+    background-color: #6658B1;
+}
+
+.gold {
+    background-color: #EF9E3E;
+}
+
+.yellow {
+    background-color: #F6C080;
+}
+
+.white {
+    background-color: #fff;
+}
+/*폰트 -> 이거만 사용, 이미 적용시켜놨어용*/
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+}
+/*기본 설정*/
+html {
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+body, header, footer{
+    width: 100%;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    padding: 30px;
+    padding-left: 8%;
+    padding-top: 50px;
+    display: flex;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1.7rem;
+}
+
+.title{
+    margin-left: 0.9rem;
+}
+
+.origin input:focus {
+    outline-color: #EF9E3E;
+    /* outline: 4px solid #EF9E3E; */
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*검색창, 입력창*/
+.search {
+    border: 1px solid #d1d0d0;
+    border-radius: 10px;
+    width: 100%;
+    height: 40px;
+    padding: 5px 20px;
+    box-sizing: border-box;
+}
+/*뒤로가기 버튼*/
+.xi-angle-left {
+    color: #6658B1;
+}
+/*기본 버튼*/
+.button {
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    border-radius: 17px;
+    border: 0px;
+    width: 100%;
+    height: 50px;
+    margin-top: 50px;
+}
+
+footer {
+    height: 60px;
+}
+
+
