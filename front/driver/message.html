@@ -7,23 +7,51 @@
     <title>탑승알림 메시지</title>
     <link rel="stylesheet" href="./userFrame.css">
     <link rel="stylesheet" href="./message.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 </head>
 
 <body>
     <header class="purple">
-
     </header>
+        <div class="alarm" id="btn_popup">
+            <i class="xi-lightbulb-o xi-2x"></i></div>
     <div class="container">
         <!--         <div id="alarm">
             <p>새로운 알람</p>
         </div> -->
         <!-- 메시지 출력할 리스트 -->
+        <div id="info" style="display: none;">
+            <div id="view">
+            <h2 class="title">이용사항 안내</h2>
+            <div class="line"></div>
+            <div id="txt">
+                <p>※ 휠체어 사용자가 탑승할 버스정류장의 30m 내 접근 후<br>승차버튼을 누르게 되면<br>해당 어플에 알람메세지가 표시됩니다.</p>
+                <p>※ 지하철 역의 경우,<br>해당 승차지에 100m 내 접근시<br>자동으로 알람메세지가 전송됩니다.</p>
+                <p>※ 알람메세지는 최신순으로 상단에 표기되며 지난 내역은<br>스크롤을 내려 확인할 수 있습니다.</p>
+            </div>
+            <button class="close" id="close">닫기</button>
+            </div>
+        </div>
         <ul class="msg_list">
-
         </ul>
     </div>
     <script>
+
+        const btn_popup = document.getElementById('btn_popup')
+
+        btn_popup.addEventListener('click', () => {
+            const info = document.getElementById('info')
+            info.style.display = 'block'
+
+        })
+
+        const close = document.getElementById('close')
+
+        close.addEventListener('click', () =>{
+            const info = document.getElementById('info')
+            info.style.display = 'none'
+        })
+
         document.addEventListener("message", function (event) { //window
             const datas = JSON.parse(event.data)
             ReloadingList(datas.message, datas.userId);
