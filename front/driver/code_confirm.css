@@ -1,0 +1,32 @@
+#slogan {
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: -81px;
+    font-size: 11.5px;
+    margin-left: 55px;
+}
+
+#login_logo{
+    margin-top : -20px;
+    width: 300px;
+}
+
+.logo {
+    margin: 12rem 0;   
+    margin-bottom: 0;
+    align-self: center;
+}
+/* #login_logo {
+    display: block;
+    margin: 0 auto;
+} */
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.search{
+    background-color: #F0F0F0;
+    border: 0.5px #6C6591 solid;
+}
+

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>관리자 페이지</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <style>
+            #datatablesSimple th:nth-child(5),
+            #datatablesSimple td:nth-child(5) {
+                width: 200px !important; 
+                max-width: 200px !important; 
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-left: 10px;
+            }
+
+            
+
+            .btn-td {
+                display: flex;
+                gap: 10px; 
+            }
+
+            
+
+            #refuse{
+                background-color: #930000;
+                color: white;
+            }
+
+
+
+            .btn_status_ok {
+                border-radius: 7px;
+                background-color: #14301F;
+                color: white;
+                width: 54px;
+                height: 25px;
+                font-size: 13px;
+                margin: 0 5px;
+                margin-left: 10px;
+            }
+
+            .btn_status_none{
+                border-radius: 7px;
+                background-color: #14301F;
+                color: white;
+                width: 57px;
+                height: 25px;
+                font-size: 13px;
+                margin: 0 5px;
+                margin-left: 10px;
+            }
+        </style>
+        <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/auth_yet.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">이동의 꿈_관리자페이지</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Menu</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"></div>
+                            </a>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"></div>
+                                등록증 관리
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="auth_yet.html">미승인 목록</a>
+                                    <a class="nav-link" href="auth_no.html">승인 거부 회원</a>
+                                </nav>
+                            </div>
+                           
+                            <a class="nav-link" href="member.html">
+                                <div class="sb-nav-link-icon"></div>
+                                회원 관리
+                            </a>
+                            <a class="nav-link" href="customer.html">
+                                <div class="sb-nav-link-icon"></div>
+                                고객센터
+                            </a>
+                            <a class="nav-link" href="report.html">
+                                <div class="sb-nav-link-icon"></div>
+                                불편신고
+                            </a>
+                            <a class="nav-link" href="inquiry.html">
+                                <div class="sb-nav-link-icon"></div>
+                                문의사항
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        DreamDeveloper
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">미승인 목록</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="member.html">회원 관리</a></li>
+                            <li class="breadcrumb-item active">미승인 회원 관리</li>
+                        </ol>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                전체 회원의 장애인 등록증 승인 / 미승인 여부를 확인 할 수 있습니다.
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                데이터 목록
+                            </div>
+                            <div class="card-body">
+                                <div id="userTableContainer"></div>
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이름</th>
+                                            <th>비밀번호</th>
+                                            <th>전화번호</th>
+                                            <th>장애인 등록증</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <th>이름</th>
+                                            <th>비밀번호</th>
+                                            <th>전화번호</th>
+                                            <th>장애인 등록증</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td class="btn-td">
+                                                <button class="btn_status" id="status1">승인</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; DD project 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+
+
+<script>
+    const token = localStorage.getItem('token');
+
+if (token) {
+
+    fetch("https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/members",{
+    method:"GET",
+    headers: {
+         "Authorization":`Bearer ${token}`
+    }
+})
+.then(res => res.json())
+.then((data) => {
+console.log(data)
+const inquiriesTableBody = document.getElementById('datatablesSimple').getElementsByTagName('tbody')[0];
+
+// 비우기
+inquiriesTableBody.innerHTML = '';
+
+
+if (data && data.length > 0) {
+
+
+    data.forEach((item, index) => {
+    
+    if (item.identify === 'no') {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${item.userid}</td>
+            <td>${item.name}</td>
+            <td>${item.userpw}</td>
+            <td class="td_hp">${item.hp}</td>
+            <td class="btn-td">
+                <button class="btn_status_none" id="watch" type="button">보기</button>
+                <button class="btn_status_none" id="refuse" type="button">거부</button>
+                <button class="btn_status_none" id="accept" type="button">승인</button>
+            </td>
+        `;
+        
+        tr.setAttribute('data-id', item.id);
+        tr.addEventListener('click', handleClick);
+
+        inquiriesTableBody.appendChild(tr);
+    }
+});
+} else {
+const tr = document.createElement('tr');
+tr.innerHTML = `
+    <td colspan="5">유저가 존재하지 않습니다.</td>
+`;
+inquiriesTableBody.appendChild(tr);
+}
+})
+.catch(error => {
+console.error("Error fetching data:", error);
+});
+
+
+
+// li 클릭이벤트 핸들러
+function handleClick(event) {
+    const clickedElement = event.target;
+    const isAcceptButton = clickedElement.id === 'accept';
+    const isRefuseButton = clickedElement.id === 'refuse';
+    const isWatchButton = clickedElement.id === 'watch';
+
+
+    if (isAcceptButton) {
+        const clickedNodeId = clickedElement.closest('tr').getAttribute('data-id');
+        updateStatus(clickedNodeId);
+    }
+    else if (isRefuseButton){
+        const clickedNodeId = clickedElement.closest('tr').getAttribute('data-id');
+        updateStatus_Refuse(clickedNodeId);
+    }
+    else if (isWatchButton){
+        const clickedNodeId = clickedElement.closest('tr').getAttribute('data-id');
+        updateStatus_Watch(clickedNodeId);
+    }
+}
+
+
+function updateStatus(userId) {
+
+    fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/identifyOK/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({identify: 'ok'})
+    })
+    .then(res => {
+        if (!res.status) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        
+        return res.text();
+    })
+    .then((data) => {
+        
+        console.log("Status updated successfully:", data);
+        alert('승인이 완료되었습니다.')
+        location.reload()
+    })
+    .catch(error => {
+        console.error("Error updating status:", error);
+    });
+}
+
+
+function updateStatus_Refuse(userId) {
+    
+    fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/refuse/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({identify: 'refuse'})
+    })
+    .then(res => {
+        if (!res.identify) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        
+        return res.text();
+    })
+    .then((data) => {
+        
+        console.log("Status updated successfully:", data);
+        alert('승인이 거부되었습니다.')
+    })
+    .catch(error => {
+        console.error("Error updating status:", error);
+    });
+}
+
+    function updateStatus_Watch(userId) {
+        fetch(`https://port-0-ddproject-iad5e2alq1winnk.sel4.cloudtype.app/auth/getImage/${userId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(res => res.blob())
+        .then(blob => { openImagePopup(URL.createObjectURL(blob));})
+        .catch(error => console.error('Error:', error));
+    }
+
+    // 팝업창에 이미지 표시하는 함수
+    function openImagePopup(imageSrc) {
+        localStorage.setItem('img', imageSrc)
+        // 팝업창 생성
+        const popup = window.open('imgPopup.html', '_blank', 'width=500,height=500');
+    }
+}
+
+</script>
+    </body>
+</html>

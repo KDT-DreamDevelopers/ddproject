@@ -1,0 +1,43 @@
+th, td {
+    padding: 20px;
+    text-align: start;
+    vertical-align: middle;
+}
+
+
+.btn-td button {
+    text-align: center;
+}
+
+
+.btn {
+    border-radius: 7px;
+    background-color: #14301F;
+    color: white;
+    width: 54px;
+    height: 25px;
+    font-size: 13px;
+    margin: 0 5px;
+}
+
+
+.btn_status_ok {
+    border-radius: 7px;
+    background-color: whitesmoke;
+    color: black;
+    width: 54px;
+    height: 25px;
+    font-size: 13px;
+    margin: 0 5px;
+}
+
+.btn_status_none{
+    border-radius: 7px;
+    background-color: #14301F;
+    color: white;
+    width: 57px;
+    height: 25px;
+    font-size: 13px;
+    margin: 0 5px;
+}
+
