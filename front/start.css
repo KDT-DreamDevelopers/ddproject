@@ -6,11 +6,17 @@
     /* border: none; */
     /* height: 1px;
 } */ 
-
-
-.container {
+body {
     display: flex;
     flex-direction: column;
+    vertical-align: middle;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
 }
 
 .line {
@@ -20,12 +26,14 @@
 }
 
 .logo {
+    align-self: center;
     width: 80%;
-    margin: 10rem auto 3rem auto;  
+    padding: 8rem;
+    /* margin: 10rem auto 3rem auto;   */
 }
 
 #login_logo{
-    margin: 4rem auto 2rem auto;
+    margin: 30% auto 2rem auto;
     width: 100%;
 }
 

@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 
     <title>이동의 꿈</title>
     <link rel="stylesheet" href="./userFrame.css">
     <link rel="stylesheet" href="./start.css">
 </head>
+
 <body>
     <div class="container">
+
         <div class="logo">
             <img id="login_logo" src="./img/logo.svg">
         </div>
         <div class="line"></div>
-
-        <button type="button" value="로그인" class="button purple">로그인</button>
-        <button type="button" value="회원가입" class="button" style="border: 0.0625rem solid #6658B1; color: black; font-weight: 600; margin-top: 1rem;">회원가입</button>   
+        <div>
+            <button type="button" value="로그인" class="button purple">로그인</button>
+            <button type="button" value="회원가입" class="button"
+                style="border: 0.0625rem solid #6658B1; color: black; font-weight: 600; margin-top: 1rem;">회원가입</button>
+        </div>
     </div>
     <script>
         // 자동로그인
         const token = getItemWithExpiry('userInfo')
-        if (token){
+        if (token) {
             window.location.href = './mapPage.html'
         }
-        
+
 
         // 만료여부 확인
         function getItemWithExpiry(key) {
@@ -46,13 +51,13 @@
         }
 
         const btn = document.querySelectorAll('.button');
-        for(let i = 0; i < btn.length; i++){
-            btn[i].addEventListener('click', function(event){
+        for (let i = 0; i < btn.length; i++) {
+            btn[i].addEventListener('click', function (event) {
                 console.log(event.target.value);
-                if(event.target.value == '로그인'){
+                if (event.target.value == '로그인') {
                     window.location.href = './login.html';
                 }
-                else if(event.target.value == '회원가입'){
+                else if (event.target.value == '회원가입') {
                     window.location.href = './regist.html';
 
                 }
@@ -60,4 +65,5 @@
         }
     </script>
 </body>
+
 </html>

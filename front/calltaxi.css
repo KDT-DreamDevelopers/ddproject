@@ -6,6 +6,10 @@ header {
     padding-top: 5rem !important;
 }
 
+a {
+    color: white;
+    text-decoration: none; 
+  }
 
 .xi-angle-left {
     color: white;
