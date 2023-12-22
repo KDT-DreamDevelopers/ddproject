@@ -16,7 +16,7 @@ const collection = database.collection("busstops");
 export async function getBestBusDriver(busStopId, busroot) {
     let result = [];
     try {
-        const fetchLink = `http://ws.bus.go.kr/api/rest/arrive/getLowArrInfoByStId?serviceKey=QTopfVxZ8MZ1R8jXooRF5Z25dJ2cxSUQRKNzxqBUIqKqkhp%2BTkJlDWXhui3l3%2Fr5u8BqAbMCHpIBJF0twkWk4g%3D%3D&stId=112000001${busStopId}`
+        const fetchLink = `http://ws.bus.go.kr/api/rest/arrive/getLowArrInfoByStId?serviceKey=QTopfVxZ8MZ1R8jXooRF5Z25dJ2cxSUQRKNzxqBUIqKqkhp%2BTkJlDWXhui3l3%2Fr5u8BqAbMCHpIBJF0twkWk4g%3D%3D&stId=${busStopId}`
         const response = await fetch(fetchLink);
         const xmldata = await response.text();
         const alldata = await useParse(xmldata);
