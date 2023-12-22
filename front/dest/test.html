@@ -180,7 +180,7 @@
                             const longitude = await position.coords.longitude;
                             if (startBusStops.length >= 1) {
                                 isNearBus = await sendIsNearBus(latitude, longitude, await startBusStops[0][1]);
-                                if (isNearBus <= 7000) {
+                                if (isNearBus <= 700000) {
                                     let startButtons = document.getElementsByClassName("start-buttons")
                                     startButtons[orderBus].classList.remove("gray");
                                     startButtons[orderBus].classList.add("black")
