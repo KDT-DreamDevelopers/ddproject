@@ -1,0 +1,70 @@
+body {
+    background-color: #6658B1;
+}
+
+header {
+    margin: 0;
+}
+
+.xi-angle-left {
+    color: white;
+}
+
+.title {
+    color: white;
+}
+
+.container {
+    background-color: #6658B1;
+    width: 100%;
+    height: 31.25rem;
+    display: flex;
+    flex-direction: column; /* 메뉴를 세로로 배치 */
+    align-items: flex-start; /* 가운데 정렬 */
+    justify-content: center; /* 가운데 정렬 */
+    padding-left: 20px; 
+    
+}
+
+.con-menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 50px; /* 간격 더 벌리기 */
+    margin-left: 0; /* 좌측 여백 추가 */
+}
+
+.menu-container {
+    background-color: #ffffff;
+    padding: 10px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.xi-play {
+    color: #F6C080;
+}
+
+.xi-play span {
+    color: white ;
+}
+
+.calling {
+    display: none; 
+    color: white;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    font-size: 1.6rem;
+    border-bottom: 2px solid white;
+    cursor: pointer;
+}
+
+a {
+    color: white;
+    text-decoration: none; 
+  }
