@@ -6,8 +6,8 @@ header {
     padding-top: 5rem !important;
 }
 
-a {
-    color: white;
+.con-menu-button a {
+    color: white !important;
     text-decoration: none; 
   }
 
