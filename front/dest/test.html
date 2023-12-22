@@ -193,8 +193,10 @@
                                 }
                             }
                             if (startSubwayList.length >= 1) {
+                                console.log(isNearSubway)
                                 isNearSubway = await sendIsNearSubway(latitude, longitude, await startSubwayList[0]);
                                 if (isNearSubway <= 100) {
+                                    
                                     alert("역무원에게 알림을 보냈습니다.");
                                     // 역무원에게 알림을 보낼 코드 작성
                                     const targetSubId = startSubwayIdList[orderSub];
