@@ -28,7 +28,7 @@ body {
 .logo {
     align-self: center;
     width: 80%;
-    padding: 8rem;
+    padding: 8rem 0;
     /* margin: 10rem auto 3rem auto;   */
 }
 
