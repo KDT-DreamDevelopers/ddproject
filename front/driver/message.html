@@ -58,7 +58,6 @@
             ReloadingList(datas.message, datas.userId);
         });
         window.addEventListener('message', function (event) { //ios
-            console.log(event.data);
             const datas = JSON.parse(event.data)
             ReloadingList(datas.message, datas.userId);
         })
@@ -90,7 +89,6 @@
                  </li>`;
             }
             Lists.innerHTML = (msg + lists);
-            alert(msg + lists);
             lists = msg + lists;
             if (message === "OUT") {
                 Lists.firstElementChild.classList.add('out')
