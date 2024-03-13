@@ -30,7 +30,7 @@ export const config = {
     // sms 개인정보
     sms : {
         apiKey: required('API_KEY'),
-        apiSecret: required('API_SECRET'),
+        apiSecret: required('API_SECERET'),
         fromNum: required('FROM_NUMBER')
     }
 }

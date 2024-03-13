@@ -33,7 +33,7 @@ router.get('/myInquiry/:id', isAuth, inquiryController.getInquiry)
 router.delete('/delete/:id', isAuth, inquiryController.deleteInquiry)
 
 
-// --------------------------------------
+// -------------------------------------- 
 // 관리자 페이지
 
 // 고객센터 자주하는 질문 보기

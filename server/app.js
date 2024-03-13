@@ -71,7 +71,6 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
         await priorityClass.lengthOfTransfer();
         await priorityClass.lengthOfWalk();
         const topFivePath = await priorityClass.makeLastFiveData();
-        console.log(topFivePath);
         res.status(200).json(topFivePath);
         return;
     }
@@ -82,7 +81,6 @@ app.get("/send/:startX/:startY/:endX/:endY", async (req, res) => {
 
 app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
     const { userX, userY, targetBusId } = req.params;
-    console.log("targetBusStop", targetBusId);
     try {
         const busReturn = await distanceWithUserAndBusstop(targetBusId);
         if (!busReturn) {
@@ -91,7 +89,6 @@ app.get("/isNearBus/:userX/:userY/:targetBusId", async (req, res) => {
         }
         const busX = await busReturn[0];
         const busY = await busReturn[1];
-
         const distance = await getDistance(userX, userY, busX, busY);
 
         res.status(200).json(distance);
@@ -139,7 +136,7 @@ async function getDistance(userX, userY, busX, busY) {
 // MongoDB 연결
 let db;
 
-const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+const url = config.db.host;
 try {
     const connection = await Mongoose.connect(url, {
         dbName: "MoveOfDream"
@@ -168,13 +165,10 @@ app.post('/api/save-token', async (req, res) => {
             }
             let pushToken = new TokenModel(inputdata);
             await pushToken.save();
-            console.log("Token In!")
             res.status(200).json({ success: true, message: 'Token saved successfully' })
         } else {
-            console.log("Toekn Already in!");
             res.status(200).json({ success: false, message: 'Token already exists' });
         }
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -198,8 +192,6 @@ const sendPushNotification = async (expoPushToken, message) => {
                 body: JSON.stringify(message),
             }),
         });
-        const data = await response.json();
-        console.log("Push notification sent:", data);
     } catch (error) {
         console.error(error);
     }
@@ -215,7 +207,6 @@ app.post("/ImOnTheBusStop", async (req, res) => {
             res.status(400).json({ message: "noPath" });
             return;
         }
-        console.log("선택해야 하는 버스 아이디: ", result);
         const findBusClue = { mId: result };
         const findBus = await TokenModel.findOne(findBusClue);
         if ( findBus ){
@@ -228,7 +219,6 @@ app.post("/ImOnTheBusStop", async (req, res) => {
             res.status(200).json({ success: true, message: 'Push notification sent successfully', onbus: result });
         }
         else{
-            console.log("findBus가 없다.")
             res.status(404).json({success: false, message: "Bus Error"})
         }
     } catch (error) {
@@ -240,8 +230,6 @@ app.post("/ImOnTheBusStop", async (req, res) => {
 app.post("/ImGoingToOut", async (req, res) => {
     try {
         const {  message, onbusid, userId } = req.body;
-        console.log( message, onbusid, userId);
-
         const findBusClue = { mId: onbusid };
         const findBus = await TokenModel.findOne(findBusClue);
         const expoPushToken = findBus.token;
@@ -272,7 +260,6 @@ app.post("/ImAlmostInSubway", async (req, res) => {
             res.status(200).json({ success: true, message: 'Push notification sent successfully' })
         }
         else {
-            console.log("findSub가 없다.")
             res.status(404).json({ success: false, message: "Subway Error" })
         }
     } catch (error) {
@@ -281,17 +268,13 @@ app.post("/ImAlmostInSubway", async (req, res) => {
     }
 })
 
-
-
 app.use((req, res, next) => {
     res.sendStatus(404)
 })
 
 // DB연결
 connectDB().then(db => {
-    console.log('init!')
     const server = app.listen(config.host.port, () => {
         console.log("http://localhost:8080에서 실행중");
     })
-    // initSocket(server)  //나중에 할거
 }).catch(console.error)

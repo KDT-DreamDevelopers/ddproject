@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
+import { config } from "./config.js"
 
-const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+const url = config.db.host;
 
 const client = new MongoClient(url);
 
@@ -9,9 +10,7 @@ const collection = database.collection("busstops");
 
 export async function distanceWithUserAndBusstop(busStopId) {
     try {
-        console.log(busStopId)
         const findData = { sttn_id: Number(busStopId) };
-        console.log(findData)
         if ( findData){
             const findResult = await collection.findOne(findData);
             const busX = await findResult.crdnt_x;

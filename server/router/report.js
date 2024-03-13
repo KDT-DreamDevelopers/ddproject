@@ -21,7 +21,8 @@ const validateReport = [
 // 불편신고 글 생성
 router.post('/write', isAuth, reportController.upload.single('file'), validateReport, reportController.createreport)
 
-// 관리자 페이지----------------------------------------------
+// ----------------------------------------------
+// 관리자 페이지
 
 // 불편신고 데이터 불러오기 (관리자 페이지)
 router.get('/all', isAuth, reportController.ViewReport )

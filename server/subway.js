@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
+import { config } from "./config.js"
 
-const url = 'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+const url = config.db.host
 
 const client = new MongoClient(url);
 
@@ -10,7 +11,6 @@ const collection = database.collection("subways");
 export async function getSubwayAddress(subwayName) {
     try {
         const findname = subwayName.slice(0, -1);
-        console.log(findname);
         const findData = { "name": findname };
         const findResult = await collection.findOne(findData);
 

@@ -23,8 +23,7 @@ export class MakePriorityAboutPath {
     constructor(pathList) {
         this.pathList = pathList;
         this.scoreList = [];
-        this.url =
-            'mongodb+srv://wnsvy1237:Dldzmtor15@cluster0.qorzsry.mongodb.net/?retryWrites=true&w=majority';
+        this.url = config.db.host
         this.client = new MongoClient(this.url);
         this.database = this.client.db('MoveOfDream');
         this.collection = this.database.collection('subways');
@@ -61,15 +60,11 @@ export class MakePriorityAboutPath {
                         this.scoreList.pop();
                         break;
                     } else {
-                        // onePathList["소요시간"][0] += await tmpdata.exps1 / 60;
                         scoreIndex++;
-                        // console.log(tmpdata)
                     }
                 }
             }
         }
-        // console.log(this.scoreList)
-        // console.log(this.pathList)
     }
 
     async lengthOfTransfer() {
@@ -128,5 +123,4 @@ export class MakePriorityAboutPath {
         }
         return maxIndex;
     }
-
 }

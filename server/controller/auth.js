@@ -16,9 +16,7 @@ function createJwtToken(id){
 
 // 아이디 중복확인 함수 /auth/userid_check
 export async function useridCheck(req, res){
-    console.log(4)
     const userid = req.body
-    console.log(userid.userid)
     const found = await authRepository.findByUserid(userid.userid)
     if (found){
         return res.status(409).json({message: '이 아이디로 등록된 계정이 이미 있습니다'})
@@ -37,9 +35,7 @@ function randomNumber(){
 
 // 본인인증 함수 /auth/check
 export async function check(req, res, next){
-    console.log(2)
     const code = randomNumber()
-    console.log(code)
     const {hp} = req.body
     const check = await authRepository.sendMessage(code, hp)
     res.status(200).json({code})
@@ -113,7 +109,6 @@ export async function login(req, res){
         return res.status(405).json({message: '장애인인증서 인증 실패로 이용이 정지되었습니다.'})
     }
     const token = createJwtToken(user.id)
-    console.log(token)
     res.status(200).json({token, message: '로그인 되었습니다'})
 }
 
@@ -166,7 +161,6 @@ export async function newPW(req, res, next){
 // 새로운 pw 등록   /auth/newPW_id       (회원정보 수정시 이용)
 export async function newPW_id(req, res, next){
     const new_pw = req.body.new_pw
-    console.log(new_pw)
     const new_hashed = await bcrypt.hash(new_pw, config.bcrypt.saltRounds)
     const user = await authRepository.getById(req.userId)
     if(!user){
@@ -279,7 +273,6 @@ export async function login_Admin(req, res) {
     }
 
     const token = createJwtToken(user.id);
-    console.log(token);
     res.status(200).json({ token, message: '관리자 로그인 되었습니다' });
 }
 
@@ -323,7 +316,6 @@ export async function user_modify(req, res) {
         const update = await authRepository.admin_updateUserInfo(id, userpw, name, hp);
         res.status(200).json({ message: '회원정보가 수정되었습니다', update });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
@@ -349,7 +341,6 @@ export async function readFile(req, res){
         res.status(401).json({message:'유저정보를 불러오지 못함'})
     }
     const filename = user.img
-    console.log('Requested File Path:', filename);
     try {
         const fullPath = path.join(__dirname, '..', 'uploads', filename);
         console.log('Full File Path:', fullPath);
