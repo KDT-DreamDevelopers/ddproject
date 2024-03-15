@@ -12,7 +12,7 @@ function required(key, defaultValue = undefined){
 export const config = {
     jwt: {
         // jwt 시크릿 키
-        secretKey: required('JWT_SECERET'),
+        secretKey: required('JWT_SECRET'),
         // 만료일자
         expiresInSec: parseInt(required('JWT_EXPIRES_SEC', 172800))
     },
@@ -30,7 +30,7 @@ export const config = {
     // sms 개인정보
     sms : {
         apiKey: required('API_KEY'),
-        apiSecret: required('API_SECERET'),
+        apiSecret: required('API_SECRET'),
         fromNum: required('FROM_NUMBER')
     }
 }
